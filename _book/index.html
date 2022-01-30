@@ -5,32 +5,26 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Geostatistics Final Summary</title>
-  <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
-The HTML output format for this example is bookdown::gitbook,
-set in the _output.yml file.</p>" />
+  <meta name="description" content="This is the final report summary of spatial statistics analysis. January 31, 2022." />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Geostatistics Final Summary" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
-The HTML output format for this example is bookdown::gitbook,
-set in the _output.yml file.</p>" />
-  <meta name="github-repo" content="rstudio/bookdown-demo" />
+  <meta property="og:description" content="This is the final report summary of spatial statistics analysis. January 31, 2022." />
+  <meta name="github-repo" content="Ryanna-github/Geostatistics" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Geostatistics Final Summary" />
   
-  <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
-The HTML output format for this example is bookdown::gitbook,
-set in the _output.yml file.</p>" />
+  <meta name="twitter:description" content="This is the final report summary of spatial statistics analysis. January 31, 2022." />
   
 
 <meta name="author" content="Yan Ren" />
 
 
-<meta name="date" content="2022-01-27" />
+<meta name="date" content="2022-01-31" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -38,7 +32,7 @@ set in the _output.yml file.</p>" />
   
   
 
-<link rel="next" href="hello-bookdown.html"/>
+<link rel="next" href="spatial-prediction-and-kriging.html"/>
 <script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -59,6 +53,24 @@ set in the _output.yml file.</p>" />
 
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.0.4.1/leaflet-providers-plugin.js"></script>
 
 
 <style type="text/css">
@@ -125,28 +137,6 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -161,50 +151,104 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">A Minimal Book Example</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About</a>
+<li class="part"><span><b>I Geostatistical Data</b></span></li>
+<li class="chapter" data-level="1" data-path="geostatistics.html"><a href="geostatistics.html"><i class="fa fa-check"></i><b>1</b> Geostatistics</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#usage"><i class="fa fa-check"></i><b>1.1</b> Usage</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#render-book"><i class="fa fa-check"></i><b>1.2</b> Render book</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#preview-book"><i class="fa fa-check"></i><b>1.3</b> Preview book</a></li>
+<li class="chapter" data-level="1.1" data-path="geostatistics.html"><a href="geostatistics.html#targeted-problems"><i class="fa fa-check"></i><b>1.1</b> Targeted Problems</a></li>
+<li class="chapter" data-level="1.2" data-path="geostatistics.html"><a href="geostatistics.html#spatial-data-example"><i class="fa fa-check"></i><b>1.2</b> Spatial Data Example</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="geostatistics.html"><a href="geostatistics.html#main-concepts"><i class="fa fa-check"></i><b>1.2.1</b> Main Concepts</a></li>
+<li class="chapter" data-level="1.2.2" data-path="geostatistics.html"><a href="geostatistics.html#esitimation-of-variogram"><i class="fa fa-check"></i><b>1.2.2</b> Esitimation of Variogram</a></li>
+<li class="chapter" data-level="1.2.3" data-path="geostatistics.html"><a href="geostatistics.html#decomposition"><i class="fa fa-check"></i><b>1.2.3</b> Decomposition</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="hello-bookdown.html"><a href="hello-bookdown.html"><i class="fa fa-check"></i><b>2</b> Hello bookdown</a>
+<li class="chapter" data-level="1.3" data-path="geostatistics.html"><a href="geostatistics.html#stationary-process"><i class="fa fa-check"></i><b>1.3</b> Stationary Process</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="hello-bookdown.html"><a href="hello-bookdown.html#a-section"><i class="fa fa-check"></i><b>2.1</b> A section</a>
+<li class="chapter" data-level="1.3.1" data-path="geostatistics.html"><a href="geostatistics.html#vc"><i class="fa fa-check"></i><b>1.3.1</b> Variogram &amp; Covariogram</a></li>
+<li class="chapter" data-level="1.3.2" data-path="geostatistics.html"><a href="geostatistics.html#estimation-of-variogram-covariogram"><i class="fa fa-check"></i><b>1.3.2</b> Estimation of Variogram &amp; Covariogram</a></li>
+<li class="chapter" data-level="1.3.3" data-path="geostatistics.html"><a href="geostatistics.html#validity"><i class="fa fa-check"></i><b>1.3.3</b> Validity</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="geostatistics.html"><a href="geostatistics.html#variogram-model-fitting"><i class="fa fa-check"></i><b>1.4</b> Variogram Model Fitting</a>
 <ul>
-<li class="chapter" data-level="" data-path="hello-bookdown.html"><a href="hello-bookdown.html#an-unnumbered-section"><i class="fa fa-check"></i>An unnumbered section</a></li>
+<li class="chapter" data-level="1.4.1" data-path="geostatistics.html"><a href="geostatistics.html#eda-check-before-model-fitting"><i class="fa fa-check"></i><b>1.4.1</b> EDA Check Before Model Fitting</a></li>
+<li class="chapter" data-level="1.4.2" data-path="geostatistics.html"><a href="geostatistics.html#maximum-likelihood-estimator"><i class="fa fa-check"></i><b>1.4.2</b> Maximum Likelihood Estimator</a></li>
+<li class="chapter" data-level="1.4.3" data-path="geostatistics.html"><a href="geostatistics.html#minq-estimation"><i class="fa fa-check"></i><b>1.4.3</b> MINQ Estimation</a></li>
 </ul></li>
 </ul></li>
-<li class="part"><span><b>I hhh</b></span></li>
-<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Cross-references</a>
+<li class="chapter" data-level="2" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html"><i class="fa fa-check"></i><b>2</b> Spatial Prediction and Kriging</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="cross.html"><a href="cross.html#chapters-and-sub-chapters"><i class="fa fa-check"></i><b>3.1</b> Chapters and sub-chapters</a></li>
-<li class="chapter" data-level="3.2" data-path="cross.html"><a href="cross.html#captioned-figures-and-tables"><i class="fa fa-check"></i><b>3.2</b> Captioned figures and tables</a></li>
+<li class="chapter" data-level="2.1" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#scale-of-variation"><i class="fa fa-check"></i><b>2.1</b> Scale of variation</a></li>
+<li class="chapter" data-level="2.2" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#ordinary-kriging"><i class="fa fa-check"></i><b>2.2</b> Ordinary Kriging</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#model-introduction"><i class="fa fa-check"></i><b>2.2.1</b> Model Introduction</a></li>
+<li class="chapter" data-level="2.2.2" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#effect-of-variogram-estimation"><i class="fa fa-check"></i><b>2.2.2</b> Effect of Variogram Estimation</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="parts.html"><a href="parts.html"><i class="fa fa-check"></i><b>4</b> Parts</a></li>
-<li class="chapter" data-level="5" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>5</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>5.1</b> Footnotes</a></li>
-<li class="chapter" data-level="5.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>5.2</b> Citations</a></li>
+<li class="chapter" data-level="2.3" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#cokriging"><i class="fa fa-check"></i><b>2.3</b> Cokriging</a></li>
+<li class="chapter" data-level="2.4" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#robust-kriging"><i class="fa fa-check"></i><b>2.4</b> Robust Kriging</a></li>
+<li class="chapter" data-level="2.5" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#universal-kriging"><i class="fa fa-check"></i><b>2.5</b> Universal Kriging</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>6</b> Blocks</a>
+<li class="part"><span><b>II Lattice Data</b></span></li>
+<li class="chapter" data-level="3" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html"><i class="fa fa-check"></i><b>3</b> Spatial Models on Lattices</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>6.1</b> Equations</a></li>
-<li class="chapter" data-level="6.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>6.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="6.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>6.3</b> Callout blocks</a></li>
+<li class="chapter" data-level="3.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#lattices"><i class="fa fa-check"></i><b>3.1</b> Lattices</a></li>
+<li class="chapter" data-level="3.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#spatial-models-for-lattice-data"><i class="fa fa-check"></i><b>3.2</b> Spatial Models for Lattice Data</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#simultaneous-spatial-models"><i class="fa fa-check"></i><b>3.2.1</b> Simultaneous Spatial Models</a></li>
+<li class="chapter" data-level="3.2.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#conditional-spatial-models"><i class="fa fa-check"></i><b>3.2.2</b> Conditional Spatial Models</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="sharing-your-book.html"><a href="sharing-your-book.html"><i class="fa fa-check"></i><b>7</b> Sharing your book</a>
+<li class="chapter" data-level="3.3" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#markov-random-fields"><i class="fa fa-check"></i><b>3.3</b> Markov Random Fields</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="sharing-your-book.html"><a href="sharing-your-book.html#publishing"><i class="fa fa-check"></i><b>7.1</b> Publishing</a></li>
-<li class="chapter" data-level="7.2" data-path="sharing-your-book.html"><a href="sharing-your-book.html#pages"><i class="fa fa-check"></i><b>7.2</b> 404 pages</a></li>
-<li class="chapter" data-level="7.3" data-path="sharing-your-book.html"><a href="sharing-your-book.html#metadata-for-sharing"><i class="fa fa-check"></i><b>7.3</b> Metadata for sharing</a></li>
+<li class="chapter" data-level="3.3.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#preparation"><i class="fa fa-check"></i><b>3.3.1</b> Preparation</a></li>
+<li class="chapter" data-level="3.3.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#markov-random-field"><i class="fa fa-check"></i><b>3.3.2</b> Markov Random Field</a></li>
+<li class="chapter" data-level="3.3.3" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#hammersley-clifford-theorem"><i class="fa fa-check"></i><b>3.3.3</b> Hammersley-Clifford Theorem</a></li>
+<li class="chapter" data-level="3.3.4" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#pairwise-only-dependence"><i class="fa fa-check"></i><b>3.3.4</b> Pairwise-Only Dependence</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#conditionally-specified-spatial-models"><i class="fa fa-check"></i><b>3.4</b> Conditionally Specified Spatial Models</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#models-for-discrete-data"><i class="fa fa-check"></i><b>3.4.1</b> Models for Discrete Data</a></li>
+<li class="chapter" data-level="3.4.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#models-for-continuous-data"><i class="fa fa-check"></i><b>3.4.2</b> Models for Continuous Data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#simultaneously-specified-spatial-models"><i class="fa fa-check"></i><b>3.5</b> Simultaneously Specified Spatial Models</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#spatial-autoregressive-regression-model"><i class="fa fa-check"></i><b>3.5.1</b> Spatial Autoregressive Regression Model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#space-time-models"><i class="fa fa-check"></i><b>3.6</b> Space-Time Models</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#starma-model"><i class="fa fa-check"></i><b>3.6.1</b> STARMA Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html"><i class="fa fa-check"></i><b>4</b> Inference for Lattice Models</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#parameter-estimation-for-lattice-models"><i class="fa fa-check"></i><b>4.1</b> Parameter Estimation for Lattice Models</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#pseudolikelihood"><i class="fa fa-check"></i><b>4.1.1</b> Pseudolikelihood</a></li>
+<li class="chapter" data-level="4.1.2" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#gaussian-maximum-likelihood-estimation"><i class="fa fa-check"></i><b>4.1.2</b> Gaussian Maximum Likelihood Estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#conditional-gaussian-model"><i class="fa fa-check"></i><b>4.2</b> Conditional Gaussian Model</a></li>
+<li class="chapter" data-level="4.3" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#auto-logistic-model"><i class="fa fa-check"></i><b>4.3</b> Auto-logistic Model</a></li>
+<li class="chapter" data-level="4.4" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#auto-poisson-model"><i class="fa fa-check"></i><b>4.4</b> Auto-Poisson Model</a></li>
+</ul></li>
+<li class="part"><span><b>III Homework</b></span></li>
+<li class="chapter" data-level="5" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html"><i class="fa fa-check"></i><b>5</b> Spatial Analysis Homework</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#overview"><i class="fa fa-check"></i><b>5.1</b> Overview</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#background"><i class="fa fa-check"></i><b>5.1.1</b> Background</a></li>
+<li class="chapter" data-level="5.1.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#data"><i class="fa fa-check"></i><b>5.1.2</b> Data</a></li>
+<li class="chapter" data-level="5.1.3" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#goal"><i class="fa fa-check"></i><b>5.1.3</b> Goal</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#exploratory-analysis"><i class="fa fa-check"></i><b>5.2</b> Exploratory Analysis</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#data-preprocessing"><i class="fa fa-check"></i><b>5.2.1</b> Data Preprocessing</a></li>
+<li class="chapter" data-level="5.2.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#descriptive-statistics"><i class="fa fa-check"></i><b>5.2.2</b> Descriptive Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#model-fitting"><i class="fa fa-check"></i><b>5.3</b> Model Fitting</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#variogram"><i class="fa fa-check"></i><b>5.3.1</b> Variogram</a></li>
+<li class="chapter" data-level="5.3.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#kriging-model"><i class="fa fa-check"></i><b>5.3.2</b> Kriging Model</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#animation"><i class="fa fa-check"></i><b>5.4</b> Animation</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
-<li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-
 </ul>
 
       </nav>
@@ -225,33 +269,378 @@ div.csl-indent {
 <div id="header">
 <h1 class="title">Geostatistics Final Summary</h1>
 <p class="author"><em>Yan Ren</em></p>
-<p class="date"><em>2022-01-27</em></p>
+<p class="date"><em>2022-01-31</em></p>
 </div>
-<div id="about" class="section level1" number="1">
-<h1><span class="header-section-number">Chapter 1</span> About</h1>
-<p>This is a <em>sample</em> book written in <strong>Markdown</strong>. You can use anything that Pandoc’s Markdown supports; for example, a math equation <span class="math inline">\(a^2 + b^2 = c^2\)</span>.</p>
-<div id="usage" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> Usage</h2>
-<p>Each <strong>bookdown</strong> chapter is an .Rmd file, and each .Rmd file can contain one (and only one) chapter. A chapter <em>must</em> start with a first-level heading: <code># A good chapter</code>, and can contain one (and only one) first-level heading.</p>
-<p>Use second-level and higher headings within chapters like: <code>## A short section</code> or <code>### An even shorter section</code>.</p>
-<p>The <code>index.Rmd</code> file is required, and is also your first book chapter. It will be the homepage when you render the book.</p>
+<div id="geostatistics" class="section level1" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Geostatistics</h1>
+<div id="targeted-problems" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Targeted Problems</h2>
+<p>Spatial data is considered as a random process <span class="math inline">\(\{Z(s),s\in D\}\)</span> in this part.</p>
+<ul>
+<li><span class="math inline">\(D\)</span>: a is a fixed subset of <span class="math inline">\(\mathbb{R}^d\)</span> with positive d-dimensional volume.<br />
+</li>
+<li><span class="math inline">\(s\)</span>: locations varies <em>continuously</em> throughout the region <span class="math inline">\(D\)</span>.</li>
+</ul>
+<p>Set <code>coalash</code> dataset as an example (Figure <a href="geostatistics.html#fig:coalash-scatter">1.1</a>). <span class="math inline">\(D\)</span> is the region with values. and <span class="math inline">\(s\)</span> indicates percent of coalash in this location. Many kinds of exploratory statistics can be applied here to test stationarity, local stationarity and so on.</p>
+<div class="figure"><span style="display:block;" id="fig:coalash-scatter"></span>
+<div id="htmlwidget-ea3e59452c568f6d7859" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ea3e59452c568f6d7859">{"x":{"visdat":{"28c42db945ae":["function () ","plotlyVisDat"]},"cur_data":"28c42db945ae","attrs":{"28c42db945ae":{"x":[1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,14,14,14,14,14,15,15,15,16],"y":[14,15,16,8,10,11,12,14,15,16,17,16,15,14,13,12,11,10,9,8,7,6,5,4,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,2,3,4,5,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,6,7,8,9,10,11,12,13,16,17,18,19,20,21,22,23,11,12,13,17,18,19,20,21,22,23,17,18,19,20,21,22,23,18,19,20,21,23,17,18,19,17],"z":[10.21,9.92,11.17,10.01,11.15,11.31,9.92,10.73,10.82,10.14,9.97,9.93,11.65,9.46,12.5,11.05,9.41,9.91,10.82,8.23,10.39,10.41,9.76,10.93,9.79,10.74,11.21,9.7,10.27,8.96,9.35,9.63,10.11,9.37,10.17,11.75,11.04,11.11,10.82,11.1,10.94,9.64,9.29,10.59,10.43,8.75,9.52,9.53,10.8,17.61,10.96,10.28,9.78,10.55,11.21,11.46,10.82,9.78,9.88,10.21,9.84,9.89,12.8,9.06,10.39,9.32,8.96,10.06,10.61,8.86,10.87,10.83,13.07,11,11.61,9.93,10.41,10.12,10.38,8.9,11.09,10.29,10.34,10.03,10.7,10.65,8.27,12.65,10.27,9.48,10.09,10.47,9.79,9.16,10.7,8.45,9.4,9.79,10.18,10.63,9.84,8.2,9.36,11.21,10.36,11.62,8.14,9.63,9.59,9.22,13.06,8.69,11.58,10.19,10.04,9.27,8.9,9.48,8.91,9.34,8.82,10.01,9.82,8.57,8.98,9.58,10.91,9.82,9.61,11.41,11.17,9.46,9.15,11.19,9.28,8.07,10.99,9.22,10.56,10.18,9.01,10.06,9.01,9.27,10.66,8.76,7.81,8.2,9.96,9.39,8.54,8.15,8.1,10.13,7.96,9.92,11.43,9.06,9.34,7.68,8.58,9.04,8.19,8.92,8.89,8.59,9.15,9.56,10.87,9.2,11.3,8.61,7,7.85,8.61,9.25,8.89,7.28,7.88,7.8,9.1,9,8.78,7.9,8.21,7.83,8.64,9.58,7.61,7.84,7.62,11.86,9.14,7.04,9.69,8.2,9.03,9.65,8.91,8.81,9.96,8.77,8.6,9.99,7.63,7.95,9.91,9.07],"mode":"markers","color":[10.21,9.92,11.17,10.01,11.15,11.31,9.92,10.73,10.82,10.14,9.97,9.93,11.65,9.46,12.5,11.05,9.41,9.91,10.82,8.23,10.39,10.41,9.76,10.93,9.79,10.74,11.21,9.7,10.27,8.96,9.35,9.63,10.11,9.37,10.17,11.75,11.04,11.11,10.82,11.1,10.94,9.64,9.29,10.59,10.43,8.75,9.52,9.53,10.8,17.61,10.96,10.28,9.78,10.55,11.21,11.46,10.82,9.78,9.88,10.21,9.84,9.89,12.8,9.06,10.39,9.32,8.96,10.06,10.61,8.86,10.87,10.83,13.07,11,11.61,9.93,10.41,10.12,10.38,8.9,11.09,10.29,10.34,10.03,10.7,10.65,8.27,12.65,10.27,9.48,10.09,10.47,9.79,9.16,10.7,8.45,9.4,9.79,10.18,10.63,9.84,8.2,9.36,11.21,10.36,11.62,8.14,9.63,9.59,9.22,13.06,8.69,11.58,10.19,10.04,9.27,8.9,9.48,8.91,9.34,8.82,10.01,9.82,8.57,8.98,9.58,10.91,9.82,9.61,11.41,11.17,9.46,9.15,11.19,9.28,8.07,10.99,9.22,10.56,10.18,9.01,10.06,9.01,9.27,10.66,8.76,7.81,8.2,9.96,9.39,8.54,8.15,8.1,10.13,7.96,9.92,11.43,9.06,9.34,7.68,8.58,9.04,8.19,8.92,8.89,8.59,9.15,9.56,10.87,9.2,11.3,8.61,7,7.85,8.61,9.25,8.89,7.28,7.88,7.8,9.1,9,8.78,7.9,8.21,7.83,8.64,9.58,7.61,7.84,7.62,11.86,9.14,7.04,9.69,8.2,9.03,9.65,8.91,8.81,9.96,8.77,8.6,9.99,7.63,7.95,9.91,9.07],"alpha":0.7,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":[]},"yaxis":{"title":[]},"zaxis":{"title":[]}},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,14,14,14,14,14,15,15,15,16],"y":[14,15,16,8,10,11,12,14,15,16,17,16,15,14,13,12,11,10,9,8,7,6,5,4,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,2,3,4,5,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,6,7,8,9,10,11,12,13,16,17,18,19,20,21,22,23,11,12,13,17,18,19,20,21,22,23,17,18,19,20,21,22,23,18,19,20,21,23,17,18,19,17],"z":[10.21,9.92,11.17,10.01,11.15,11.31,9.92,10.73,10.82,10.14,9.97,9.93,11.65,9.46,12.5,11.05,9.41,9.91,10.82,8.23,10.39,10.41,9.76,10.93,9.79,10.74,11.21,9.7,10.27,8.96,9.35,9.63,10.11,9.37,10.17,11.75,11.04,11.11,10.82,11.1,10.94,9.64,9.29,10.59,10.43,8.75,9.52,9.53,10.8,17.61,10.96,10.28,9.78,10.55,11.21,11.46,10.82,9.78,9.88,10.21,9.84,9.89,12.8,9.06,10.39,9.32,8.96,10.06,10.61,8.86,10.87,10.83,13.07,11,11.61,9.93,10.41,10.12,10.38,8.9,11.09,10.29,10.34,10.03,10.7,10.65,8.27,12.65,10.27,9.48,10.09,10.47,9.79,9.16,10.7,8.45,9.4,9.79,10.18,10.63,9.84,8.2,9.36,11.21,10.36,11.62,8.14,9.63,9.59,9.22,13.06,8.69,11.58,10.19,10.04,9.27,8.9,9.48,8.91,9.34,8.82,10.01,9.82,8.57,8.98,9.58,10.91,9.82,9.61,11.41,11.17,9.46,9.15,11.19,9.28,8.07,10.99,9.22,10.56,10.18,9.01,10.06,9.01,9.27,10.66,8.76,7.81,8.2,9.96,9.39,8.54,8.15,8.1,10.13,7.96,9.92,11.43,9.06,9.34,7.68,8.58,9.04,8.19,8.92,8.89,8.59,9.15,9.56,10.87,9.2,11.3,8.61,7,7.85,8.61,9.25,8.89,7.28,7.88,7.8,9.1,9,8.78,7.9,8.21,7.83,8.64,9.58,7.61,7.84,7.62,11.86,9.14,7.04,9.69,8.2,9.03,9.65,8.91,8.81,9.96,8.77,8.6,9.99,7.63,7.95,9.91,9.07],"mode":"markers","type":"scatter3d","marker":{"colorbar":{"title":"","ticklen":2},"cmin":7,"cmax":17.61,"colorscale":[["0","rgba(68,1,84,0.7)"],["0.0416666666666667","rgba(70,19,97,0.7)"],["0.0833333333333333","rgba(72,32,111,0.7)"],["0.125","rgba(71,45,122,0.7)"],["0.166666666666667","rgba(68,58,128,0.7)"],["0.208333333333333","rgba(64,70,135,0.7)"],["0.25","rgba(60,82,138,0.7)"],["0.291666666666667","rgba(56,93,140,0.7)"],["0.333333333333333","rgba(49,104,142,0.7)"],["0.375","rgba(46,114,142,0.7)"],["0.416666666666667","rgba(42,123,142,0.7)"],["0.458333333333333","rgba(38,133,141,0.7)"],["0.5","rgba(37,144,140,0.7)"],["0.541666666666667","rgba(33,154,138,0.7)"],["0.583333333333333","rgba(39,164,133,0.7)"],["0.625","rgba(47,174,127,0.7)"],["0.666666666666667","rgba(53,183,121,0.7)"],["0.708333333333333","rgba(79,191,110,0.7)"],["0.75","rgba(98,199,98,0.7)"],["0.791666666666667","rgba(119,207,85,0.7)"],["0.833333333333333","rgba(147,214,70,0.7)"],["0.875","rgba(172,220,52,0.7)"],["0.916666666666667","rgba(199,225,42,0.7)"],["0.958333333333333","rgba(226,228,40,0.7)"],["1","rgba(253,231,37,0.7)"]],"showscale":false,"color":[10.21,9.92,11.17,10.01,11.15,11.31,9.92,10.73,10.82,10.14,9.97,9.93,11.65,9.46,12.5,11.05,9.41,9.91,10.82,8.23,10.39,10.41,9.76,10.93,9.79,10.74,11.21,9.7,10.27,8.96,9.35,9.63,10.11,9.37,10.17,11.75,11.04,11.11,10.82,11.1,10.94,9.64,9.29,10.59,10.43,8.75,9.52,9.53,10.8,17.61,10.96,10.28,9.78,10.55,11.21,11.46,10.82,9.78,9.88,10.21,9.84,9.89,12.8,9.06,10.39,9.32,8.96,10.06,10.61,8.86,10.87,10.83,13.07,11,11.61,9.93,10.41,10.12,10.38,8.9,11.09,10.29,10.34,10.03,10.7,10.65,8.27,12.65,10.27,9.48,10.09,10.47,9.79,9.16,10.7,8.45,9.4,9.79,10.18,10.63,9.84,8.2,9.36,11.21,10.36,11.62,8.14,9.63,9.59,9.22,13.06,8.69,11.58,10.19,10.04,9.27,8.9,9.48,8.91,9.34,8.82,10.01,9.82,8.57,8.98,9.58,10.91,9.82,9.61,11.41,11.17,9.46,9.15,11.19,9.28,8.07,10.99,9.22,10.56,10.18,9.01,10.06,9.01,9.27,10.66,8.76,7.81,8.2,9.96,9.39,8.54,8.15,8.1,10.13,7.96,9.92,11.43,9.06,9.34,7.68,8.58,9.04,8.19,8.92,8.89,8.59,9.15,9.56,10.87,9.2,11.3,8.61,7,7.85,8.61,9.25,8.89,7.28,7.88,7.8,9.1,9,8.78,7.9,8.21,7.83,8.64,9.58,7.61,7.84,7.62,11.86,9.14,7.04,9.69,8.2,9.03,9.65,8.91,8.81,9.96,8.77,8.6,9.99,7.63,7.95,9.91,9.07],"line":{"colorbar":{"title":"","ticklen":2},"cmin":7,"cmax":17.61,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[10.21,9.92,11.17,10.01,11.15,11.31,9.92,10.73,10.82,10.14,9.97,9.93,11.65,9.46,12.5,11.05,9.41,9.91,10.82,8.23,10.39,10.41,9.76,10.93,9.79,10.74,11.21,9.7,10.27,8.96,9.35,9.63,10.11,9.37,10.17,11.75,11.04,11.11,10.82,11.1,10.94,9.64,9.29,10.59,10.43,8.75,9.52,9.53,10.8,17.61,10.96,10.28,9.78,10.55,11.21,11.46,10.82,9.78,9.88,10.21,9.84,9.89,12.8,9.06,10.39,9.32,8.96,10.06,10.61,8.86,10.87,10.83,13.07,11,11.61,9.93,10.41,10.12,10.38,8.9,11.09,10.29,10.34,10.03,10.7,10.65,8.27,12.65,10.27,9.48,10.09,10.47,9.79,9.16,10.7,8.45,9.4,9.79,10.18,10.63,9.84,8.2,9.36,11.21,10.36,11.62,8.14,9.63,9.59,9.22,13.06,8.69,11.58,10.19,10.04,9.27,8.9,9.48,8.91,9.34,8.82,10.01,9.82,8.57,8.98,9.58,10.91,9.82,9.61,11.41,11.17,9.46,9.15,11.19,9.28,8.07,10.99,9.22,10.56,10.18,9.01,10.06,9.01,9.27,10.66,8.76,7.81,8.2,9.96,9.39,8.54,8.15,8.1,10.13,7.96,9.92,11.43,9.06,9.34,7.68,8.58,9.04,8.19,8.92,8.89,8.59,9.15,9.56,10.87,9.2,11.3,8.61,7,7.85,8.61,9.25,8.89,7.28,7.88,7.8,9.1,9,8.78,7.9,8.21,7.83,8.64,9.58,7.61,7.84,7.62,11.86,9.14,7.04,9.69,8.2,9.03,9.65,8.91,8.81,9.96,8.77,8.6,9.99,7.63,7.95,9.91,9.07]}},"frame":null},{"x":[1,16],"y":[1,23],"type":"scatter3d","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"colorbar":{"title":"","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"cmin":7,"cmax":17.61,"colorscale":[["0","rgba(68,1,84,0.7)"],["0.0416666666666667","rgba(70,19,97,0.7)"],["0.0833333333333333","rgba(72,32,111,0.7)"],["0.125","rgba(71,45,122,0.7)"],["0.166666666666667","rgba(68,58,128,0.7)"],["0.208333333333333","rgba(64,70,135,0.7)"],["0.25","rgba(60,82,138,0.7)"],["0.291666666666667","rgba(56,93,140,0.7)"],["0.333333333333333","rgba(49,104,142,0.7)"],["0.375","rgba(46,114,142,0.7)"],["0.416666666666667","rgba(42,123,142,0.7)"],["0.458333333333333","rgba(38,133,141,0.7)"],["0.5","rgba(37,144,140,0.7)"],["0.541666666666667","rgba(33,154,138,0.7)"],["0.583333333333333","rgba(39,164,133,0.7)"],["0.625","rgba(47,174,127,0.7)"],["0.666666666666667","rgba(53,183,121,0.7)"],["0.708333333333333","rgba(79,191,110,0.7)"],["0.75","rgba(98,199,98,0.7)"],["0.791666666666667","rgba(119,207,85,0.7)"],["0.833333333333333","rgba(147,214,70,0.7)"],["0.875","rgba(172,220,52,0.7)"],["0.916666666666667","rgba(199,225,42,0.7)"],["0.958333333333333","rgba(226,228,40,0.7)"],["1","rgba(253,231,37,0.7)"]],"showscale":true,"color":[7,17.61],"line":{"color":"rgba(255,127,14,1)"}},"z":[7,17.61],"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 1.1: Scatter Plot of CoalAsh Percent
+</p>
 </div>
-<div id="render-book" class="section level2" number="1.2">
-<h2><span class="header-section-number">1.2</span> Render book</h2>
-<p>You can render the HTML version of this example book without changing anything:</p>
-<ol style="list-style-type: decimal">
-<li><p>Find the <strong>Build</strong> pane in the RStudio IDE, and</p></li>
-<li><p>Click on <strong>Build Book</strong>, then select your output format, or select “All formats” if you’d like to use multiple formats from the same book source files.</p></li>
-</ol>
-<p>Or build the book from the R console:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a>bookdown<span class="sc">::</span><span class="fu">render_book</span>()</span></code></pre></div>
-<p>To render this example to PDF as a <code>bookdown::pdf_book</code>, you’ll need to install XeLaTeX. You are recommended to install TinyTeX (which includes XeLaTeX): <a href="https://yihui.org/tinytex/" class="uri">https://yihui.org/tinytex/</a>.</p>
+<p>The key idea in this chapter is to model the above random process <span class="math inline">\(\{Z(s),s\in D\}\)</span> with values on known locations. Then inference of unknown locations can be made.</p>
 </div>
-<div id="preview-book" class="section level2" number="1.3">
-<h2><span class="header-section-number">1.3</span> Preview book</h2>
-<p>As you work, you may start a local server to live preview this HTML book. This preview will update as you edit the book when you save individual .Rmd files. You can start the server in a work session by using the RStudio add-in “Preview book,” or from the R console:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a>bookdown<span class="sc">::</span><span class="fu">serve_book</span>()</span></code></pre></div>
+<div id="spatial-data-example" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Spatial Data Example</h2>
+<div id="main-concepts" class="section level3" number="1.2.1">
+<h3><span class="header-section-number">1.2.1</span> Main Concepts</h3>
+<p>Variogram is the crucial parameter of geostatistics.</p>
+<blockquote>
+<p><strong>Intrinsic Stationarity</strong><br />
+Based on the random process mentioned above, intrinsic stationarity is defined through first differences
+<span class="math display" id="eq:stationary2">\[\begin{equation}
+\begin{aligned}
+&amp;E\{Z(s+h) - Z(s)\} = 0,\\
+&amp;Var\{Z(s+h) - Z(s)\} = 2\gamma(h).
+\end{aligned}
+\tag{1.1}
+\end{equation}\]</span></p>
+</blockquote>
+<blockquote>
+<p><strong>Variogram</strong><br />
+Variogram is <span class="math inline">\(2\gamma(h)\)</span> in the definition of intrinsic stationarity.</p>
+</blockquote>
+</div>
+<div id="esitimation-of-variogram" class="section level3" number="1.2.2">
+<h3><span class="header-section-number">1.2.2</span> Esitimation of Variogram</h3>
+<div id="estimator" class="section level4" number="1.2.2.1">
+<h4><span class="header-section-number">1.2.2.1</span> Estimator</h4>
+<p>The classical estimator of the variogram:<br />
+<span class="math display" id="eq:v-estimation-classic">\[\begin{equation}
+2 \hat{\gamma}(h) \equiv \frac{1}{|N(h)|} \sum_{N(h)}\left(Z\left(s_{i}\right)-Z\left(s_{j}\right)\right)^{2}
+\tag{1.2}
+\end{equation}\]</span></p>
+<p>Estimator <a href="geostatistics.html#eq:v-estimation-classic">(1.2)</a> is unbiased. However, it is badly affected by atypical observations due to square operation.</p>
+<p>For an approximately symmetric distribution, there is a more robust approach to the estimation of the variogram by transforming the problem to location estimation. For a Gaussian process, we have:</p>
+<p><span class="math display" id="eq:v-estimation-robust">\[\begin{equation}
+2 \bar{\gamma}(\mathrm{h}) \equiv\left\{\frac{1}{|N(\mathrm{~h})|} \sum_{N(\mathrm{~h})}\left|Z\left(\mathrm{~s}_{i}\right)-Z\left(\mathrm{~s}_{j}\right)\right|^{1 / 2}\right\}^{4} /\left(0.457+\frac{0.494}{|N(\mathrm{~h})|}\right).
+\tag{1.3}
+\end{equation}\]</span></p>
+<p>Estimator <a href="geostatistics.html#eq:v-estimation-robust">(1.3)</a> is also unbiased.</p>
+</div>
+<div id="visualization" class="section level4" number="1.2.2.2">
+<h4><span class="header-section-number">1.2.2.2</span> Visualization</h4>
+<p><strong>Variogram Cloud</strong>:<br />
+Cousin to estimator <a href="geostatistics.html#eq:v-estimation-classic">(1.2)</a>, variogram cloud is a useful diagnostic tool. Similarly, it can be badly affected by atypical observations. Variogram cloud in east-west direction of coalash data is shown in Figure <a href="geostatistics.html#fig:v-cloud">1.2</a></p>
+<p>Here are steps to draw variogram cloud.<br />
+</p>
+<ul>
+<li>Group points with <span class="math inline">\(y\)</span> value;</li>
+<li>Calculate the classical estimator of the variogram <span class="math inline">\(\frac{1}{|N(h)|}\cdot \displaystyle\sum_{N(h)}{(z(s_i) - z(s_j))^2}\)</span>.<br />
 
+<ul>
+<li><span class="math inline">\(N(h) = \{(s_i, s_j):\ s_i + he = s_j\}\)</span></li>
+<li><span class="math inline">\(e\)</span>: the unit vector of east direction (positive x axis)</li>
+<li>Notice that y values of each pair <span class="math inline">\((s_i, s_j)\)</span> are the same. But they may vary among pairs.</li>
+</ul></li>
+<li>Plot the corresponding boxplot.<br />
+
+<ul>
+<li>x axis: distance <span class="math inline">\(h\)</span></li>
+<li>y axis: the classical estimator of the variogram with parameter h, Units are <span class="math inline">\((\% coal ash)^2\)</span></li>
+</ul></li>
+</ul>
+<div class="figure"><span style="display:block;" id="fig:v-cloud"></span>
+<div id="htmlwidget-6b9b0f03084835b0bba4" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6b9b0f03084835b0bba4">{"x":{"data":[{"x":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"y":[0.0256,0.0169000000000002,1.2321,0.291599999999999,0.608399999999999,0.4624,1.1236,0.0441000000000004,0.4489,0.8464,0.476100000000002,1.1664,0.0168999999999997,0.0144000000000002,1,0.810000000000001,6.1504,0.291600000000001,0.0899999999999994,3.1684,6.7081,0.0289,9.1204,9.99999999999957e-005,9.5481,1.4161,10.24,3.61,0.202499999999999,2.25,1.9881,7.89609999999999,2.0164,0.490000000000001,0.504099999999999,3.8809,1.1664,0.00160000000000007,3.0976,0.5776,0.518399999999998,0.1156,1.7424,5.29,0.532900000000001,0.1849,7.7841,0.0120999999999999,0.0529000000000002,0.1156,4.0401,1.7956,6.76,0.202499999999999,1.6384,1.1449,0.348100000000002,1.2321,0.0625,4.2849,0.129600000000001,4.4944,1.1664,4.5796,3.76360000000001,4.8841,5.4289,0.864899999999999,1.4884,0.384400000000001,1.6129,1.0609,9.99999999999957e-005,0.0675999999999999,0.260100000000002,0.0224999999999996,0.152099999999999,0.0841000000000005,1.9881,0.1681,0.0576000000000001,0.0289,1.4884,7.2361,0.0169000000000002,0.774399999999998,46.1041,2.1904,1.4641,1.1025,1.5376,0.360000000000002,45.4276,0.16,0.9216,0.1681,0.960400000000001,1.0816,0.211599999999999,0.0960999999999998,1,2.7225,0.5476,3.8416,2.1025,0.7056,0.656100000000001,0.518399999999998,2.0449,1.1025,1.4161,0.7056,0.0675999999999999,0.000899999999999962,0.6889,1.6384,1.3225,1.7161,0.202499999999999,7.67290000000001,0.144400000000001,0.0441000000000004,0.202500000000001,1.2769,8.2369,0.00359999999999985,0.0729000000000007,3.0276,3.38560000000001,0.0440999999999996,3.1684,0.0121000000000001,2.2801,1.96,0.532899999999998,1.1664,4.2436,0.0675999999999999,0.3249,0.624099999999999,2.6244,0.846400000000003,8.7025,3.2761,2.6896,2.0736,0.1936,0.0016,0.739600000000001,8.1796,2.4649,4.6225,0.1849,0.722500000000002,0.0729000000000007,4.1209,0.592899999999999,4.9729,1.8496,0.0961000000000003,2.3104,0.0196000000000002,2.56,6.0025,2.1904,0.0840999999999995,0.0961000000000003,0.6889,1.7689,0.00250000000000007,0.774399999999998,0.810000000000001,0.348099999999999,1.2544,3.1329,0.0121000000000003,1.8225,0.00640000000000001,0.2704,0.883600000000002,0.0289,0.0728999999999998,0.774399999999998],"hoverinfo":"y","type":"box","fillcolor":"rgba(19,43,67,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(19,43,67,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],"y":[0.108899999999999,2.9929,2.1316,2.0164,0.0168999999999997,1.9044,0.656100000000001,0.1156,5.1529,0.2304,5.8081,5.4289,0.504100000000001,0.0900000000000004,3.4596,0.0120999999999999,3.1684,2.9241,9.99999999999957e-005,0.260100000000002,9.06010000000001,0.756900000000002,0.409600000000001,5.0176,1.0609,3.1329,9.8596,0.5476,1.7424,0.144400000000001,9.7969,0.1764,1.5376,1.0404,10.6929,0.3249,0.5776,0.336399999999999,4.2025,4.5796,1.0404,0.4489,0.6724,2.2801,3.76360000000001,2.8561,0.00359999999999995,0,0.0360999999999998,2.4649,0.1089,0.739600000000002,1.3689,1.6129,0.6889,0.960400000000001,1.1449,0.0783999999999996,1.0816,4.1209,1.6129,0.0225000000000001,0.0899999999999994,3.4225,0.1225,8.1796,8.1796,0.0783999999999996,2.2801,0.00360000000000006,1.1449,2.0736,0.00360000000000006,0.8281,0.409599999999998,0.756900000000002,0.129600000000001,4.1209,1.5376,1.9321,0.624100000000001,2.5281,1.1664,1.9881,0.0121000000000003,0.240099999999998,0.0783999999999996,1.9321,1.5129,0.144399999999999,0.000900000000000068,1.0201,2.5921,2.9584,0.883600000000001,0.5625,0.202500000000001,3.24,11.8336,51.84,2.0164,3.76360000000001,0.0168999999999997,0.2704,4.79610000000001,0.6724,0.0361000000000005,9.24160000000001,1.0609,0.0289,0.0484000000000003,0.409599999999998,1.1664,4.0804,2.4649,2.9929,0.1681,0.1936,4.1616,0.00809999999999998,0.00249999999999989,0.313600000000001,3.4596,1.96,0.1764,0.8281,0.4356,0.220899999999999,1.8225,2.8224,0.00249999999999989,0.4356,0.0169000000000002,0.0784000000000006,0.291600000000001,0.144400000000001,3.7636,2.2201,0.490000000000001,0.202499999999999,0.102399999999999,0.3481,6.3504,9.99999999999957e-005,0.302500000000001,0.1849,1.3456,0.5625,0.2704,1.0816,2.1609,4.6225,3.4969,0.0576000000000001,5.1076,0.0900000000000004,0.1024,0.1936,0.324899999999998,9.61],"hoverinfo":"y","type":"box","fillcolor":"rgba(24,53,80,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(24,53,80,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],"y":[2.89,0.1156,1.2996,0.3249,2.3716,0.1936,1.7956,0.656100000000001,0.372099999999999,0.1089,0.5625,9.06010000000001,0.1681,1.9044,0.0400000000000001,1.6384,7.45289999999999,2.0449,0.240099999999999,0.4356,7.5625,2.0164,23.4256,0.5776,0.624099999999999,0.902500000000002,5.15290000000001,0.5776,1.21,0.25,0.144400000000001,3.4225,7.1824,9.0601,0.00999999999999993,1.0404,2.1316,0.1024,0.0121000000000003,0.1764,9.99999999999957e-005,0.810000000000001,3.8416,2.6244,3.76360000000001,6.5536,0.0289,0.489999999999999,0.324899999999998,0.00490000000000004,0.921599999999998,9.12040000000001,1.1236,0.4489,2.0164,3.61,5.4756,9.99999999999957e-005,0.00490000000000004,2.7556,0.0323999999999999,0.756900000000002,13.0321,0.864899999999999,1.6641,7.7284,2.0736,7.9524,0.260100000000002,1.0404,2.4964,0.00360000000000006,17.8929,0.00490000000000004,0.409600000000001,0.64,2.6569,0.324899999999998,0.0441000000000004,0.00640000000000001,0.8281,0.1936,1.0404,1.6641,1.4884,2.6896,0.1024,1.2544,1.0201,0.0529000000000002,0.756899999999999,1.7689,3.72490000000001,0.1024,0.9801,1.6384,4.6656,0.0728999999999998,0.476100000000001,0.4225,0.2704,3.1684,0.211599999999999,0.129600000000001,1.69,3.2761,0.9801,1.5876,1.3456,6.0516,0.883599999999999,0.810000000000001,20.7025,0.00640000000000001,2.3716,0.8464,0.0289,5.6644,0.102399999999999,0.2704,0.504100000000001,1.9321,0.0783999999999996,0.36,0.0120999999999999,2.7556,0.0196000000000002,1.3456,0.756900000000002,0.792099999999999,1.3924,0.739600000000002,0.291600000000001,2.6896,0.4225,15.2881,2.7556,0.291600000000001],"hoverinfo":"y","type":"box","fillcolor":"rgba(29,63,94,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(29,63,94,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],"y":[0.0900000000000004,0.2401,0.2401,2.4336,0.0399999999999997,0.00159999999999993,0.0289,6.3504,2.1025,1.3924,11.0889,2.0736,1.9044,2.6244,2.1609,0.902499999999999,0.4624,1.9321,1.1449,9.99999999999957e-005,6.3001,3.72490000000001,0.5625,0.476100000000002,10.8241,0.409599999999998,5.8564,6.0025,0.396899999999999,0.0728999999999998,4.3681,0.6889,1.0609,1.96,12.3201,1.3225,1.8225,0.921599999999998,1.8769,1,0.9801,0.000900000000000068,0.0440999999999996,7.84,0.0289,0.0169000000000002,1.0201,0.846400000000003,20.5209,4.3264,8.1225,3.5344,0.672399999999998,0.00999999999999993,6.8121,11.4921,4.7089,0.1024,0.280899999999999,0.291600000000001,0.0783999999999996,0.108899999999999,5.0176,3.0625,5.0176,0.1936,0.0169000000000002,1.5376,0.0440999999999996,0.656099999999998,0.0841000000000005,0.0225000000000001,3.0276,14.3641,0.313599999999999,6.9169,9.1204,0.0961000000000003,0.883600000000001,0.3364,0.3481,2.9929,0.4356,0.3481,0.0529000000000002,6.76000000000001,38.44,0.792100000000001,1.6129,2.1025,0.4356,0.211599999999999,6.5536,0.4624,1.4161,4.5796,9.3636,0.144399999999999,0.490000000000001,4.08040000000001,9.61,1.6641,0.1225,1.4641,3.0976,2.6569,0.184900000000001,0.0400000000000004,2.4025,0.0169000000000002,1.1025,0.828099999999997,0.159999999999999,0.0256,3.6864,4.7524],"hoverinfo":"y","type":"box","fillcolor":"rgba(34,73,108,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(34,73,108,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],"y":[0.2401,2.1609,2.89,0.608400000000002,0.302499999999999,0.902500000000002,2.49639999999999,2.1609,2.6569,1.0404,5.1529,0.193600000000001,1.5876,2.4649,0.810000000000001,12.96,1.5625,11.2225,6.76,2.9929,0.372100000000001,3.6864,4.6656,0.3969,0.0960999999999992,4.84,1.7161,0.0168999999999997,7.9524,2.2201,3.0276,1.6129,0.00360000000000006,0.756900000000002,12.25,7.7284,0.396900000000001,0.00249999999999998,1.2544,0.302500000000001,0.883600000000002,16,1.2544,0.00640000000000001,3.24,4.0401,8.1225,0.756900000000002,1.8496,1.0404,14.1376,0.756900000000002,0.302500000000001,0.25,0.0323999999999999,0.3481,0.0168999999999997,0.00159999999999993,6.0025,1.4161,2.1025,0.211600000000001,1.7956,58.5225,4.6225,7.0225,0.0196000000000002,5.3361,2.9584,0.0484000000000003,0.00809999999999998,6.3504,0.00809999999999998,11.6281,3.9601,2.56,7.5625,1.0816,2.7225,0.291599999999999,4.2436,1.1664,6.1504,0.756899999999999,0.0289,0.476099999999999,6.76000000000001,0.409600000000001,2.9584,9.1204,1.2321,1.3225,1.7424,4.1616,0.6724,0.2704],"hoverinfo":"y","type":"box","fillcolor":"rgba(40,84,122,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(40,84,122,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],"y":[0.810000000000001,1.7424,8.8209,4.4521,4.1616,2.89,19.8916,1.9321,1.6384,0.608399999999999,6.25,2.7889,0.0675999999999999,6.7081,3.8809,9.54809999999999,0.921600000000002,9.7969,2.56,1.3924,3.64809999999999,0.0441000000000004,9.06010000000001,0.0576000000000001,0.0169000000000002,1.0201,0.739599999999999,1.5129,8.41,0.1089,0.3481,6.3001,2.89,0.3481,0.0840999999999995,1.9321,0.960400000000001,0.0225000000000001,1.3456,0.3364,1.1881,0.291599999999999,3.3124,4.0804,0.5625,2.9584,1.2321,1.2321,4.2849,30.4704,1,6.0516,6.76000000000001,1.96,4.3264,0.864899999999999,12.96,1.7689,1.3225,0.176400000000001,1.0404,2.4649,71.5716,0.0625,0.489999999999999,8.8804,2.56,6.9169,0.202499999999999,2.2801,0.577600000000002,4.6225,0.00999999999999993,7.8961,1.9044,1,2.1904],"hoverinfo":"y","type":"box","fillcolor":"rgba(45,95,137,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(45,95,137,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7],"y":[3.2761,12.6736,3.4969,0.360000000000002,5.6644,0.0289,7.1289,5.2441,0.372100000000001,2.2801,6.25,4.0401,11.9716,3.1684,6.5025,4.1209,5.95360000000001,5.5225,2.7889,0.0960999999999992,0.202499999999999,6.8121,10.89,9.7344,0.00159999999999993,1.2769,10.3684,3.8809,1,5.90490000000001,5.3824,3.4225,2.7556,2.1025,3.0976,0.5776,1.69,0.518400000000001,0.302499999999999,0.202499999999999,1.3225,6.7081,0.3364,3.6481,0.00159999999999993,9.6721,0.00360000000000006,6.6564,0.3481,0.1156,2.6244,6.5025,1.5625,1.7956,0.0675999999999999,9.54810000000001,2.4336,2.4025],"hoverinfo":"y","type":"box","fillcolor":"rgba(51,106,152,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(51,106,152,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],"y":[3.7249,0.0624999999999996,6.96959999999999,9.67210000000001,0.302500000000001,0.489999999999999,0.739600000000002,1.8496,1.3924,0.489999999999999,1.3456,0.9801,4.8841,0.640000000000001,3.8416,3.4969,2.1609,1.9321,0.3481,0.9801,0.883599999999999,0.00489999999999979,1.5876,0.6889,21.6225,8.1225,4.7524,1.7424,6.6049,9.3025,0.518400000000001,16.4025,0.640000000000001,2.6244,3.0976,4.8841,4.2025,2.0164,2.3409,0.409600000000001],"hoverinfo":"y","type":"box","fillcolor":"rgba(56,117,167,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(56,117,167,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9],"y":[0.592899999999999,2.5281,3.2041,0.313599999999999,4.5796,3.3489,2.3409,7.29000000000001,0.0225000000000001,1.1664,17.3889,18.4041,0.739599999999999,5.7121,0.739599999999999,0.0841000000000005,1.4884,8.0656,9.9225,8.5264,1.1025,0.396900000000001,7.0756,0.0143999999999998],"hoverinfo":"y","type":"box","fillcolor":"rgba(62,129,183,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(62,129,183,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[10,10,10,10,10,10,10,10,10,10,10],"y":[6.5536,6.40090000000001,5.76,0.608399999999999,4.0804,1.4884,4.8841,1.0404,8.3521,0.6889,3.7636],"hoverinfo":"y","type":"box","fillcolor":"rgba(68,141,198,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(68,141,198,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[11,11,11,11],"y":[0.6889,4.2849,10.6276,0.592899999999999],"hoverinfo":"y","type":"box","fillcolor":"rgba(74,153,214,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(74,153,214,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[12,12],"y":[0.396899999999999,5.4756],"hoverinfo":"y","type":"box","fillcolor":"rgba(80,165,231,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(80,165,231,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[13],"y":[0.810000000000001],"hoverinfo":"y","type":"box","fillcolor":"rgba(86,177,247,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(86,177,247,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":43.7625570776256,"r":7.30593607305936,"b":40.1826484018265,"l":37.2602739726027},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"title":{"text":"Variogram Cloud in the East-West Direction","font":{"color":"rgba(0,0,0,1)","family":"","size":17.5342465753425},"x":0.5,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,13.6],"tickmode":"array","ticktext":["1","2","3","4","5","6","7","8","9","10","11","12","13"],"tickvals":[1,2,3,4,5,6,7,8,9,10,11,12,13],"categoryorder":"array","categoryarray":["1","2","3","4","5","6","7","8","9","10","11","12","13"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"y","title":{"text":"h","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-3.57858,75.15018],"tickmode":"array","ticktext":["0","20","40","60"],"tickvals":[0,20,40,60],"categoryorder":"array","categoryarray":["0","20","40","60"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"x","title":{"text":"Variogram","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"title":{"text":"alpha","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"28c47f9d18c5":{"x":{},"y":{},"fill":{},"colour":{},"alpha":{},"type":"box"}},"cur_data":"28c47f9d18c5","visdat":{"28c47f9d18c5":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 1.2: Variogram Cloud in the East-West Direction
+</p>
+</div>
+<p><strong>Square-Root-Differences Cloud</strong>:<br />
+The only different from variogram cloud: calculate the classical estimator of the variogram <span class="math inline">\(\frac{1}{|N(h)|}\cdot \displaystyle\sum_{N(h)}{|Z(s_i) - Z(s_j)|^\frac12}\)</span>.</p>
+<div class="figure"><span style="display:block;" id="fig:squre-cloud"></span>
+<div id="htmlwidget-39e61919f1ebba7e11b8" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-39e61919f1ebba7e11b8">{"x":{"data":[{"x":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"y":[0.4,0.3605551275464,1.05356537528527,0.734846922834953,0.883176086632784,0.824621125123532,1.0295630140987,0.458257569495585,0.818535277187245,0.959166304662544,0.830662386291808,1.03923048454133,0.360555127546398,0.346410161513777,1,0.948683298050514,1.57480157480236,0.734846922834954,0.547722557505165,1.33416640641263,1.60934769394311,0.412310562561766,1.73781471969828,0.0999999999999989,1.75783958312469,1.09087121146357,1.78885438199983,1.37840487520902,0.670820393249936,1.22474487139159,1.18743420870379,1.67630546142402,1.1916375287813,0.836660026534076,0.842614977317635,1.40356688476182,1.03923048454133,0.200000000000002,1.32664991614216,0.871779788708135,0.848528137423856,0.58309518948453,1.14891252930761,1.51657508881031,0.854400374531753,0.6557438524302,1.67032930884901,0.331662479035539,0.479583152331272,0.58309518948453,1.41774468787578,1.15758369027902,1.61245154965971,0.670820393249936,1.13137084989848,1.03440804327886,0.768114574786862,1.05356537528527,0.5,1.43874945699382,0.600000000000001,1.4560219778561,1.03923048454133,1.46287388383278,1.39283882771841,1.48660687473185,1.52643375224737,0.964365076099295,1.10453610171873,0.787400787401182,1.12694276695846,1.01488915650922,0.0999999999999989,0.509901951359278,0.714142842854286,0.38729833462074,0.624499799839839,0.538516480713451,1.18743420870379,0.640312423743285,0.489897948556636,0.412310562561766,1.10453610171873,1.64012194668567,0.3605551275464,0.938083151964685,2.60576284415908,1.21655250605964,1.1,1.02469507659596,1.113552872566,0.774596669241484,2.59615099714943,0.632455532033676,0.979795897113271,0.640312423743285,0.989949493661167,1.01980390271856,0.678232998312526,0.556776436283002,1,1.28452325786651,0.860232526704263,1.4,1.20415945787923,0.916515138991168,0.9,0.848528137423856,1.19582607431014,1.02469507659596,1.09087121146357,0.916515138991168,0.509901951359278,0.173205080756886,0.91104335791443,1.13137084989848,1.07238052947636,1.14455231422596,0.670820393249936,1.66433169770932,0.616441400296898,0.458257569495585,0.670820393249938,1.06301458127347,1.69410743460974,0.244948974278315,0.519615242270664,1.31909059582729,1.35646599662505,0.458257569495583,1.33416640641263,0.33166247903554,1.22882057274445,1.18321595661992,0.854400374531752,1.03923048454133,1.43527000944073,0.509901951359278,0.754983443527075,0.888819441731558,1.27279220613579,0.959166304662545,1.71755640373177,1.34536240470737,1.28062484748657,1.2,0.66332495807108,0.2,0.927361849549571,1.69115345252878,1.25299640861417,1.46628782986152,0.6557438524302,0.92195444572929,0.519615242270664,1.4247806848775,0.877496438739212,1.49331845230681,1.16619037896906,0.556776436283003,1.2328828005938,0.374165738677395,1.26491106406735,1.56524758424985,1.21655250605964,0.53851648071345,0.556776436283003,0.91104335791443,1.15325625946708,0.223606797749981,0.938083151964685,0.948683298050514,0.76811457478686,1.05830052442584,1.33041346956501,0.331662479035542,1.16189500386223,0.282842712474619,0.721110255092798,0.969535971483266,0.412310562561766,0.519615242270663,0.938083151964685],"hoverinfo":"y","type":"box","fillcolor":"rgba(19,43,67,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(19,43,67,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],"y":[0.574456264653801,1.31529464379659,1.20830459735946,1.1916375287813,0.360555127546398,1.17473401244707,0.9,0.58309518948453,1.50665191733194,0.692820323027551,1.552417469626,1.52643375224737,0.842614977317636,0.547722557505167,1.36381816969859,0.331662479035539,1.33416640641263,1.3076696830622,0.0999999999999989,0.714142842854286,1.73493515728975,0.932737905308882,0.8,1.49666295470958,1.01488915650922,1.33041346956501,1.77200451466694,0.860232526704263,1.14891252930761,0.616441400296898,1.76918060129541,0.648074069840786,1.113552872566,1.00995049383621,1.80831413200251,0.754983443527075,0.871779788708135,0.76157731058639,1.43178210632764,1.46287388383278,1.00995049383621,0.818535277187245,0.905538513813742,1.22882057274445,1.39283882771841,1.3,0.244948974278317,0,0.435889894354067,1.25299640861417,0.574456264653803,0.927361849549571,1.0816653826392,1.12694276695846,0.91104335791443,0.989949493661167,1.03440804327886,0.529150262212917,1.01980390271856,1.4247806848775,1.12694276695846,0.387298334620742,0.547722557505165,1.36014705087354,0.591607978309961,1.69115345252878,1.69115345252878,0.529150262212917,1.22882057274445,0.244948974278319,1.03440804327886,1.2,0.244948974278319,0.953939201416946,0.799999999999999,0.932737905308882,0.600000000000001,1.4247806848775,1.113552872566,1.17898261225516,0.888819441731559,1.26095202129185,1.03923048454133,1.18743420870379,0.331662479035542,0.699999999999999,0.529150262212917,1.17898261225516,1.10905365064094,0.616441400296897,0.173205080756891,1.00498756211209,1.26885775404495,1.3114877048604,0.969535971483266,0.866025403784439,0.670820393249938,1.34164078649987,1.85472369909914,2.68328157299975,1.1916375287813,1.39283882771841,0.360555127546398,0.721110255092798,1.47986485869487,0.905538513813742,0.435889894354069,1.74355957741627,1.01488915650922,0.412310562561766,0.469041575982344,0.799999999999999,1.03923048454133,1.42126704035519,1.25299640861417,1.31529464379659,0.640312423743285,0.66332495807108,1.42828568570857,0.3,0.223606797749977,0.748331477354789,1.36381816969859,1.18321595661992,0.648074069840786,0.953939201416946,0.812403840463596,0.685565460040104,1.16189500386223,1.29614813968157,0.223606797749977,0.812403840463596,0.3605551275464,0.529150262212919,0.734846922834954,0.616441400296898,1.39283882771841,1.22065556157337,0.836660026534076,0.670820393249936,0.565685424949237,0.768114574786861,1.58745078663875,0.0999999999999989,0.741619848709567,0.6557438524302,1.0770329614269,0.866025403784439,0.721110255092798,1.01980390271856,1.21243556529821,1.46628782986152,1.36747943311773,0.489897948556636,1.50332963783729,0.547722557505167,0.565685424949237,0.66332495807108,0.754983443527074,1.7606816861659],"hoverinfo":"y","type":"box","fillcolor":"rgba(24,53,80,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(24,53,80,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],"y":[1.30384048104053,0.58309518948453,1.06770782520313,0.754983443527075,1.24096736459909,0.66332495807108,1.15758369027902,0.9,0.781024967590665,0.574456264653803,0.866025403784439,1.73493515728975,0.640312423743285,1.17473401244707,0.447213595499958,1.13137084989848,1.65227116418583,1.19582607431014,0.7,0.812403840463596,1.6583123951777,1.1916375287813,2.2,0.871779788708135,0.888819441731558,0.974679434480897,1.50665191733194,0.871779788708135,1.04880884817015,0.707106781186548,0.616441400296898,1.36014705087354,1.63707055437449,1.73493515728975,0.316227766016837,1.00995049383621,1.20830459735946,0.565685424949238,0.331662479035542,0.648074069840786,0.0999999999999989,0.948683298050514,1.4,1.27279220613579,1.39283882771841,1.6,0.412310562561766,0.836660026534075,0.754983443527074,0.26457513110646,0.979795897113271,1.73781471969828,1.0295630140987,0.818535277187245,1.1916375287813,1.37840487520902,1.52970585407784,0.0999999999999989,0.26457513110646,1.28840987267251,0.424264068711928,0.932737905308882,1.9,0.964365076099295,1.13578166916005,1.66733320005331,1.2,1.67928556237467,0.714142842854286,1.00995049383621,1.25698050899765,0.244948974278319,2.05669638012031,0.26457513110646,0.8,0.894427190999916,1.27671453348037,0.754983443527074,0.458257569495585,0.282842712474619,0.953939201416946,0.66332495807108,1.00995049383621,1.13578166916006,1.10453610171873,1.28062484748657,0.565685424949238,1.05830052442584,1.00498756211209,0.479583152331272,0.932737905308881,1.15325625946708,1.38924439894498,0.565685424949238,0.99498743710662,1.13137084989848,1.46969384566991,0.519615242270663,0.830662386291808,0.806225774829855,0.721110255092798,1.33416640641263,0.678232998312526,0.600000000000001,1.14017542509914,1.34536240470737,0.99498743710662,1.12249721603218,1.0770329614269,1.56843871413581,0.969535971483266,0.948683298050514,2.13307290077015,0.282842712474619,1.24096736459909,0.959166304662544,0.412310562561766,1.54272486205415,0.565685424949237,0.721110255092798,0.842614977317636,1.17898261225516,0.529150262212917,0.774596669241483,0.331662479035539,1.28840987267251,0.374165738677395,1.0770329614269,0.932737905308882,0.94339811320566,1.08627804912002,0.927361849549571,0.734846922834954,1.28062484748657,0.806225774829855,1.97737199332852,1.28840987267251,0.734846922834954],"hoverinfo":"y","type":"box","fillcolor":"rgba(29,63,94,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(29,63,94,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],"y":[0.547722557505167,0.7,0.7,1.24899959967968,0.447213595499957,0.199999999999998,0.412310562561766,1.58745078663875,1.20415945787923,1.08627804912002,1.82482875908947,1.2,1.17473401244707,1.27279220613579,1.21243556529821,0.974679434480896,0.824621125123532,1.17898261225516,1.03440804327886,0.0999999999999989,1.58429795177549,1.38924439894498,0.866025403784439,0.830662386291808,1.81383571472171,0.799999999999999,1.5556349186104,1.56524758424985,0.793725393319377,0.519615242270663,1.4456832294801,0.91104335791443,1.01488915650922,1.18321595661992,1.87349939951952,1.07238052947636,1.16189500386222,0.979795897113271,1.17046999107196,1,0.99498743710662,0.173205080756891,0.458257569495583,1.67332005306815,0.412310562561766,0.3605551275464,1.00498756211209,0.959166304662545,2.12837966537928,1.4422205101856,1.68819430161341,1.37113092008021,0.905538513813741,0.316227766016837,1.61554944214035,1.8411952639522,1.47309198626562,0.565685424949238,0.728010988928051,0.734846922834954,0.529150262212917,0.574456264653801,1.49666295470958,1.3228756555323,1.49666295470958,0.66332495807108,0.3605551275464,1.113552872566,0.458257569495583,0.899999999999999,0.538516480713451,0.387298334620742,1.31909059582729,1.94679223339318,0.748331477354787,1.62172747402269,1.73781471969828,0.556776436283003,0.969535971483266,0.761577310586391,0.768114574786861,1.31529464379659,0.812403840463596,0.768114574786861,0.479583152331272,1.61245154965971,2.48997991959775,0.943398113205661,1.12694276695846,1.20415945787923,0.812403840463596,0.678232998312526,1.6,0.824621125123532,1.09087121146357,1.46287388383278,1.74928556845359,0.616441400296897,0.836660026534076,1.42126704035519,1.7606816861659,1.13578166916005,0.591607978309961,1.1,1.32664991614216,1.27671453348037,0.655743852430201,0.447213595499959,1.24498995979887,0.3605551275464,1.02469507659596,0.953939201416945,0.632455532033675,0.4,1.3856406460551,1.47648230602334],"hoverinfo":"y","type":"box","fillcolor":"rgba(34,73,108,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(34,73,108,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],"y":[0.7,1.21243556529821,1.30384048104053,0.883176086632785,0.741619848709566,0.974679434480897,1.25698050899765,1.21243556529821,1.27671453348037,1.00995049383621,1.50665191733194,0.663324958071081,1.12249721603218,1.25299640861417,0.948683298050514,1.89736659610103,1.11803398874989,1.83030052177231,1.61245154965971,1.31529464379659,0.781024967590666,1.3856406460551,1.46969384566991,0.793725393319377,0.556776436283001,1.48323969741913,1.14455231422596,0.360555127546398,1.67928556237467,1.22065556157337,1.31909059582729,1.12694276695846,0.244948974278319,0.932737905308882,1.87082869338697,1.66733320005331,0.793725393319378,0.223606797749979,1.05830052442584,0.741619848709567,0.969535971483266,2,1.05830052442584,0.282842712474619,1.34164078649987,1.41774468787578,1.68819430161341,0.932737905308882,1.16619037896906,1.00995049383621,1.93907194296653,0.932737905308882,0.741619848709567,0.707106781186548,0.424264068711928,0.768114574786861,0.360555127546398,0.199999999999998,1.56524758424985,1.09087121146357,1.20415945787923,0.678232998312527,1.15758369027902,2.76586333718787,1.46628782986152,1.62788205960997,0.374165738677395,1.51986841535707,1.3114877048604,0.469041575982344,0.3,1.58745078663875,0.3,1.84661853126194,1.41067359796659,1.26491106406735,1.6583123951777,1.01980390271856,1.28452325786651,0.734846922834953,1.43527000944073,1.03923048454133,1.57480157480236,0.932737905308881,0.412310562561766,0.830662386291807,1.61245154965971,0.8,1.3114877048604,1.73781471969828,1.05356537528527,1.07238052947636,1.14891252930761,1.42828568570857,0.905538513813742,0.721110255092798],"hoverinfo":"y","type":"box","fillcolor":"rgba(40,84,122,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(40,84,122,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],"y":[0.948683298050514,1.14891252930761,1.72336879396141,1.4525839046334,1.42828568570857,1.30384048104053,2.11187120819429,1.17898261225516,1.13137084989848,0.883176086632784,1.58113883008419,1.29228479833201,0.509901951359278,1.60934769394311,1.40356688476182,1.75783958312469,0.979795897113272,1.76918060129541,1.26491106406735,1.08627804912002,1.38202749610852,0.458257569495585,1.73493515728975,0.489897948556636,0.3605551275464,1.00498756211209,0.92736184954957,1.10905365064094,1.70293863659264,0.574456264653803,0.768114574786861,1.58429795177549,1.30384048104053,0.768114574786861,0.53851648071345,1.17898261225516,0.989949493661167,0.387298334620742,1.0770329614269,0.761577310586391,1.04403065089105,0.734846922834953,1.3490737563232,1.42126704035519,0.866025403784439,1.3114877048604,1.05356537528527,1.05356537528527,1.43874945699382,2.34946802489415,1,1.56843871413581,1.61245154965971,1.18321595661992,1.4422205101856,0.964365076099295,1.89736659610103,1.15325625946708,1.07238052947636,0.648074069840787,1.00995049383621,1.25299640861417,2.9086079144498,0.5,0.836660026534075,1.72626765016321,1.26491106406735,1.62172747402269,0.670820393249936,1.22882057274445,0.871779788708136,1.46628782986152,0.316227766016837,1.67630546142402,1.17473401244707,1,1.21655250605964],"hoverinfo":"y","type":"box","fillcolor":"rgba(45,95,137,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(45,95,137,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7],"y":[1.34536240470737,1.88679622641132,1.36747943311773,0.774596669241484,1.54272486205415,0.412310562561766,1.63401346383682,1.51327459504216,0.781024967590666,1.22882057274445,1.58113883008419,1.41774468787578,1.86010752377383,1.33416640641263,1.59687194226713,1.4247806848775,1.56204993518133,1.53297097167559,1.29228479833201,0.556776436283001,0.670820393249936,1.61554944214035,1.81659021245849,1.76635217326557,0.199999999999998,1.06301458127347,1.79443584449264,1.40356688476182,1,1.55884572681199,1.52315462117278,1.36014705087354,1.28840987267251,1.20415945787923,1.32664991614216,0.871779788708135,1.14017542509914,0.848528137423857,0.741619848709566,0.670820393249936,1.07238052947636,1.60934769394311,0.761577310586391,1.38202749610853,0.199999999999998,1.76351920885484,0.244948974278319,1.6062378404209,0.768114574786861,0.58309518948453,1.27279220613579,1.59687194226713,1.11803398874989,1.15758369027902,0.509901951359278,1.75783958312469,1.24899959967968,1.24498995979887],"hoverinfo":"y","type":"box","fillcolor":"rgba(51,106,152,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(51,106,152,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],"y":[1.38924439894498,0.499999999999999,1.62480768092719,1.76351920885484,0.741619848709567,0.836660026534075,0.927361849549571,1.16619037896906,1.08627804912002,0.836660026534075,1.0770329614269,0.99498743710662,1.48660687473185,0.894427190999916,1.4,1.36747943311773,1.21243556529821,1.17898261225516,0.768114574786861,0.99498743710662,0.969535971483266,0.264575131106456,1.12249721603218,0.91104335791443,2.15638586528478,1.68819430161341,1.47648230602334,1.14891252930761,1.60312195418814,1.7464249196573,0.848528137423857,2.01246117974981,0.894427190999916,1.27279220613579,1.32664991614216,1.48660687473185,1.43178210632764,1.1916375287813,1.2369316876853,0.8],"hoverinfo":"y","type":"box","fillcolor":"rgba(56,117,167,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(56,117,167,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9],"y":[0.877496438739212,1.26095202129185,1.33790881602597,0.748331477354787,1.46287388383278,1.35277492584687,1.2369316876853,1.6431676725155,0.387298334620742,1.03923048454133,2.04205778566621,2.0712315177208,0.92736184954957,1.54596248337403,0.92736184954957,0.538516480713451,1.10453610171873,1.68522995463527,1.77482393492988,1.70880074906351,1.02469507659596,0.793725393319378,1.63095064303001,0.346410161513774],"hoverinfo":"y","type":"box","fillcolor":"rgba(62,129,183,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(62,129,183,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[10,10,10,10,10,10,10,10,10,10,10],"y":[1.6,1.59059737205869,1.54919333848297,0.883176086632784,1.42126704035519,1.10453610171873,1.48660687473185,1.00995049383621,1.7,0.91104335791443,1.39283882771841],"hoverinfo":"y","type":"box","fillcolor":"rgba(68,141,198,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(68,141,198,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[11,11,11,11],"y":[0.91104335791443,1.43874945699382,1.80554700852678,0.877496438739212],"hoverinfo":"y","type":"box","fillcolor":"rgba(74,153,214,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(74,153,214,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[12,12],"y":[0.793725393319377,1.52970585407784],"hoverinfo":"y","type":"box","fillcolor":"rgba(80,165,231,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(80,165,231,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[13],"y":[0.948683298050514],"hoverinfo":"y","type":"box","fillcolor":"rgba(86,177,247,0.55)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(86,177,247,1)","width":1.88976377952756},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":[0],"name":"99_85f1de014dfb670d4b547c660418d4a5","type":"scatter","mode":"markers","opacity":0,"hoverinfo":"skip","showlegend":false,"marker":{"color":[0,1],"colorscale":[[0,"#132B43"],[0.00334448160535117,"#132B44"],[0.00668896321070234,"#132C44"],[0.0100334448160535,"#142C45"],[0.0133779264214047,"#142D45"],[0.0167224080267559,"#142D46"],[0.020066889632107,"#142D46"],[0.0234113712374582,"#142E47"],[0.0267558528428094,"#152E47"],[0.0301003344481605,"#152F48"],[0.0334448160535117,"#152F48"],[0.0367892976588629,"#152F49"],[0.0401337792642141,"#153049"],[0.0434782608695652,"#16304A"],[0.0468227424749164,"#16304A"],[0.0501672240802676,"#16314B"],[0.0535117056856187,"#16314B"],[0.0568561872909699,"#16324C"],[0.0602006688963211,"#17324D"],[0.0635451505016722,"#17324D"],[0.0668896321070234,"#17334E"],[0.0702341137123746,"#17334E"],[0.0735785953177258,"#17344F"],[0.0769230769230769,"#18344F"],[0.0802675585284281,"#183450"],[0.0836120401337793,"#183550"],[0.0869565217391304,"#183551"],[0.0903010033444816,"#183651"],[0.0936454849498328,"#193652"],[0.096989966555184,"#193652"],[0.100334448160535,"#193753"],[0.103678929765886,"#193754"],[0.107023411371237,"#193854"],[0.110367892976589,"#1A3855"],[0.11371237458194,"#1A3955"],[0.117056856187291,"#1A3956"],[0.120401337792642,"#1A3956"],[0.123745819397993,"#1A3A57"],[0.127090301003344,"#1B3A57"],[0.130434782608696,"#1B3B58"],[0.133779264214047,"#1B3B59"],[0.137123745819398,"#1B3B59"],[0.140468227424749,"#1C3C5A"],[0.1438127090301,"#1C3C5A"],[0.147157190635452,"#1C3D5B"],[0.150501672240803,"#1C3D5B"],[0.153846153846154,"#1C3D5C"],[0.157190635451505,"#1D3E5C"],[0.160535117056856,"#1D3E5D"],[0.163879598662207,"#1D3F5D"],[0.167224080267559,"#1D3F5E"],[0.17056856187291,"#1D3F5F"],[0.173913043478261,"#1E405F"],[0.177257525083612,"#1E4060"],[0.180602006688963,"#1E4160"],[0.183946488294314,"#1E4161"],[0.187290969899666,"#1E4261"],[0.190635451505017,"#1F4262"],[0.193979933110368,"#1F4263"],[0.197324414715719,"#1F4363"],[0.20066889632107,"#1F4364"],[0.204013377926421,"#1F4464"],[0.207357859531773,"#204465"],[0.210702341137124,"#204465"],[0.214046822742475,"#204566"],[0.217391304347826,"#204566"],[0.220735785953177,"#214667"],[0.224080267558528,"#214668"],[0.22742474916388,"#214768"],[0.230769230769231,"#214769"],[0.234113712374582,"#214769"],[0.237458193979933,"#22486A"],[0.240802675585284,"#22486A"],[0.244147157190635,"#22496B"],[0.247491638795987,"#22496C"],[0.250836120401338,"#224A6C"],[0.254180602006689,"#234A6D"],[0.25752508361204,"#234A6D"],[0.260869565217391,"#234B6E"],[0.264214046822743,"#234B6E"],[0.267558528428094,"#244C6F"],[0.270903010033445,"#244C70"],[0.274247491638796,"#244C70"],[0.277591973244147,"#244D71"],[0.280936454849498,"#244D71"],[0.28428093645485,"#254E72"],[0.287625418060201,"#254E72"],[0.290969899665552,"#254F73"],[0.294314381270903,"#254F74"],[0.297658862876254,"#254F74"],[0.301003344481605,"#265075"],[0.304347826086957,"#265075"],[0.307692307692308,"#265176"],[0.311036789297659,"#265176"],[0.31438127090301,"#275277"],[0.317725752508361,"#275278"],[0.321070234113712,"#275278"],[0.324414715719064,"#275379"],[0.327759197324415,"#275379"],[0.331103678929766,"#28547A"],[0.334448160535117,"#28547B"],[0.337792642140468,"#28557B"],[0.341137123745819,"#28557C"],[0.344481605351171,"#28567C"],[0.347826086956522,"#29567D"],[0.351170568561873,"#29567D"],[0.354515050167224,"#29577E"],[0.357859531772575,"#29577F"],[0.361204013377926,"#2A587F"],[0.364548494983278,"#2A5880"],[0.367892976588629,"#2A5980"],[0.37123745819398,"#2A5981"],[0.374581939799331,"#2A5982"],[0.377926421404682,"#2B5A82"],[0.381270903010033,"#2B5A83"],[0.384615384615385,"#2B5B83"],[0.387959866220736,"#2B5B84"],[0.391304347826087,"#2C5C85"],[0.394648829431438,"#2C5C85"],[0.397993311036789,"#2C5D86"],[0.40133779264214,"#2C5D86"],[0.404682274247492,"#2C5D87"],[0.408026755852843,"#2D5E87"],[0.411371237458194,"#2D5E88"],[0.414715719063545,"#2D5F89"],[0.418060200668896,"#2D5F89"],[0.421404682274247,"#2E608A"],[0.424749163879599,"#2E608A"],[0.42809364548495,"#2E618B"],[0.431438127090301,"#2E618C"],[0.434782608695652,"#2E618C"],[0.438127090301003,"#2F628D"],[0.441471571906354,"#2F628D"],[0.444816053511706,"#2F638E"],[0.448160535117057,"#2F638F"],[0.451505016722408,"#30648F"],[0.454849498327759,"#306490"],[0.45819397993311,"#306590"],[0.461538461538462,"#306591"],[0.464882943143813,"#306592"],[0.468227424749164,"#316692"],[0.471571906354515,"#316693"],[0.474916387959866,"#316793"],[0.478260869565217,"#316794"],[0.481605351170569,"#326895"],[0.48494983277592,"#326895"],[0.488294314381271,"#326996"],[0.491638795986622,"#326996"],[0.494983277591973,"#326997"],[0.498327759197324,"#336A98"],[0.501672240802676,"#336A98"],[0.505016722408027,"#336B99"],[0.508361204013378,"#336B99"],[0.511705685618729,"#346C9A"],[0.51505016722408,"#346C9B"],[0.518394648829431,"#346D9B"],[0.521739130434783,"#346D9C"],[0.525083612040134,"#346E9D"],[0.528428093645485,"#356E9D"],[0.531772575250836,"#356E9E"],[0.535117056856187,"#356F9E"],[0.538461538461538,"#356F9F"],[0.54180602006689,"#3670A0"],[0.545150501672241,"#3670A0"],[0.548494983277592,"#3671A1"],[0.551839464882943,"#3671A1"],[0.555183946488294,"#3772A2"],[0.558528428093645,"#3772A3"],[0.561872909698997,"#3773A3"],[0.565217391304348,"#3773A4"],[0.568561872909699,"#3773A4"],[0.57190635451505,"#3874A5"],[0.575250836120401,"#3874A6"],[0.578595317725752,"#3875A6"],[0.581939799331104,"#3875A7"],[0.585284280936455,"#3976A8"],[0.588628762541806,"#3976A8"],[0.591973244147157,"#3977A9"],[0.595317725752508,"#3977A9"],[0.598662207357859,"#3978AA"],[0.602006688963211,"#3A78AB"],[0.605351170568562,"#3A79AB"],[0.608695652173913,"#3A79AC"],[0.612040133779264,"#3A79AC"],[0.615384615384615,"#3B7AAD"],[0.618729096989967,"#3B7AAE"],[0.622073578595318,"#3B7BAE"],[0.625418060200669,"#3B7BAF"],[0.62876254180602,"#3C7CB0"],[0.632107023411371,"#3C7CB0"],[0.635451505016722,"#3C7DB1"],[0.638795986622073,"#3C7DB1"],[0.642140468227425,"#3C7EB2"],[0.645484949832776,"#3D7EB3"],[0.648829431438127,"#3D7FB3"],[0.652173913043478,"#3D7FB4"],[0.655518394648829,"#3D7FB5"],[0.658862876254181,"#3E80B5"],[0.662207357859532,"#3E80B6"],[0.665551839464883,"#3E81B6"],[0.668896321070234,"#3E81B7"],[0.672240802675585,"#3F82B8"],[0.675585284280936,"#3F82B8"],[0.678929765886288,"#3F83B9"],[0.682274247491639,"#3F83BA"],[0.68561872909699,"#4084BA"],[0.688963210702341,"#4084BB"],[0.692307692307692,"#4085BB"],[0.695652173913043,"#4085BC"],[0.698996655518395,"#4086BD"],[0.702341137123746,"#4186BD"],[0.705685618729097,"#4186BE"],[0.709030100334448,"#4187BF"],[0.712374581939799,"#4187BF"],[0.71571906354515,"#4288C0"],[0.719063545150502,"#4288C1"],[0.722408026755853,"#4289C1"],[0.725752508361204,"#4289C2"],[0.729096989966555,"#438AC2"],[0.732441471571906,"#438AC3"],[0.735785953177257,"#438BC4"],[0.739130434782609,"#438BC4"],[0.74247491638796,"#438CC5"],[0.745819397993311,"#448CC6"],[0.749163879598662,"#448DC6"],[0.752508361204013,"#448DC7"],[0.755852842809365,"#448EC8"],[0.759197324414716,"#458EC8"],[0.762541806020067,"#458FC9"],[0.765886287625418,"#458FC9"],[0.769230769230769,"#458FCA"],[0.77257525083612,"#4690CB"],[0.775919732441472,"#4690CB"],[0.779264214046823,"#4691CC"],[0.782608695652174,"#4691CD"],[0.785953177257525,"#4792CD"],[0.789297658862876,"#4792CE"],[0.792642140468227,"#4793CF"],[0.795986622073579,"#4793CF"],[0.79933110367893,"#4894D0"],[0.802675585284281,"#4894D0"],[0.806020066889632,"#4895D1"],[0.809364548494983,"#4895D2"],[0.812709030100334,"#4896D2"],[0.816053511705686,"#4996D3"],[0.819397993311037,"#4997D4"],[0.822742474916388,"#4997D4"],[0.826086956521739,"#4998D5"],[0.82943143812709,"#4A98D6"],[0.832775919732441,"#4A99D6"],[0.836120401337793,"#4A99D7"],[0.839464882943144,"#4A9AD8"],[0.842809364548495,"#4B9AD8"],[0.846153846153846,"#4B9BD9"],[0.849498327759197,"#4B9BDA"],[0.852842809364548,"#4B9BDA"],[0.8561872909699,"#4C9CDB"],[0.859531772575251,"#4C9CDB"],[0.862876254180602,"#4C9DDC"],[0.866220735785953,"#4C9DDD"],[0.869565217391304,"#4D9EDD"],[0.872909698996656,"#4D9EDE"],[0.876254180602007,"#4D9FDF"],[0.879598662207358,"#4D9FDF"],[0.882943143812709,"#4DA0E0"],[0.88628762541806,"#4EA0E1"],[0.889632107023411,"#4EA1E1"],[0.892976588628763,"#4EA1E2"],[0.896321070234114,"#4EA2E3"],[0.899665551839465,"#4FA2E3"],[0.903010033444816,"#4FA3E4"],[0.906354515050167,"#4FA3E5"],[0.909698996655518,"#4FA4E5"],[0.91304347826087,"#50A4E6"],[0.916387959866221,"#50A5E7"],[0.919732441471572,"#50A5E7"],[0.923076923076923,"#50A6E8"],[0.926421404682274,"#51A6E8"],[0.929765886287625,"#51A7E9"],[0.933110367892977,"#51A7EA"],[0.936454849498328,"#51A8EA"],[0.939799331103679,"#52A8EB"],[0.94314381270903,"#52A9EC"],[0.946488294314381,"#52A9EC"],[0.949832775919732,"#52AAED"],[0.953177257525084,"#53AAEE"],[0.956521739130435,"#53ABEE"],[0.959866220735786,"#53ABEF"],[0.963210702341137,"#53ACF0"],[0.966555183946488,"#54ACF0"],[0.96989966555184,"#54ADF1"],[0.973244147157191,"#54ADF2"],[0.976588628762542,"#54AEF2"],[0.979933110367893,"#55AEF3"],[0.983277591973244,"#55AFF4"],[0.986622073578595,"#55AFF4"],[0.989966555183947,"#55B0F5"],[0.993311036789298,"#56B0F6"],[0.996655518394649,"#56B1F6"],[1,"#56B1F7"]],"colorbar":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"thickness":23.04,"title":"h","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"tickmode":"array","ticktext":["2.5","5.0","7.5","10.0","12.5"],"tickvals":[0.125,0.333333333333333,0.541666666666667,0.75,0.958333333333333],"tickfont":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"ticklen":2,"len":0.5}},"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":43.7625570776256,"r":7.30593607305936,"b":40.1826484018265,"l":31.4155251141553},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"title":{"text":"Square-Root-Differences Cloud in the East-West Direction","font":{"color":"rgba(0,0,0,1)","family":"","size":17.5342465753425},"x":0.5,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,13.6],"tickmode":"array","ticktext":["1","2","3","4","5","6","7","8","9","10","11","12","13"],"tickvals":[1,2,3,4,5,6,7,8,9,10,11,12,13],"categoryorder":"array","categoryarray":["1","2","3","4","5","6","7","8","9","10","11","12","13"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"y","title":{"text":"h","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.14543039572249,3.05403831017229],"tickmode":"array","ticktext":["0","1","2","3"],"tickvals":[0,1,2,3],"categoryorder":"array","categoryarray":["0","1","2","3"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"x","title":{"text":"Square-Root-Differences","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"title":{"text":"alpha","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"28c4481f3d79":{"x":{},"y":{},"fill":{},"colour":{},"alpha":{},"type":"box"}},"cur_data":"28c4481f3d79","visdat":{"28c4481f3d79":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 1.3: Square-Root-Differences Cloud in the East-West Direction
+</p>
+</div>
+<p><strong>Pocket Plot</strong></p>
+<p>The Pocket Plot tries to identify a localized area as being atypical with respect to a stationary mode. We plotting Pocket Plot <a href="geostatistics.html#fig:pocket">1.4</a> in the North-South Direction follows the steps as below:</p>
+<ul>
+<li>Get <span class="math inline">\(\{|N_{jk}|\}\)</span> matrix (symmetric).
+<ul>
+<li>Denote <span class="math inline">\(|N_{jk}|\)</span> as the value of row <span class="math inline">\(j\)</span> and column <span class="math inline">\(k\)</span> of the matrix</li>
+<li><span class="math inline">\(N_{jk} = \{(s_j, s_k):\ s_j \in row_j, s_k \in row_k, x_{s_j} = x_{s_k}\}\)</span></li>
+<li><span class="math inline">\(|N_{jk}|\)</span> means total pair number between row <span class="math inline">\(j\)</span> and <span class="math inline">\(k\)</span></li>
+</ul></li>
+<li>Get <span class="math inline">\(\{Y_{jk}\}\)</span> matrix (symmetric).
+<ul>
+<li>For there are 23 distinct value in y axis, the matrix has the dim of <span class="math inline">\(23\times 23\)</span></li>
+<li>Denote <span class="math inline">\(Y_{jk}\)</span> as the value of row <span class="math inline">\(j\)</span> and column <span class="math inline">\(k\)</span> of the matrix, we have <span class="math inline">\(Y_{jk} = \frac{1}{N_{jk}}\displaystyle\sum_{N_{jk}}|z(s_j) - z(s_k)|^{\frac12}\)</span></li>
+</ul></li>
+<li>Calculate <span class="math inline">\(Y_h\)</span> vector.
+<ul>
+<li><span class="math inline">\(Y_h\)</span> is the weighted mean of <span class="math inline">\(Y_{jk}\)</span> where <span class="math inline">\(|j - k| = h\)</span></li>
+</ul></li>
+<li>Calculate <span class="math inline">\(P_{jk} = Y_{jk} - Y_h\)</span></li>
+<li>Plot the boxplot.
+<ul>
+<li>x axis: index <span class="math inline">\(j\)</span></li>
+<li>y axis: <span class="math inline">\(P_{jk}\)</span>.</li>
+<li>There should be 23 points of each columns.</li>
+</ul></li>
+</ul>
+<div class="figure"><span style="display:block;" id="fig:pocket"></span>
+<img src="_main_files/figure-html/pocket-1.png" alt="Pocket Plot in the North-South Direction" width="672" />
+<p class="caption">
+Figure 1.4: Pocket Plot in the North-South Direction
+</p>
+</div>
+</div>
+</div>
+<div id="decomposition" class="section level3" number="1.2.3">
+<h3><span class="header-section-number">1.2.3</span> Decomposition</h3>
+<p>The goal is to deompose data into large- and small-scale variation.</p>
+<blockquote>
+<p><strong>Large-Scale Variation</strong>: The grand, column, and row effects.</p>
+</blockquote>
+<blockquote>
+<p><strong>Small-Scale Variation</strong>: The residual.</p>
+</blockquote>
+<ul>
+<li>Like ANOVA, <span class="math inline">\(F\)</span> test within-rows and within-columns is first raised. However, it suffer from correlation among data points.<br />
+</li>
+<li>Another additive decomposition follows the idea of <span class="math inline">\(data = all + row + column + residual\)</span>. Then for value of a location <span class="math inline">\((i,j)\)</span> can be decomposed as <span class="math inline">\(Y_{ij} = Y_{..} + (Y_{i.}-Y_{..}) + (Y_{.j}-Y_{..}) + (Y_{ij}-Y_{i.}-Y_{.j}+Y_{..})\)</span>, where a subscripted dot (·) denotes averaging over that subscript. This can be settled by <em>median polishing</em> method.</li>
+</ul>
+<p><strong>Median Polishing</strong><br />
+Successively sweeps medians out of rows, then columns, then rows, then columns, and so on, accumulating them in “row,” “column,” and “all” registers, and leaves behind the table of residuals.</p>
+</div>
+</div>
+<div id="stationary-process" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> Stationary Process</h2>
+<p>The concept of <em>intrinsic stationarity</em> has been introduced in section <a href="geostatistics.html#main-concepts">1.2.1</a>. Second-order (weak) stationarity is addressed in this section. It should be noticed that intrinsic stationarity is weaker than second-order stationarity.</p>
+<blockquote>
+<p><strong>Intrinsic Stationarity</strong><br />
+Based on the random process mentioned above, intrinsic stationarity is defined through first differences
+<span class="math display" id="eq:stationary2">\[\begin{equation}
+\begin{aligned}
+&amp;E\{Z(s+h) - Z(s)\} = 0,\\
+&amp;Var\{Z(s+h) - Z(s)\} = 2\gamma(h).
+\end{aligned}
+\tag{1.1}
+\end{equation}\]</span></p>
+</blockquote>
+<blockquote>
+<p><strong>Second-Order (Weak) Stationarity</strong><br />
+When the random process meets the following assuptions, the process is second-order (weak) stationary.
+<span class="math display" id="eq:stationary">\[\begin{equation}
+\begin{aligned}
+&amp;E(Z(s)) = 0, \ \forall s \in D \\
+&amp;Cov(Z(s_i), Z(s_j)) = C(s_i - s_j), \ \forall s_i, s_j \in D
+\end{aligned}
+\tag{1.4}
+\end{equation}\]</span></p>
+</blockquote>
+<p>Other important concepts related to stationary process as listed below.<br />
+</p>
+<ul>
+<li><strong>Covariogram</strong>: Function <span class="math inline">\(C(.)\)</span> in <a href="geostatistics.html#eq:stationary">(1.4)</a>.</li>
+<li><strong>Isotropy</strong>: When <span class="math inline">\(C(s_i - s_j)\)</span> only depends on <span class="math inline">\(\Vert s_i - s_j\Vert\)</span> but not the direction of <span class="math inline">\(s_i - s_j\)</span>, then <span class="math inline">\(C(.)\)</span> is isotropic.</li>
+<li><strong>Anisotropy</strong>: Contrary to isotropy, when <span class="math inline">\(C(s_i - s_j)\)</span> depends on both <span class="math inline">\(\Vert s_i - s_j\Vert\)</span> and the direction of <span class="math inline">\(s_i - s_j\)</span>, then <span class="math inline">\(C(.)\)</span> is anisotropic.
+<ul>
+<li>Caused by underlying physical process evolving differentlly in space.</li>
+<li>The Euclidean space is not appropriate for measuring distance between locations.</li>
+</ul></li>
+<li><strong>Ergodicity</strong>: The property which allows expectations over the <span class="math inline">\(\Omega \in \mathbb{R}^d}\)</span> space to be estimated by spatial averages.</li>
+<li><strong>Strong Stationarity</strong>: Strong stationarity refers to the property that the distribution of any finite sample of <span class="math inline">\(Z(.)\)</span> is independent of locations (translation invariant).</li>
+</ul>
+<div id="vc" class="section level3" number="1.3.1">
+<h3><span class="header-section-number">1.3.1</span> Variogram &amp; Covariogram</h3>
+<p>Recall section <a href="geostatistics.html#main-concepts">1.2.1</a>, variogram is defined as <span class="math inline">\(2\gamma(h) = Var(Z(s+h) - z(s)),\ \forall s, s+h\in D\)</span>. Some exploratory analysis of variogram has been seen in the example. Some related concepts are listed below.</p>
+<ul>
+<li><strong>Semiv-variogram</strong>: <span class="math inline">\(\gamma(h) = \frac12 Var(Z(s+h) - z(s))\)</span>.</li>
+<li><strong>Relative Variogram</strong>: Variogram of transformed data. Sometimes, simple transformations lead to intrinsic stationary processes.</li>
+<li><strong>Nugget Effect</strong>: <span class="math inline">\(c_0\)</span> is named as nugget effect, where <span class="math inline">\(c_0 = \lim_{h\to 0}\gamma(h)\)</span>.
+<ul>
+<li>When <span class="math inline">\(h\to 0\)</span>, <span class="math inline">\(Var(Z(s+h) - Z(s))\to Var(0)\)</span>, which should be exactly 0. This implies that nuggest effect should be 0 if assumptions are all met.</li>
+<li>Causes of <span class="math inline">\(c_0 &gt; 0\)</span>:
+<ul>
+<li>Measurement error;</li>
+<li>Microscale variation.</li>
+</ul></li>
+<li>Estimation: Extrapolating the variogram estimates fro lags closest to zero. for practically, it is impossible to calculate variogram with scale less than <span class="math inline">\(\min \left\{\left\|s_{i}-s_{j}\right\|, 1 \leq i \leq j \leq n\right\}\)</span>.</li>
+</ul></li>
+<li><strong>Still</strong>: The quantity <span class="math inline">\(C(0)\)</span> is called still. <span class="math inline">\(C(0) - c_0\)</span> is called the partial still.</li>
+</ul>
+<p>Here are some other properties related to variogram and covariogram.</p>
+<ul>
+<li>Variogram is symmetric: <span class="math inline">\(\gamma(h) = \gamma(-h),\ \gamma(0) = 0\)</span>.</li>
+<li>Speed of increase: <span class="math inline">\(\lim _{|h| \rightarrow \infty} \frac{2 \gamma(h)}{|h|^{2}}=0\)</span>, which means that it is necessary for a variogram to increase slower than <span class="math inline">\(|h|^2\)</span>.</li>
+<li>Under stationarity, the covariance function <span class="math inline">\(C(h)\)</span> is necessarily positive definite.</li>
+<li>Under intrinsic stationarity, variograms must be conditionally negative-definite.</li>
+</ul>
+</div>
+<div id="estimation-of-variogram-covariogram" class="section level3" number="1.3.2">
+<h3><span class="header-section-number">1.3.2</span> Estimation of Variogram &amp; Covariogram</h3>
+<div id="estimator-of-variogram" class="section level4" number="1.3.2.1">
+<h4><span class="header-section-number">1.3.2.1</span> Estimator of Variogram</h4>
+<p>Considering the definition of variogram, the most direct solution is moment estimator <span class="math display">\[2 \hat{\gamma}(h) \equiv \frac{1}{|N(h)|} \sum_{N(h)}\left(Z\left(s_{i}\right)-Z\left(s_{j}\right)\right)^{2}\]</span> where <span class="math inline">\(N(h) = \{(s_i, s_j): s_i - s_j = h\}\)</span></p>
+<p>Generally speaking, the variogram estimator can be expressed as a quadratic form <a href="geostatistics.html#eq:qestimator">(1.5)</a></p>
+<p><span class="math display" id="eq:qestimator">\[\begin{equation}
+2\hat \gamma (h) = Z&#39;A(h)Z
+\tag{1.5}
+\end{equation}\]</span></p>
+<p>Denote <span class="math inline">\(Var(Z)=\Sigma\)</span>, then the means and variance of <span class="math inline">\(2\gamma(h)\)</span> can be calculated as:</p>
+<p><span class="math display" id="eq:matrixestimator">\[\begin{equation}
+\begin{aligned} E(2 \hat{\gamma}(h)) &amp;=\operatorname{trace}(A(h) \Sigma) \\ \operatorname{var}(2 \hat{\gamma}(h)) &amp;=2 \operatorname{trace}(A(h) \Sigma A(h) \Sigma) \end{aligned}
+\tag{1.6}
+\end{equation}\]</span></p>
+</div>
+<div id="estimator-of-covariogram" class="section level4" number="1.3.2.2">
+<h4><span class="header-section-number">1.3.2.2</span> Estimator of Covariogram</h4>
+<p>For Covariogram, estimators are in line with basic ideas of variogram estimators. In the same way, the most direct thought of moment estimator is as Formula <a href="#eq:mcov-estimator">(<strong>??</strong>)</a></p>
+<p><span class="math display">\[\begin{equation}
+\hat{C}(h) \equiv \frac{1}{|N(h)|} \displaystyle\sum_{N(b)}\left(Z\left(s_{i}\right)-\bar{Z}\right)\left(Z\left(s_{j}\right)-\bar{Z}\right)
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(\bar{Z}=\sum_{i=1}^{n} Z\left(s_{i}\right) / n\)</span>.</p>
+</div>
+</div>
+<div id="validity" class="section level3" number="1.3.3">
+<h3><span class="header-section-number">1.3.3</span> Validity</h3>
+<p>Not all functions can be variograms or covariogram. There are some prerequisites ensuring validity of them.</p>
+<div id="valid-variogram" class="section level4" number="1.3.3.1">
+<h4><span class="header-section-number">1.3.3.1</span> Valid Variogram</h4>
+<ul>
+<li>Under intrinsic stationarity, variogram must be conditionally negative definite, which means <a href="geostatistics.html#eq:valid-variogram-cnd">(1.7)</a></li>
+</ul>
+<p><span class="math display" id="eq:valid-covariogram" id="eq:valid-variogram-cnd">\[\begin{equation}
+\sum_{i, j} a_{i} a_{j} 2 \gamma\left(s_{i}-s_{j}\right) \leq 0$ for $\sum a_{i}=0
+\tag{1.7}
+\end{equation}\]</span></p>
+<ul>
+<li>Continuous conditionally negative definite function corresponds to an intrinsically stationary stochastic process.</li>
+<li>Valid variogram forms a convex cone.</li>
+<li>Theorem <a href="geostatistics.html#thm:valid-variogram">1.1</a> provides us with several ways to check variogram validity.</li>
+</ul>
+<div class="theorem">
+<p><span id="thm:valid-variogram" class="theorem"><strong>Theorem 1.1  </strong></span>If <span class="math inline">\(2 \gamma(.)\)</span> is continuous on <span class="math inline">\(\mathbb{R}^{d}\)</span> and <span class="math inline">\(\gamma(0)=0\)</span>, then the following are equivalent:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(2 \gamma(.)\)</span> is conditionally negative definite;<br />
+</li>
+<li>For all <span class="math inline">\(a&gt;0\)</span>, <span class="math inline">\(\exp (-a \gamma(.))\)</span> is positive definite.<br />
+</li>
+<li><span class="math inline">\(2 \gamma(h)=Q(h)+\int \frac{1-\cos \left(\omega^{\prime} h\right)}{\|\omega\|^{2}} G(d \omega)\)</span>, where <span class="math inline">\(Q(.) \geq 0\)</span> is a quadratic form and <span class="math inline">\(G(.)\)</span> is a positive, symmetric measure continuous at the origin that <span class="math inline">\(\int\left(1+\|\omega\|^{2}\right)^{-1} G(d \omega)&lt;\infty\)</span>.</li>
+</ol>
+</div>
+</div>
+<div id="valid-covariogram" class="section level4" number="1.3.3.2">
+<h4><span class="header-section-number">1.3.3.2</span> Valid Covariogram</h4>
+<ul>
+<li>Under second-order stationarity, the covariance function <span class="math inline">\(C(h)\)</span> is necessarily positive definite. That is, for any real numbers <span class="math inline">\(a_1,...,a_n\)</span> and locations <span class="math inline">\(s_1,...,s_n\)</span>,</li>
+</ul>
+<p>(<em>{i=1}^{n} a</em>{i} Z(s_{i}))=<em>{i, j} a</em>{i} a_{j} C(s_{i}-s_{j}) 
+\tag{1.8}
+\end{equation}</p>
+<ul>
+<li>Spectral representation form
+<ul>
+<li>Accoding to Theorem <a href="geostatistics.html#thm:valid-covariogram">1.2</a>, a continuous function <span class="math inline">\(C(h)\)</span> is positive-definite if and only if it has a spectral representation <span class="math inline">\(C(h)=\int \cos \left(\omega^{\prime} h\right) G(d \omega)\)</span>, where <span class="math inline">\(G\)</span> is a positive bounded symmetric measure.<br />
+</li>
+<li>Spectral density and distribution
+<ul>
+<li><span class="math inline">\(G/C(0)\)</span> is the spectral distribution function</li>
+<li>If <span class="math inline">\(G(d \omega)=g(\omega) d \omega\)</span>, <span class="math inline">\(g/C(0)\)</span> is the spectral density function.</li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="theorem">
+<p><span id="thm:valid-covariogram" class="theorem"><strong>Theorem 1.2  </strong></span>Theorem For any normalized continuous positive-definite function <span class="math inline">\(f\)</span> on <span class="math inline">\(G\)</span> (normalization here means that <span class="math inline">\(f\)</span> is 1 at the unit of <span class="math inline">\(G\)</span> ), there exists a unique probability measure <span class="math inline">\(\mu\)</span> on <span class="math inline">\(\widehat{G}\)</span> such that
+<span class="math display">\[
+f(g)=\int_{\widehat{G}} \xi(g) d \mu(\xi)
+\]</span></p>
+</div>
+</div>
+</div>
+</div>
+<div id="variogram-model-fitting" class="section level2" number="1.4">
+<h2><span class="header-section-number">1.4</span> Variogram Model Fitting</h2>
+<p>Considering variogram validity prerequisites, variogram estimators presented in section <a href="geostatistics.html#estimator-of-variogram">1.3.2.1</a> can not be used directly for spatial prediction. The key idea of variogram model fitting is to search for a valid variogram that is closest to the data.</p>
+<p>When there are more than one valid model, probably from method illustrated from section <a href="geostatistics.html#maximum-likelihood-estimator">1.4.2</a> to <a href="geostatistics.html#least-squares-esimator">1.4.3.1</a>, <strong>corss validation</strong> is an important tool for model checking.</p>
+<div id="eda-check-before-model-fitting" class="section level3" number="1.4.1">
+<h3><span class="header-section-number">1.4.1</span> EDA Check Before Model Fitting</h3>
+<ul>
+<li>Check assumptions such as constant mean, constant marginal variance, stationarity, intrinsic stationarity;</li>
+<li>Check the Gaussian assumption;
+<ul>
+<li>If the data is approximately normally distributed, modelling the first two moments are quite enough.</li>
+<li>If some evidence of non-Gaussianity is found, the variogram estimator defined in section <a href="geostatistics.html#estimator-of-variogram">1.3.2.1</a> is still valid, because they can be viewed as moment estimators which are independent of Gaussian assumption.</li>
+</ul></li>
+<li>Isolate suspicious observations for further study;</li>
+<li>Choose a appropriate parametric variogram model.</li>
+</ul>
+<p>From now on, we consider</p>
+</div>
+<div id="maximum-likelihood-estimator" class="section level3" number="1.4.2">
+<h3><span class="header-section-number">1.4.2</span> Maximum Likelihood Estimator</h3>
+<ul>
+<li>Assumptions:
+<ul>
+<li>Suppose the data is generated from a stationary Gaussian process with a parametric variogram model <span class="math inline">\(P=\{2 \gamma: 2 \gamma(h)=2 \gamma(h ; \theta) ; \theta \in \Theta\}\)</span>. Then the goal is to estimate <span class="math inline">\(\theta\)</span>.</li>
+<li>Suppose we also observed some covariates <span class="math inline">\(X_1,...,X_n\)</span> which are linearly related to <span class="math inline">\(Z\)</span>.</li>
+</ul></li>
+<li>Model: <span class="math inline">\(Z=\left(Z\left(s_{1}\right), \ldots, Z\left(s_{n}\right)\right) \sim N(X \beta, \Sigma(\theta))\)</span> where <span class="math inline">\(\Sigma(\theta)=\left(\operatorname{cov}\left(Z\left(s_{i}\right), Z\left(s_{j}\right)\right)\right)\)</span>.</li>
+<li>Goal: find parameter estimation <span class="math inline">\((\hat \beta, \hat \theta)\)</span> to minimize loglikelihood function <a href="geostatistics.html#eq:loglikelihood">(1.9)</a>.
+<ul>
+<li>Where there is no spatial correlation, this amounts to a simple linear regression model. The solution is <span class="math inline">\(\Sigma(\theta)=\sigma^{2} I\)</span> and <span class="math inline">\(\theta=\sigma^{2}.\)</span></li>
+<li>General solution: <span class="math inline">\(\hat{\sigma}^{2}=\sum\left(Z\left(s_{i}\right)-X_{i} \hat{\beta}\right)^{2} / n\)</span>
+<ul>
+<li><span class="math inline">\(\hat{\sigma}^{2}\)</span> is biased.</li>
+<li>For <span class="math inline">\(E\left(\hat{\sigma}^{2}\right)=(n-q) / n \sigma^{2}\)</span>, the larger <span class="math inline">\(q\)</span> is, the more biased the estimator gets.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><span class="math display" id="eq:loglikelihood">\[\begin{equation}
+L(\beta, \theta)=\frac{n}{2} \log (2 \pi)+\frac{1}{2} \log |\Sigma(\theta)|+\frac{1}{2}(Z-X \beta)^{\prime} \Sigma(\theta)^{-1}(Z-X \beta)
+\tag{1.9}
+\end{equation}\]</span></p>
+<ul>
+<li>Improvements: To de-bias <span class="math inline">\(\hat \theta\)</span>, which is <span class="math inline">\(\hat{\sigma}^{2}\)</span> is out case, restricted maximum likelihood estimator (EMLE) is raised.
+<ul>
+<li>Estimator form: <span class="math inline">\(\hat{\theta}=\int_{\beta} \exp (-L(\beta, \theta))(d \beta)\)</span></li>
+</ul></li>
+</ul>
+<p>Once variogram is estimated, then covariogram can be easily get by <span class="math inline">\(2\gamma(h) = 2(C(0) - C(h))\)</span></p>
+</div>
+<div id="minq-estimation" class="section level3" number="1.4.3">
+<h3><span class="header-section-number">1.4.3</span> MINQ Estimation</h3>
+<p>Applicable Situation: the variance matrix of the data is linear in its parameters, i.e. <span class="math inline">\(\Sigma(\theta)=\theta_{1} \Sigma_{1}+\ldots, \theta_{m} \Sigma_{m}\)</span>. The MINQ approach is particularly appropriate for a variance components model.</p>
+<div id="least-squares-esimator" class="section level4" number="1.4.3.1">
+<h4><span class="header-section-number">1.4.3.1</span> Least Squares Esimator</h4>
+<p>The main idea of Least Squares Esimator (LSE) is the same as least square regression. The goal function to minimize is the square error.</p>
+<p><span class="math display" id="eq:lse">\[\begin{equation}
+\sum_{j=1}^{K}\left\{2 \gamma^{\#}(h(j) e)-2 \gamma(h(j) e ; \theta)\right\}^{2}
+\tag{1.10}
+\end{equation}\]</span></p>
+<p>If we not <span class="math inline">\(2 \boldsymbol{\gamma}^{\#}=\left(2 \gamma^{\#}(h(1)), \ldots, 2 \gamma^{\#}(h(K))\right)\)</span> with covariance matrix <span class="math inline">\(\operatorname{var}\left(2 \boldsymbol{\gamma}^{\#}\right)=V\)</span>, the goal to minimize is tranformed into</p>
+<p><span class="math display" id="eq:lse2">\[\begin{equation}
+\left(2 \boldsymbol{\gamma}^{\#}-2 \boldsymbol{\gamma}(\theta)\right)^{\prime} V^{-1}\left(2 \boldsymbol{\gamma}^{\#}-2 \boldsymbol{\gamma}(\theta)\right)
+\tag{1.11}
+\end{equation}\]</span></p>
+<ul>
+<li>Notice that although a direction vector <span class="math inline">\(e\)</span> is included in formula <a href="geostatistics.html#eq:lse">(1.10)</a>, multiple directions could also be accounted for by adding the appropriate squared differences.</li>
+<li>Drawbacks: The least squares estimator takes no cognizance of the distributional variation and covariation of the generic estimator.</li>
+<li>Improvement:
+<ul>
+<li>Weighted Least Squares (WLS): Replace <span class="math inline">\(V\)</span> by a diagonal matrix <span class="math inline">\(\left.\Delta=\operatorname{diag}\left(\operatorname{var}\left(2 \gamma^{\#}(h(1))\right), \ldots, 2 \gamma^{\#}(h(K))\right)\right)\)</span>.</li>
+<li>Generalized Least Squares (GLS): use just the (asymptotic) second-order structure of the variogram estimator and does not make assumptions about the whole distribution of the data. When there is little knowledge of the true model, GLS is a good startingg choice.</li>
+</ul></li>
+</ul>
+
+</div>
+</div>
 </div>
 </div>
             </section>
@@ -260,7 +649,7 @@ div.csl-indent {
         </div>
       </div>
 
-<a href="hello-bookdown.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="spatial-prediction-and-kriging.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -291,7 +680,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/index.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/01-ch2.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -308,7 +697,8 @@ gitbook.start({
 "options": null
 },
 "toc": {
-"collapse": "subsection"
+"collapse": "section",
+"scroll_highlight": true
 }
 });
 });
