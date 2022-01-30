@@ -1,0 +1,6 @@
+"0","chi_grid <- pt2grid((chiCA), 200) # self-defined pt2grid for griding (omitted)"
+"2","CRS object has comment, which is lost in output; in tests, see
+https://cran.r-project.org/web/packages/sp/vignettes/CRS_warnings.html"
+"0","projection(chi_grid) <- CRS(""+init=epsg:4326"")  "
+"0","projection(nodes) <-  CRS(""+init=epsg:4326"")"
+"0","projection(chiCA) <- CRS(""+init=epsg:4326"")"

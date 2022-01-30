@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Spatial Models on Lattices | Geostatistics Final Summary</title>
+  <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Spatial Models on Lattices | Geostatistics Final Summary" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Spatial Models on Lattices | Geostatistics Final Summary" />
+  
+  <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  
+
+<meta name="author" content="Yan Ren" />
+
+
+<meta name="date" content="2022-01-31" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="spatial-prediction-and-kriging.html"/>
+<link rel="next" href="inference-for-lattice-models.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.0.4.1/leaflet-providers-plugin.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="part"><span><b>I Geostatistical Data</b></span></li>
+<li class="chapter" data-level="1" data-path="geostatistics.html"><a href="geostatistics.html"><i class="fa fa-check"></i><b>1</b> Geostatistics</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="geostatistics.html"><a href="geostatistics.html#targeted-problems"><i class="fa fa-check"></i><b>1.1</b> Targeted Problems</a></li>
+<li class="chapter" data-level="1.2" data-path="geostatistics.html"><a href="geostatistics.html#spatial-data-example"><i class="fa fa-check"></i><b>1.2</b> Spatial Data Example</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="geostatistics.html"><a href="geostatistics.html#main-concepts"><i class="fa fa-check"></i><b>1.2.1</b> Main Concepts</a></li>
+<li class="chapter" data-level="1.2.2" data-path="geostatistics.html"><a href="geostatistics.html#esitimation-of-variogram"><i class="fa fa-check"></i><b>1.2.2</b> Esitimation of Variogram</a></li>
+<li class="chapter" data-level="1.2.3" data-path="geostatistics.html"><a href="geostatistics.html#decomposition"><i class="fa fa-check"></i><b>1.2.3</b> Decomposition</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="geostatistics.html"><a href="geostatistics.html#stationary-process"><i class="fa fa-check"></i><b>1.3</b> Stationary Process</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="geostatistics.html"><a href="geostatistics.html#vc"><i class="fa fa-check"></i><b>1.3.1</b> Variogram &amp; Covariogram</a></li>
+<li class="chapter" data-level="1.3.2" data-path="geostatistics.html"><a href="geostatistics.html#estimation-of-variogram-covariogram"><i class="fa fa-check"></i><b>1.3.2</b> Estimation of Variogram &amp; Covariogram</a></li>
+<li class="chapter" data-level="1.3.3" data-path="geostatistics.html"><a href="geostatistics.html#validity"><i class="fa fa-check"></i><b>1.3.3</b> Validity</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="geostatistics.html"><a href="geostatistics.html#variogram-model-fitting"><i class="fa fa-check"></i><b>1.4</b> Variogram Model Fitting</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="geostatistics.html"><a href="geostatistics.html#eda-check-before-model-fitting"><i class="fa fa-check"></i><b>1.4.1</b> EDA Check Before Model Fitting</a></li>
+<li class="chapter" data-level="1.4.2" data-path="geostatistics.html"><a href="geostatistics.html#maximum-likelihood-estimator"><i class="fa fa-check"></i><b>1.4.2</b> Maximum Likelihood Estimator</a></li>
+<li class="chapter" data-level="1.4.3" data-path="geostatistics.html"><a href="geostatistics.html#minq-estimation"><i class="fa fa-check"></i><b>1.4.3</b> MINQ Estimation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html"><i class="fa fa-check"></i><b>2</b> Spatial Prediction and Kriging</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#scale-of-variation"><i class="fa fa-check"></i><b>2.1</b> Scale of variation</a></li>
+<li class="chapter" data-level="2.2" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#ordinary-kriging"><i class="fa fa-check"></i><b>2.2</b> Ordinary Kriging</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#model-introduction"><i class="fa fa-check"></i><b>2.2.1</b> Model Introduction</a></li>
+<li class="chapter" data-level="2.2.2" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#effect-of-variogram-estimation"><i class="fa fa-check"></i><b>2.2.2</b> Effect of Variogram Estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#cokriging"><i class="fa fa-check"></i><b>2.3</b> Cokriging</a></li>
+<li class="chapter" data-level="2.4" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#robust-kriging"><i class="fa fa-check"></i><b>2.4</b> Robust Kriging</a></li>
+<li class="chapter" data-level="2.5" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#universal-kriging"><i class="fa fa-check"></i><b>2.5</b> Universal Kriging</a></li>
+</ul></li>
+<li class="part"><span><b>II Lattice Data</b></span></li>
+<li class="chapter" data-level="3" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html"><i class="fa fa-check"></i><b>3</b> Spatial Models on Lattices</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#lattices"><i class="fa fa-check"></i><b>3.1</b> Lattices</a></li>
+<li class="chapter" data-level="3.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#spatial-models-for-lattice-data"><i class="fa fa-check"></i><b>3.2</b> Spatial Models for Lattice Data</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#simultaneous-spatial-models"><i class="fa fa-check"></i><b>3.2.1</b> Simultaneous Spatial Models</a></li>
+<li class="chapter" data-level="3.2.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#conditional-spatial-models"><i class="fa fa-check"></i><b>3.2.2</b> Conditional Spatial Models</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#markov-random-fields"><i class="fa fa-check"></i><b>3.3</b> Markov Random Fields</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#preparation"><i class="fa fa-check"></i><b>3.3.1</b> Preparation</a></li>
+<li class="chapter" data-level="3.3.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#markov-random-field"><i class="fa fa-check"></i><b>3.3.2</b> Markov Random Field</a></li>
+<li class="chapter" data-level="3.3.3" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#hammersley-clifford-theorem"><i class="fa fa-check"></i><b>3.3.3</b> Hammersley-Clifford Theorem</a></li>
+<li class="chapter" data-level="3.3.4" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#pairwise-only-dependence"><i class="fa fa-check"></i><b>3.3.4</b> Pairwise-Only Dependence</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#conditionally-specified-spatial-models"><i class="fa fa-check"></i><b>3.4</b> Conditionally Specified Spatial Models</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#models-for-discrete-data"><i class="fa fa-check"></i><b>3.4.1</b> Models for Discrete Data</a></li>
+<li class="chapter" data-level="3.4.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#models-for-continuous-data"><i class="fa fa-check"></i><b>3.4.2</b> Models for Continuous Data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#simultaneously-specified-spatial-models"><i class="fa fa-check"></i><b>3.5</b> Simultaneously Specified Spatial Models</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#spatial-autoregressive-regression-model"><i class="fa fa-check"></i><b>3.5.1</b> Spatial Autoregressive Regression Model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#space-time-models"><i class="fa fa-check"></i><b>3.6</b> Space-Time Models</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#starma-model"><i class="fa fa-check"></i><b>3.6.1</b> STARMA Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html"><i class="fa fa-check"></i><b>4</b> Inference for Lattice Models</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#parameter-estimation-for-lattice-models"><i class="fa fa-check"></i><b>4.1</b> Parameter Estimation for Lattice Models</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#pseudolikelihood"><i class="fa fa-check"></i><b>4.1.1</b> Pseudolikelihood</a></li>
+<li class="chapter" data-level="4.1.2" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#gaussian-maximum-likelihood-estimation"><i class="fa fa-check"></i><b>4.1.2</b> Gaussian Maximum Likelihood Estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#conditional-gaussian-model"><i class="fa fa-check"></i><b>4.2</b> Conditional Gaussian Model</a></li>
+<li class="chapter" data-level="4.3" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#auto-logistic-model"><i class="fa fa-check"></i><b>4.3</b> Auto-logistic Model</a></li>
+<li class="chapter" data-level="4.4" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#auto-poisson-model"><i class="fa fa-check"></i><b>4.4</b> Auto-Poisson Model</a></li>
+</ul></li>
+<li class="part"><span><b>III Homework</b></span></li>
+<li class="chapter" data-level="5" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html"><i class="fa fa-check"></i><b>5</b> Spatial Analysis Homework</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#overview"><i class="fa fa-check"></i><b>5.1</b> Overview</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#background"><i class="fa fa-check"></i><b>5.1.1</b> Background</a></li>
+<li class="chapter" data-level="5.1.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#data"><i class="fa fa-check"></i><b>5.1.2</b> Data</a></li>
+<li class="chapter" data-level="5.1.3" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#goal"><i class="fa fa-check"></i><b>5.1.3</b> Goal</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#exploratory-analysis"><i class="fa fa-check"></i><b>5.2</b> Exploratory Analysis</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#data-preprocessing"><i class="fa fa-check"></i><b>5.2.1</b> Data Preprocessing</a></li>
+<li class="chapter" data-level="5.2.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#descriptive-statistics"><i class="fa fa-check"></i><b>5.2.2</b> Descriptive Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#model-fitting"><i class="fa fa-check"></i><b>5.3</b> Model Fitting</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#variogram"><i class="fa fa-check"></i><b>5.3.1</b> Variogram</a></li>
+<li class="chapter" data-level="5.3.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#kriging-model"><i class="fa fa-check"></i><b>5.3.2</b> Kriging Model</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#animation"><i class="fa fa-check"></i><b>5.4</b> Animation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Geostatistics Final Summary</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="spatial-models-on-lattices" class="section level1" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Spatial Models on Lattices</h1>
+<p>Instead of continuous index set considered in Part 1, this part is concerned with the situation where the index set <span class="math inline">\(D\)</span> is a countable collection of spatial sites at which data are observed. The collection <span class="math inline">\(D\)</span> of such sites is called a lattice, which is then supplemented with neighborhood information.</p>
+<div id="lattices" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Lattices</h2>
+<blockquote>
+<p><strong>Latices</strong><br />
+Lattice refers to a countable collection of (spatial) sites, either spatially regular or irregular.</p>
+</blockquote>
+<p>Set Sudden Infant Death Syndrome (SIDS) in North Carolina, 1974-1978 as an example. The lattice form of the data can be drawn as Figure <a href="spatial-models-on-lattices.html#fig:lattice-example">3.1</a>.</p>
+<div class="figure"><span style="display:block;" id="fig:lattice-example"></span>
+<img src="_main_files/figure-html/lattice-example-1.png" alt="Lattice Figure of Sudden Infant Death Syndrome (SIDS) in North Carolina, 1974-1978" width="672" />
+<p class="caption">
+Figure 3.1: Lattice Figure of Sudden Infant Death Syndrome (SIDS) in North Carolina, 1974-1978
+</p>
+</div>
+<blockquote>
+<p><strong>Neighborhoods</strong><br />
+A site <span class="math inline">\(k\)</span> is defined to be a neighbor of site <span class="math inline">\(i\)</span> if the conditional distribution of <span class="math inline">\(Z\left(s_{i}\right)\)</span>, given all other site values, depends functionally on <span class="math inline">\(z\left(s_{k}\right)\)</span>, for <span class="math inline">\(k \neq i\)</span>. Also define
+<span class="math display" id="eq:neighborhoods">\[\begin{equation}
+N_{i} \equiv\{k: k \text { is a neighbor of } i\}
+\tag{3.1}
+\end{equation}\]</span>
+to be the neighborhood set of site <span class="math inline">\(i\)</span>.</p>
+</blockquote>
+<p>Neighborhoods is important in lattice data. In SIDS data example, neighborhood relationships are drawn by blue line in Figure <a href="spatial-models-on-lattices.html#fig:lattice-example">3.1</a>.Here, counties whose seats are closer than 30 miles are deemed neighbors. For instance, if we consider the bold red points, four blue points around it are neighbors.</p>
+</div>
+<div id="spatial-models-for-lattice-data" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Spatial Models for Lattice Data</h2>
+<p>In spatial domain, the conditional approach <a href="spatial-models-on-lattices.html#conditional-spatial-models">3.2.2</a> and the simultaneous approach <a href="spatial-models-on-lattices.html#simultaneous-spatial-models">3.2.1</a> result in different models.</p>
+<div id="simultaneous-spatial-models" class="section level3" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> Simultaneous Spatial Models</h3>
+<div id="general-form" class="section level4" number="3.2.1.1">
+<h4><span class="header-section-number">3.2.1.1</span> General Form</h4>
+<p>For simplicity, consider the square lattice in the plane <span class="math inline">\(\mathbb{R}^2\)</span>.
+<span class="math display" id="eq:lattice">\[\begin{equation}
+D=\{s=(u, v): u=\ldots,-2,-1,0,1,2, \ldots ; v=\ldots,-2,-1,0,1,2, \ldots\}
+\tag{3.2}
+\end{equation}\]</span></p>
+<p>The joint approach is to assume
+<span class="math display" id="eq:joint">\[\begin{equation}
+\operatorname{Pr}(\mathbf{z})=\prod_{(u, v) \in D} Q_{u v}(z(u, v) ; z(u-1, v), z(u+1, v), z(u, v-1), z(u, v+1)).
+\tag{3.3}
+\end{equation}\]</span></p>
+<p>Equation <a href="spatial-models-on-lattices.html#eq:joint">(3.3)</a> suggests that the probability of values on a specific location is determined by values of its neighbors.</p>
+<p>Model definition of simultaneous spatial models
+<span class="math display" id="eq:gaussian-sg">\[\begin{equation}
+\phi\left(T_{1}, T_{2}\right) Z(u, v)=\epsilon(u, v)
+\tag{3.4}
+\end{equation}\]</span>
+where
+<span class="math display" id="eq:details-gaussian-sg">\[\begin{equation}
+\left\{\begin{aligned}
+&amp; T_{1} Z(u, v)=Z(u+1, v) \\
+&amp; T_{1}^{-1} Z(u, v)=Z(u-1, v) \\
+&amp; T_{2} Z(u, v)=Z(u, v+1) \\
+&amp; T_{2}^{-1} Z(u, v)=Z(u, v-1)
+\end{aligned}
+\right.
+\tag{3.5}
+\end{equation}\]</span>
+and
+<span class="math display" id="eq:details-gaussian-sg2">\[\begin{equation} 
+\phi\left(T_{1}, T_{2}\right)=\sum_{i} \sum_{j} a_{i j} T_{1}^{i} T_{2}^{j}
+\tag{3.6}
+\end{equation}\]</span></p>
+<p>Notice that <span class="math inline">\(\phi(c_1, c_2)\neq 0\)</span> for any complex number <span class="math inline">\(|c_1| = |c_2| = 1\)</span> must be met to ensure obtaining a stationary process.</p>
+</div>
+<div id="simultaneously-specified-spatial-gaussian-models" class="section level4" number="3.2.1.2">
+<h4><span class="header-section-number">3.2.1.2</span> Simultaneously Specified Spatial Gaussian Models</h4>
+<p>For this section, assume that <span class="math inline">\(\{Z(s): s \in D\}=\left\{Z\left(s_{i}\right): i=1, \ldots, n\right\}\)</span> is defined on a finite subset of the integer lattice in the plane.</p>
+<p>Suppose <span class="math inline">\(\boldsymbol{\epsilon}=\left(\epsilon\left(s_{1}\right), \ldots, \epsilon\left(s_{n}\right)\right) \sim \operatorname{Gua}(0, \Lambda)\)</span>, where <span class="math inline">\(\Lambda=\sigma^{2} I\)</span> and <span class="math inline">\(B=\left(b_{i j}\right)\)</span>, where <span class="math inline">\(b_{ij} = 0\)</span> means <span class="math inline">\(s_1, s_2\)</span> are independent. If <span class="math inline">\(I - B\)</span> is invertable, then simultaneously specified spatial gaussian model is writen as
+<span class="math display" id="eq:sg-form-matrix">\[\begin{equation}
+(I-B)(\mathbf{Z}-\mu)=\epsilon
+\tag{3.7}
+\end{equation}\]</span>
+Equally,
+<span class="math display" id="eq:sg-form-long">\[\begin{equation}
+Z\left(s_{i}\right)=\mu_{i}+\sum_{j=1}^{n} b_{i j}\left(Z\left(s_{j}\right)-\mu_{j}\right)+\epsilon_{i}
+\tag{3.8}
+\end{equation}\]</span></p>
+<ul>
+<li>From equation <a href="spatial-models-on-lattices.html#eq:sg-form-matrix">(3.7)</a>, we have <span class="math inline">\(\mathbf{Z} \sim \operatorname{Gau}\left(\mu,(I-B)^{-1} \Lambda\left(I-B^{\top}\right)^{-1}\right)\)</span>.</li>
+<li>Equation <a href="spatial-models-on-lattices.html#eq:sg-form-long">(3.8)</a>, this is a spatial analogue of the autoregressive model.</li>
+<li>Note that <span class="math inline">\(\left.\left.\operatorname{Cov}(\boldsymbol{\epsilon}, \mathbf{Z})=\operatorname{cov}\left(\boldsymbol{\epsilon},(I-B)^{-1}\right) \boldsymbol{\epsilon}\right)=\Lambda\left(I-B^{\top}\right)^{-1}\right)\)</span> is not diagonal, which means the error is not independent of the autoregressive variables. It theoretically suspects the consistency of least-squares estimators.</li>
+</ul>
+</div>
+</div>
+<div id="conditional-spatial-models" class="section level3" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> Conditional Spatial Models</h3>
+<div id="general-form-1" class="section level4" number="3.2.2.1">
+<h4><span class="header-section-number">3.2.2.1</span> General Form</h4>
+<p>The spatial conditional approach assumes</p>
+<p><span class="math display" id="eq:conditional-lattice">\[\begin{equation}
+\begin{aligned}
+&amp;\mathbf{P}(z(u, v) \mid\{z(k, l):(k, l) \neq(u, v)\}) \\
+\quad=&amp;\mathbf{P}(z(u, v) \mid z(u-1, v), z(u+1, v), z(u, v-1), z(u, v+1)), \text { for all }(u, v)^{\prime} \in D.
+\end{aligned}
+\tag{3.9}
+\end{equation}\]</span></p>
+<p>The conditional approach also suggests that the probability of values on a specific location is determined by values of its neighbors, but in a different way from simultaneous approach in section <a href="spatial-models-on-lattices.html#simultaneous-spatial-models">3.2.1</a></p>
+</div>
+<div id="conditionally-specified-spatial-gaussian-models" class="section level4" number="3.2.2.2">
+<h4><span class="header-section-number">3.2.2.2</span> Conditionally Specified Spatial Gaussian Models</h4>
+<p>For Gaussian data defined in section <a href="spatial-models-on-lattices.html#simultaneously-specified-spatial-gaussian-models">3.2.1.2</a>, the conditional model can be written as
+<span class="math display" id="eq:cg-model">\[\begin{equation}
+\left.Z\left(s_{i}\right) \mid\left\{Z\left(s_{j}\right): j \neq i\right\}\right) \sim \operatorname{Gau}\left(\theta_{i}\left(\left\{Z\left(s_{j}\right): j \neq i\right\}\right), \tau_{i}^{2}\right)
+\tag{3.10}
+\end{equation}\]</span></p>
+<p>Addditionally, we suppose ”pairwise-only dependence” between sites. Therefore we can write <span class="math inline">\(\theta_i\)</span> as a linear function
+<span class="math display" id="eq:cg-pairwise">\[\begin{equation}
+\theta_{i}\left(\left\{Z\left(s_{j}\right): j \neq i\right\}\right)=\mu_{i}+\sum_{j=1}^{n} c_{i j}\left(z\left(s_{j}\right)-\mu_{j}\right)
+\tag{3.11}
+\end{equation}\]</span>
+where <span class="math inline">\(c_{i j} \tau_{j}^{2}=c_{j i} \tau_{i}^{2}, c_{i i}=0\)</span>. <span class="math inline">\(c_{i k}=0\)</span> means there is no dependence between sites <span class="math inline">\(s_i\)</span> and <span class="math inline">\(s_k\)</span>. Then we have
+<span class="math display" id="eq:cg-z">\[\begin{equation}
+\mathbf{Z} \sim \operatorname{Gau}\left(\mu,(I-C)^{-1} M\right)
+\tag{3.12}
+\end{equation}\]</span>
+where <span class="math inline">\(M=\operatorname{diag}\left(\tau_{1}^{2}, \ldots, \tau_{n}^{2}\right)\)</span>.</p>
+<p>If we note <span class="math inline">\(\nu:=(I-C)(\mathbf{Z}-\mu)\)</span>, conditionally specified spatial gaussian models can also be writen as
+<span class="math display" id="eq:cg-form-long">\[\begin{equation}
+Z\left(s_{i}\right)=\mu_{i}+\sum_{j=1}^{n} c_{i j}\left(Z\left(s_{j}\right)-\mu_{j}\right)+\nu_{i}
+\tag{3.13}
+\end{equation}\]</span></p>
+</div>
+<div id="comparison" class="section level4" number="3.2.2.3">
+<h4><span class="header-section-number">3.2.2.3</span> Comparison</h4>
+<ul>
+<li>Equation <a href="spatial-models-on-lattices.html#eq:cg-form-long">(3.13)</a> and equation <a href="spatial-models-on-lattices.html#eq:sg-form-long">(3.8)</a> are comparable.</li>
+<li>SG and CG is equivalent if <span class="math inline">\((I-C)^{-1} M=(I-B)^{-1} \Lambda\left(I-B^{\top}\right)^{-1}\)</span>.</li>
+<li>Any SG can be represented as a CG, but not necessarily vice versa.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="markov-random-fields" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Markov Random Fields</h2>
+<div id="preparation" class="section level3" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Preparation</h3>
+<p>Before Markov Random Fields, some concepts and conditions need to be specified.</p>
+<blockquote>
+<p><strong>Positivity Condition</strong><br />
+Suppose on each lattice node, we observe a discrete random variable <span class="math inline">\(Z(s_i)\)</span> (continuous random variables can be similarly treated). Define the domain of <span class="math inline">\(Z(s_i)\)</span> as <span class="math inline">\(\zeta_{i}=\left\{z\left(s_{i}\right): \mathbf{P}\left(z\left(s_{i}\right)\right)&gt;0\right\}\)</span>. Thus <span class="math inline">\(\boldsymbol{\zeta}=\left\{\mathbf{z}=\left(z\left(s_{1}\right), \ldots, z\left(s_{n}\right)\right): \mathbf{P}(z)&gt;0\right\}\)</span> indicates the domain of <span class="math inline">\((Z(s_1),...,, Z(s_n))\)</span>. Positivity condition says that
+<span class="math display" id="eq:positivity-condition">\[\begin{equation}
+\zeta=\zeta_{1} \times \cdots \times \zeta_{n}.
+\tag{3.14}
+\end{equation}\]</span></p>
+</blockquote>
+<p>In other words, positivity condition means indepence of domains in dimensions</p>
+<div class="theorem">
+<p><span id="thm:factorization-theorem" class="theorem"><strong>Theorem 3.1  </strong></span><strong>[Factorization Theorem]</strong><br />
+Suppose the variables <span class="math inline">\(\left\{\mathrm{Z}\left(s_{i}\right): i=1, \ldots, n\right\}\)</span> have joint probability mass function <span class="math inline">\(\mathbf{P}(\mathbf{z})\)</span>, whose support <span class="math inline">\(\zeta\)</span> satisfies the positivity condition. Then,
+<span class="math display" id="eq:factorization-theorem">\[\begin{equation}
+\frac{\mathbf{P}(\mathbf{z})}{\mathbf{P}(\mathbf{y})}=\prod_{i=1}^{n} \frac{\mathbf{P}\left(z\left(s_{i}\right) \mid z\left(s_{1}\right), \cdots, z\left(s_{i-1}\right), y\left(s_{i+1}\right), \cdots, y\left(s_{n}\right)\right)}{\mathbf{P}\left(y\left(s_{i}\right) \mid z\left(s_{1}\right), \cdots, z\left(s_{i-1}\right), y\left(s_{i+1}\right), \cdots, y\left(s_{n}\right)\right)}
+\tag{3.15}
+\end{equation}\]</span>
+where <span class="math inline">\(\mathbf{z}=\left(z\left(s_{1}\right), \cdots, z\left(s_{n}\right)\right), \mathbf{y}=\left(y\left(s_{1}\right), \ldots, y\left(s_{n}\right)\right) \in \boldsymbol{\zeta} .\)</span></p>
+</div>
+<p>There are two ways to model. If we model through joint distribution, conditional distribution is easily derived. However, if we start from conditional distribution, joint distribution may not be valid. In case of this, Factorization Theorem <a href="spatial-models-on-lattices.html#eq:factorization-theorem">(3.15)</a> is proposed to eliminate invalid joint distribution.</p>
+<ul>
+<li>Positivity condition and factorization theorem also works for continuous variable.</li>
+<li>The ordering of the variables <span class="math inline">\(\left(Z\left(s_{1}\right), \cdots, Z\left(s_{n}\right)\right)\)</span> do not affect the left hand of equation <a href="spatial-models-on-lattices.html#eq:factorization-theorem">(3.15)</a>, but do affect the right hand.</li>
+</ul>
+<blockquote>
+<p><strong>Neighbors</strong><br />
+Formal definition of neighbors is already given as <a href="spatial-models-on-lattices.html#eq:neighborhoods">(3.1)</a> in section <a href="spatial-models-on-lattices.html#lattices">3.1</a></p>
+</blockquote>
+<blockquote>
+<p><strong>Clique</strong><br />
+A clique is defined to be a set of sites that consists either of a single site or of sites that
+are all neighbors of each other.</p>
+</blockquote>
+<p>A clique can ben understood as an undirected graph.</p>
+</div>
+<div id="markov-random-field" class="section level3" number="3.3.2">
+<h3><span class="header-section-number">3.3.2</span> Markov Random Field</h3>
+<p>Having some knowledge of graphs, Markov random field can be introduced now.</p>
+<blockquote>
+<p><strong>Markov Random Field</strong><br />
+Any probability measure whose conditional distributions define a neighborhood
+structure <span class="math inline">\({N_i: i = 1,...,n}\)</span> is defined to be a Markov random field.</p>
+</blockquote>
+<p>Another important concept in Markov Random Field, which contains the same informations as <span class="math inline">\(\mathbf{P}(\mathbf{z})\)</span>.</p>
+<blockquote>
+<p><strong>Negpotential Function</strong><br />
+The Negpotential Function <span class="math inline">\(Q\)</span> is defined as
+<span class="math display" id="eq:neg-func">\[\begin{equation}
+Q(\mathbf{z})=\log \left\{\frac{\mathbf{P}(\mathbf{z})}{\mathbf{P}(\mathbf{0})}\right\}, \quad \mathbf{z} \in \boldsymbol{\zeta}
+\tag{3.16}
+\end{equation}\]</span>
+which is also called log-likelihood ratio.</p>
+</blockquote>
+<p>Negpotential function is equivalent to knowledge of <span class="math inline">\(\mathbf{P}(\mathbf{z})\)</span> for
+<span class="math display" id="eq:qp">\[\begin{equation}
+\mathbf{P}(\mathbf{z})=\frac{\exp (Q(\mathbf{z}))}{\sum_{\mathbf{y} \in \zeta} \exp (Q(\mathbf{y}))}
+\tag{3.17}
+\end{equation}\]</span></p>
+<div class="theorem">
+<p><span id="thm:negpotential-function" class="theorem"><strong>Theorem 3.2  </strong></span><strong>[Properites of the negpotential function Q]</strong><br />
+<span class="math display" id="eq:nf1">\[\begin{equation}
+\exp \left(Q(\mathbf{z})-Q\left(\mathbf{z}_{i}\right)\right)=\frac{\mathbf{P}(\mathbf{z})}{\mathbf{P}\left(\mathbf{z}_{i}\right)}=\frac{\mathbf{P}\left(z\left(s_{i}\right) \mid\left\{z\left(s_{j}\right): j \neq i\right\}\right)}{\mathbf{P}\left(0\left(s_{i}\right) \mid\left\{z\left(s_{j}\right): j \neq i\right\}\right)}
+\tag{3.18}
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{z}_{i}=\left(z\left(s_{1}\right), \cdots, z\left(s_{i-1}\right), 0, z\left(s_{i+1}\right), \ldots, z\left(s_{n}\right)\right)^{\prime}\)</span> and <span class="math inline">\(0\left(s_{i}\right)\)</span> denotes the event <span class="math inline">\(Z\left(s_{i}\right)=0\)</span>.</p>
+<p><span class="math inline">\(Q\)</span> can be expanded uniquely on <span class="math inline">\(\zeta\)</span> as
+<span class="math display" id="eq:nf2">\[\begin{equation}
+\begin{aligned}
+Q(\mathbf{z})=&amp; \sum_{1 \leq i \leq n} z\left(s_{i}\right) G_{i}\left(z\left(s_{i}\right)\right)+\sum_{1 \leq i&lt;j \leq n} z\left(s_{i}\right) z\left(s_{j}\right) G_{i j}\left(z\left(s_{i}\right), z\left(s_{j}\right)\right)+\cdots \\
+&amp;+z\left(s_{1}\right) \cdots z\left(s_{n}\right) G_{1} \cdots n\left(z\left(s_{1}\right), \cdots, z\left(s_{n}\right)\right), \quad \mathbf{z} \in \boldsymbol{\zeta} .
+\end{aligned}
+\tag{3.19}
+\end{equation}\]</span></p>
+</div>
+<ul>
+<li>Theorem <a href="#negpotential-function"><strong>??</strong></a> implies that the expansion of <span class="math inline">\(Q(z)\)</span> is
+actually made up of conditional probabilities.</li>
+<li>The pairwise interaction term in <span class="math inline">\(Q(\mathbf{z})\)</span> <a href="spatial-models-on-lattices.html#eq:nf2">(3.19)</a> is:
+<span class="math display" id="eq:pair-dependence">\[\begin{equation}
+\begin{aligned}
+z &amp;\left(s_{i}\right) z\left(s_{j}\right) G_{i j}\left(z\left(s_{i}\right), z\left(s_{j}\right)\right) \\
+=&amp; Q\left(0, \cdots, 0, z\left(s_{i}\right), 0, \cdots, 0, z\left(s_{j}\right), 0, \cdots, 0\right)-Q\left(0, \cdots, 0, z\left(s_{j}\right), 0, \cdots, 0\right) \\
+&amp;+Q(0, \cdots, 0)-Q\left(0, \cdots, 0, z\left(s_{i}\right), 0, \cdots, 0\right) \\
+=&amp; \log \left[\frac{\mathbf{P}\left(z\left(s_{i}\right) \mid z\left(s_{j}\right),\left\{0\left(s_{k}\right): k \neq i, j\right\}\right)}{\mathbf{P}\left(0\left(s_{i}\right) \mid z\left(s_{j}\right),\left\{0\left(s_{k}\right): k \neq i, j\right\}\right)} \frac{\mathbf{P}\left(0\left(s_{i}\right) \mid\left\{0\left(s_{k}\right): k \neq i\right\}\right)}{\mathbf{P}\left(z\left(s_{i}\right) \mid\left\{0\left(s_{j}\right): j \neq i\right\}\right)}\right]
+\end{aligned}
+\tag{3.20}
+\end{equation}\]</span></li>
+</ul>
+<p>Recall that if we start from conditional distribution, joint distribution may not be valid. With some conditions, joint distribution is valid. One more concept is to introduce.</p>
+<blockquote>
+<p><strong>Well-Defined G Functions</strong>
+The consistency conditions on the conditional probabilities (needed for
+reconstruction of a joint probability) can then be expressed as those conditions
+needed to yield well-defined G functions.</p>
+</blockquote>
+</div>
+<div id="hammersley-clifford-theorem" class="section level3" number="3.3.3">
+<h3><span class="header-section-number">3.3.3</span> Hammersley-Clifford Theorem</h3>
+<div class="theorem">
+<p><span id="thm:hammersley-clifford-theorem" class="theorem"><strong>Theorem 3.3  </strong></span><strong><a href="spatial-models-on-lattices.html#hammersley-clifford-theorem">Hammersley-Clifford Theorem</a></strong><br />
+Suppose that <span class="math inline">\(\mathbf{Z}\)</span> is distributed according to a Markov random field on <span class="math inline">\(\boldsymbol{\zeta}\)</span> that satisfies the positivity condition. Then, the negpotential function <span class="math inline">\(Q(.)\)</span> given by
+<span class="math display" id="eq:hc-theorem">\[\begin{equation}
+\begin{aligned}
+Q(\mathbf{z})=&amp; \sum_{1 \leq i \leq n} z\left(\mathbf{s}_{i}\right) G_{i}\left(z\left(\mathbf{s}_{i}\right)\right)+\sum_{1 \leq i&lt;j \leq n} z\left(\mathbf{s}_{i}\right) z\left(\mathbf{s}_{j}\right) G_{i j}\left(z\left(\mathbf{s}_{i}\right), z\left(\mathbf{s}_{j}\right)\right) \\
+&amp;+\sum_{1 \leq i&lt;j&lt;k \leq n} z\left(\mathbf{s}_{i}\right) z\left(\mathbf{s}_{j}\right) z\left(\mathbf{s}_{k}\right) G_{i j k}\left(z\left(\mathbf{s}_{i}\right), z\left(\mathbf{s}_{j}\right), z\left(\mathbf{s}_{k}\right)\right)+\cdots \\
+&amp;+z\left(\mathbf{s}_{1}\right) \cdots z\left(\mathbf{s}_{n}\right) G_{1 \cdots n}\left(z\left(\mathbf{s}_{1}\right), \ldots, z\left(\mathbf{s}_{n}\right)\right), \quad \mathbf{z} \in \zeta .
+\end{aligned}
+\tag{3.21}
+\end{equation}\]</span>
+must satisfy the property that if sites <span class="math inline">\(i, j, \ldots, s\)</span> do not form a clique, then <span class="math inline">\(G_{i j \cdots s}(.)=0\)</span>.</p>
+</div>
+<p>Hammersley-Clifford theorem indicates negpotential function <span class="math inline">\(Q(.)\)</span>’s property within a clique.</p>
+</div>
+<div id="pairwise-only-dependence" class="section level3" number="3.3.4">
+<h3><span class="header-section-number">3.3.4</span> Pairwise-Only Dependence</h3>
+<p>Pairwise-only means there is no directly stacked influence between sites who is not direct neighbors to each other. For simplicity and universality, from now on we consider only exponential distribution family. If there is non priori information, the exponential distribution is a good choice.</p>
+<blockquote>
+<p><strong>Exponential Distribution</strong><br />
+A random variable follows a single parameter exponential distribution if <span class="math inline">\(p(x \mid \eta)=h(x) \exp \{\eta t(x)-a(\eta)\}\)</span></p>
+</blockquote>
+<p>Suppose the one-parameter exponential family is used to model the conditional
+distribution:
+<span class="math display" id="eq:besag-condition">\[\begin{equation}
+\begin{aligned}
+\mathbf{P}\left(z\left(s_{i}\right) \mid\left\{z\left(s_{j}\right): j \neq i\right\}\right)=&amp; \exp \left[A_{i}\left(\left\{z\left(s_{j}\right): j \neq i\right\}\right) B_{i}\left(z\left(s_{i}\right)\right)\right.\\
+&amp;\left.+C_{i}\left(z\left(s_{i}\right)\right)+D_{i}\left(\left\{z\left(s_{j}\right): j \neq i\right\}\right)\right]
+\end{aligned}
+\tag{3.22}
+\end{equation}\]</span></p>
+<div class="theorem">
+<p><span id="thm:besag" class="theorem"><strong>Theorem 3.4  </strong></span><strong>[Besag’s Theorem]</strong><br />
+Assume equation <a href="spatial-models-on-lattices.html#eq:besag-condition">(3.22)</a>
+and pairwise-only dependence between sites, i.e., all <span class="math inline">\(G_{A}(.)=0\)</span> for any <span class="math inline">\(A\)</span> whose number of distinct elements is 3 or more. Then
+<span class="math display" id="eq:besag">\[\begin{equation}
+A_{i}\left(\left\{z\left(s_{j}\right): j \neq i\right\}\right)=\alpha_{i}+\sum_{j=1}^{n} \theta_{i j} B_{j}\left(z\left(s_{j}\right)\right), i=1, \cdots, n,
+\tag{3.23}
+\end{equation}\]</span>
+where <span class="math inline">\(\theta_{i j}=\theta_{j i}, \theta_{i i}=0\)</span>, and <span class="math inline">\(\theta_{i k}=0\)</span> for <span class="math inline">\(k \notin N_{i}\)</span>.</p>
+</div>
+<p>As a consequence of the theorem, <span class="math inline">\(Q(z)\)</span> can be expressed as
+<span class="math display">\[\begin{equation}
+Q(\mathbf{z})=\sum_{i=1}^{n}\left\{\alpha_{i} B_{i}\left(z\left(s_{i}\right)\right)+C_{i}\left(z\left(s_{i}\right)\right)\right\}+\sum_{1 \leq i&lt;j \leq n} \theta_{i j} B_{i}\left(z\left(s_{i}\right)\right) B_{j}\left(z\left(s_{j}\right)\right).
+\end{equation}\]</span></p>
+</div>
+</div>
+<div id="conditionally-specified-spatial-models" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Conditionally Specified Spatial Models</h2>
+<div id="models-for-discrete-data" class="section level3" number="3.4.1">
+<h3><span class="header-section-number">3.4.1</span> Models for Discrete Data</h3>
+<p>Hammersley-Clifford theorem <a href="spatial-models-on-lattices.html#hammersley-clifford-theorem">3.3.3</a> is the theoretical foundation of conditionally specified spatial models for discrete data.</p>
+<div id="binary-data" class="section level4" number="3.4.1.1">
+<h4><span class="header-section-number">3.4.1.1</span> Binary Data</h4>
+<blockquote>
+<p><strong>Binary Data</strong><br />
+Binary data refers to data points which are either 0 or 1.</p>
+</blockquote>
+<p>Logistic function is the first thing come to ming when it comes to 0-1 binary data. One of the most used method is known as <strong>Autologistic Model</strong>.</p>
+<p>Assuming pairwise-only dependence between sites, <span class="math inline">\(G_{i}(1) \equiv \alpha_{i}\)</span>, <span class="math inline">\(G_{i j}(1,1) \equiv \theta_{i j}\)</span>, and <span class="math inline">\(z(s_i) = 0,1\)</span>. Autologistic Model can be writen as <a href="spatial-models-on-lattices.html#eq:autologistic">(3.24)</a>.</p>
+<p><span class="math display" id="eq:autologistic">\[\begin{equation}
+\operatorname{Pr}\left(z\left(\mathbf{s}_{i}\right) \mid\left\{z\left(\mathbf{s}_{j}\right): j \neq i\right\}\right)=\frac{\exp \left\{\alpha_{i} z\left(\mathbf{s}_{i}\right)+\sum_{j=1}^{n} \theta_{i j} z\left(\mathbf{s}_{i}\right) z\left(\mathbf{s}_{j}\right)\right\}}{1+\exp \left\{\alpha_{i}+\sum_{j=1}^{n} \theta_{i j} z\left(\mathbf{s}_{j}\right)\right\}}
+\tag{3.24}
+\end{equation}\]</span></p>
+<p>Autologistic model can be easily fitted by function <code>autologistic()</code> in <code>ngspatial</code> package.</p>
+<p>As a homogeneous first-order autologistic on a countable regular latticeOne of autologistic prefered by physicist is <strong>Ising Model</strong>. It can ben summarized as
+<span class="math display" id="eq:isling">\[\begin{equation}
+\operatorname{Pr}(z(u, v) \mid\{z(k, l):(k, l) \neq(u, v)\})=\exp (z(u, v) g) /\{1+\exp (g)\}
+\tag{3.25}
+\end{equation}\]</span>
+where
+<span class="math display">\[\begin{equation}
+\begin{aligned}
+g \equiv\{\alpha&amp;+\gamma_{1}(z(u-1, v)+z(u+1, v)) \\
+&amp;\left.+\gamma_{2}(z(u, v-1)+z(u, v+1))\right\}
+\end{aligned}
+\end{equation}\]</span></p>
+<p>Other modelling types for binary data include Random Media, Multicolored Data and so on.</p>
+</div>
+<div id="counts-data" class="section level4" number="3.4.1.2">
+<h4><span class="header-section-number">3.4.1.2</span> Counts Data</h4>
+<p>Besag’s theorem <a href="spatial-models-on-lattices.html#thm:besag">3.4</a> is the theoretical foundation for counts data. When spatial data arise as counts, the natural model that comes to mind is one
+based on the Poisson distribution. Assuming pairwise-only dependence between site, the auto-Poisson conditional specification is
+<span class="math display" id="eq:poisson">\[\begin{equation}
+\begin{aligned}
+&amp;\operatorname{Pr}\left(z\left(\mathrm{~s}_{i}\right) \mid\left\{z\left(\mathrm{~s}_{j}\right): j \neq i\right\}\right) \\
+&amp;\quad=\exp \left(-\lambda_{i}\left(\left\{z\left(\mathrm{~s}_{j}\right): j \neq i\right\}\right)\right)\left(\lambda_{i}\left(\left\{z\left(\mathrm{~s}_{j}\right): j \neq i\right\}\right)\right)^{z\left(\mathrm{~s}_{i}\right)} / z\left(\mathrm{~s}_{i}\right) !
+\end{aligned}
+\tag{3.26}
+\end{equation}\]</span>
+where <span class="math inline">\(\lambda_{i}=\lambda_{i}\left(\left\{z\left(\mathbf{s}_{j}\right): j \in N_{i}\right\}\right)\)</span> is a function of data observed for the regions <span class="math inline">\(N_j\)</span> that neighbor the region <span class="math inline">\(i (i = 1,..., n)\)</span>. By Besag’s theorem <a href="spatial-models-on-lattices.html#thm:besag">3.4</a>, we have</p>
+<p><span class="math display" id="eq:count1">\[\begin{equation}
+\lambda_{i}\left(\left\{z\left(\mathbf{s}_{j}\right): j \in N_{i}\right\}\right)=\exp \left\{\alpha_{i}+\sum_{j=1}^{n} \theta_{i j} z\left(\mathbf{s}_{j}\right)\right\}
+\tag{3.27}
+\end{equation}\]</span>
+Then, <span class="math inline">\(Q(z)\)</span> is derived as
+<span class="math display" id="eq:count2">\[\begin{equation}
+Q(\mathbf{z})=\sum_{i=1}^{n} \alpha_{i} z\left(s_{i}\right)+\sum_{1 \leq i&lt;j \leq n} \theta_{i j} z\left(s_{i}\right) z\left(s_{j}\right)-\sum_{i=1}^{n} \log \left(z\left(s_{i}\right) !\right)
+\tag{3.28}
+\end{equation}\]</span></p>
+<p>Note that SIDS data introduced in the first part of this chapter <a href="spatial-models-on-lattices.html#lattices">3.1</a> are suitable for auto-poisson model.</p>
+</div>
+</div>
+<div id="models-for-continuous-data" class="section level3" number="3.4.2">
+<h3><span class="header-section-number">3.4.2</span> Models for Continuous Data</h3>
+<div id="auto-gaussian-or-cg-models" class="section level4" number="3.4.2.1">
+<h4><span class="header-section-number">3.4.2.1</span> Auto-Gaussian (or CG) models</h4>
+<p>Assuming that the conditional density has the Gaussian form
+<span class="math display" id="eq:gaussian-form">\[\begin{equation}
+\begin{aligned}
+&amp;f\left(z\left(\mathbf{s}_{i}\right) \mid\left\{z\left(\mathbf{s}_{j}\right): j \neq i\right\}\right) \\
+&amp;\quad=\left(2 \pi \tau_{i}^{2}\right)^{-1 / 2} \exp \left[-\left\{z\left(\mathbf{s}_{i}\right)-\theta_{i}\left(\left\{z\left(\mathbf{s}_{j}\right): j \neq i\right\}\right)\right\}^{2} / 2 \tau_{i}^{2}\right]
+\end{aligned}
+\tag{3.29}
+\end{equation}\]</span></p>
+<p>Assuming pairwise-only dependence between sites, the conditional expecta-
+tion <span class="math inline">\(E\left(Z\left(\mathbf{s}_{i}\right)\left\{\left\{z\left(\mathbf{s}_{j}\right): j \neq i\right\}\right) \equiv \theta_{i}\left(\left\{z\left(\mathbf{s}_{j}\right): j \neq i\right\}\right)\right.\)</span> can be written as
+<span class="math display" id="eq:g1">\[\begin{equation}
+\theta_{i}\left(\left\{z\left(\mathbf{s}_{j}\right): j \neq i\right\}\right)=\mu_{i}+\sum^{n} c_{i j}\left(z\left(\mathbf{s}_{j}\right)-\mu_{j}\right)
+\tag{3.30}
+\end{equation}\]</span></p>
+<p>The conditional distribution is given by
+<span class="math display" id="eq:g2">\[\begin{equation}
+Z\left(\mathbf{s}_{i}\right)\left\{\left\{z\left(\mathbf{s}_{j}\right): j \neq i\right\} \sim \operatorname{Gau}\left(\mu_{i}+\sum_{j=1}^{n} c_{i j}\left(z\left(\mathbf{s}_{j}\right)-\mu_{j}\right), \tau_{i}^{2}\right)\right.
+\tag{3.31}
+\end{equation}\]</span></p>
+<p>Apply Factorization Theorem <a href="#factorization-theorem"><strong>??</strong></a> directly, the joint distribution is as
+<span class="math display" id="eq:g3">\[\begin{equation}
+\mathbf{Z} \sim \operatorname{Gau}\left(\boldsymbol{\mu},(I-C)^{-1} M\right)
+\tag{3.32}
+\end{equation}\]</span></p>
+<p>After the necessary derivation, we have <span class="math inline">\(Q(z)\)</span> as
+<span class="math display">\[\begin{equation}
+\begin{aligned}
+Q(\mathbf{z})=\log (f(\mathbf{z}) / f(\mathbf{0}))=&amp;-(1 / 2)(\mathbf{z}-\boldsymbol{\mu})^{\prime} M^{-1}(I-C)(\mathbf{z}-\boldsymbol{\mu}) \\
+&amp;+(1 / 2) \boldsymbol{\mu}^{\prime} M^{-1}(I-C) \boldsymbol{\mu}
+\end{aligned}
+\end{equation}\]</span></p>
+</div>
+</div>
+</div>
+<div id="simultaneously-specified-spatial-models" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> Simultaneously Specified Spatial Models</h2>
+<p>Simultaneous approach is popular in econometrics and graphical modeling. Whittle’s (1954) prescription for simultaneously specified stationary processes in the plane is given by equation <a href="spatial-models-on-lattices.html#eq:ss1">(3.33)</a>. For a (finite) data set <span class="math inline">\(\mathbf{Z} \equiv\left(Z\left(s_{1}\right), \ldots, Z\left(s_{n}\right)\right)^{\prime}\)</span> at locations <span class="math inline">\(s_{1}, \ldots, s_{n}\)</span>, the analogous specification is
+<span class="math display" id="eq:ss1">\[\begin{equation}
+(I-B) \mathrm{Z}=\epsilon
+\tag{3.33}
+\end{equation}\]</span>
+where <span class="math inline">\(\epsilon \equiv\left(\epsilon\left(s_{1}\right), \ldots, \epsilon\left(s_{n}\right)\right)^{\prime}\)</span> is a vector of i.i.d. zero-mean errors and <span class="math inline">\(B\)</span> is a matrix whose diagonal elements <span class="math inline">\(\left\{b_{i i}\right\}\)</span> are zero. Another way to write (6.7.1) is
+<span class="math display" id="eq:ss3" id="eq:ss2">\[\begin{equation}
+Z\left(\mathbf{s}_{i}\right)=\sum_{j=1}^{n} b_{i j} Z\left(\mathbf{s}_{j}\right)+\epsilon\left(\mathbf{s}_{i}\right),
+\tag{3.34}
+\end{eq:equation}
+
+Simultaneously specified spatial models is referred to as a spatial autoregressiue (SAR) process, which can be understood by the form of equation \@ref(eq:ss2)
+
+A common special case occurs when $\epsilon$ is Gaussian, then we have
+\begin{equation}
+\mathbf{Z} \sim \operatorname{Gau}\left(\mathbf{0},(I-B)^{-1}\left(I-B^{\prime}\right)^{-1} \sigma^{2}\right)
+\tag{3.35}
+\end{equation}\]</span></p>
+<div id="spatial-autoregressive-regression-model" class="section level3" number="3.5.1">
+<h3><span class="header-section-number">3.5.1</span> Spatial Autoregressive Regression Model</h3>
+<p>If it is desired to interpret large-scale effects <span class="math inline">\(\boldsymbol{\beta}\)</span> through <span class="math inline">\(E(\mathbf{Z})=X \boldsymbol{\beta}\)</span> (where the columns of <span class="math inline">\(X\)</span> might be treatments, spatial trends, factors, etc.), then the model should be modified to
+<span class="math display" id="eq:ss4">\[\begin{equation}
+(I-B)(\mathbf{Z}-X \boldsymbol{\beta})=\boldsymbol{\epsilon}
+\tag{3.36}
+\end{equation}\]</span>
+When <span class="math inline">\(\epsilon\)</span> is Gaussian,
+<span class="math display" id="eq:ss5">\[\begin{equation}
+\mathbf{Z} \sim \operatorname{Gau}\left(X \boldsymbol{\beta},(I-B)^{-1}\left(I-B^{\prime}\right)^{-1} \sigma^{2}\right)
+\tag{3.37}
+\end{equation}\]</span></p>
+</div>
+</div>
+<div id="space-time-models" class="section level2" number="3.6">
+<h2><span class="header-section-number">3.6</span> Space-Time Models</h2>
+<p>Space-Time models consider the case when not only space but also time should also be taken into acount.</p>
+<div id="starma-model" class="section level3" number="3.6.1">
+<h3><span class="header-section-number">3.6.1</span> STARMA Model</h3>
+<p>the STARMA model is summarized as
+<span class="math display" id="eq:starma">\[\begin{equation}
+\begin{aligned}
+\mathbf{Z}(t) &amp;=\sum_{k=0}^{p}\left(\sum_{j=1}^{\lambda_{k}} \xi_{k j} W_{k j}\right) \mathbf{Z}(t-k)-\sum_{l=0}^{q}\left(\sum_{j=1}^{\mu_{l}} \phi_{l j} V_{l j}\right) \boldsymbol{\epsilon}(t-l)+\boldsymbol{\epsilon}(t) \\
+&amp;=\sum_{k=0}^{p} B_{k} \mathbf{Z}(t-k)+\boldsymbol{\epsilon}(t)-\sum_{l=0}^{q} E_{l} \boldsymbol{\epsilon}(t-l)
+\end{aligned}
+\tag{3.38}
+\end{equation}\]</span>
+where</p>
+<ul>
+<li><span class="math inline">\(W_{k j}\)</span> and <span class="math inline">\(V_{l j}\)</span>: given weight matrices,</li>
+<li><span class="math inline">\(\lambda_{k}\)</span>: the extent of the spatial lagging on the autoregressive component,</li>
+<li><span class="math inline">\(\mu_{l}\)</span>: the extent of the spatial lagging on the moving-average component,</li>
+<li><span class="math inline">\(\left\{\xi_{k j}\right\}\)</span> and <span class="math inline">\(\left\{\phi_{l j}\right\}\)</span>: the STARMA parameters to be estimated (restrictions are needed on the <span class="math inline">\(W\)</span> s and <span class="math inline">\(V\)</span> s to ensure these parameters are identifiable).</li>
+<li><span class="math inline">\(B_{0}, E_{0}\)</span>: necessarily have zeros down their diagonals.</li>
+</ul>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="spatial-prediction-and-kriging.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="inference-for-lattice-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/03-ch6.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

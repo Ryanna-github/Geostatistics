@@ -1,0 +1,89 @@
+# Inference for Lattice Models
+
+## Parameter Estimation for Lattice Models
+
+### Pseudolikelihood
+
+> **Pseudolikelihood** \
+Pseudolikelihood is to be writen as
+\begin{equation}
+p(\boldsymbol{\eta})=\prod_{i=1}^{n} \mathbf{P}\left(z\left(s_{i}\right) \mid\left\{z\left(s_{j}\right): j \neq i\right\} ; \boldsymbol{\eta}\right)
+(\#eq:pseudo)
+\end{equation}
+Also denote the negative log-pseudolikelihood function as 
+\begin{equation}
+P(\boldsymbol{\eta})=-\log (p(\boldsymbol{\eta}))=-\sum_{i=1}^{n} \log \mathbf{P}\left(z\left(s_{i}\right) \mid\left\{z\left(s_{j}\right): j \neq i\right\} ; \boldsymbol{\eta}\right)
+(\#eq:pseudo2)
+\end{equation}
+
+The goal is to maximizing p seudolikelihood \@ref(eq:pseudo1). Equally, we aims to find $\hat \eta_p$ which minimize formula \@ref(eq:pseudo2).
+
+### Gaussian Maximum Likelihood Estimation
+
+Under Gaussian assumptions, The SG and CG model can be estimated by maximum likelihood method.
+
+- If $\mathbf{Z} \sim \mathrm{N}(\boldsymbol{\mu}, \sigma)$, the negative log-likelihood is
+\begin{equation}
+L(\boldsymbol{\eta})=\frac{n}{2} \log (2 \pi)+\frac{1}{2} \log (|\Sigma|)+\frac{1}{2}(\mathbf{z}-\boldsymbol{\mu})^{\top} \Sigma^{-1}(\mathbf{z}-\boldsymbol{\mu})
+(\#eq:mle1)
+\end{equation}
+- For the covariance matrix,
+\begin{equation}
+\begin{array}{ll}
+\text { SG : } & \Sigma=(I-B)^{-1} \Lambda\left(I-B^{\prime}\right)^{-1} \\
+\text { CG : } & \Sigma=(I-C)^{-1} M
+\end{array}
+(\#eq:mle2)
+\end{equation}
+
+## Conditional Gaussian Model
+
+Recall Conditional Gaussian Model introduced in section \@ref(conditionally-specified-spatial-gaussian-models). The negative log-pseudolikelihood function here is 
+\begin{equation}
+P(\boldsymbol{\eta})=\frac{1}{2} \sum_{i=1}^{n} \frac{\left(z\left(s_{i}\right)-\theta\left(\left\{z\left(s_{j}\right): j \neq i\right\}\right)\right)^{2}}{\tau_{i}^{2}}+\log \left(2 \pi \tau_{i}^{2}\right)
+(\#eq:cgm1)
+\end{equation}
+where $\theta\left(\left\{z\left(s_{j}\right): j \neq i\right\}\right)=\mu_{i}+\sum_{j=1}^{n} c_{i j}\left(z\left(s_{j}\right)-\mu_{j}\right) .$
+
+It can be seen from forumula \@ref(eq:cgm1) that 
+
+- The maximum pseudolikelihood estimator is a weighted least squares
+estimator under heterogeneous variances $\tau_i$
+- If $\tau_{i}^{2} \equiv \sigma^{2}$ for all $i=1, \cdots, n$, then maximum pseudolikelihood estimator is the ordinary least squares estimator.
+
+Now that we have the goal function, MLE illustrated in section \@ref(gaussian-maximum-likelihood-estimation) can be applied for parameter estimation
+
+## Auto-logistic Model
+
+The conditional distribution is
+\begin{equation}
+\operatorname{logit}\left(Z\left(s_{i}\right)=1 \mid\left\{z\left(s_{j}\right): j \neq i\right\}\right)=\alpha_{i}+\sum_{j=1}^{n} \theta_{i j} z\left(s_{j}\right) .
+(\#eq:tmp1)
+\end{equation}
+
+Consider again the isotropic Ising model $\gamma_{1}=\gamma_{2}=\gamma$, the model is simplified to
+\begin{equation}
+\operatorname{logit}\left(Z\left(s_{i}\right)=1 \mid\left\{z\left(s_{j}\right): j \neq i\right\}\right)=\alpha+\gamma n_{i} .
+(\#eq:tmp2)
+\end{equation}
+
+Estimation: parameters can be estimated by a logistic regression with pseudo-data $\left\{\left(z_{i}, n_{i}\right), i=1, \cdots, n\right\}$.
+
+## Auto-Poisson Model
+The negative log-likelihood
+
+\begin{equation}
+\begin{aligned}
+\mathbf{P}\left(\left\{\alpha_{i}\right\},\left\{\theta_{i j}\right\}\right) &=\sum_{i=1}^{n} \lambda_{i}\left(\left\{z\left(s_{j}\right): j \neq i\right\}\right) \\
+&-z\left(s_{i}\right) \log \left(\lambda_{i}\left(\left\{z\left(s_{j}\right): j \neq i\right\}\right)\right)+\log \left(z\left(s_{i}\right) !\right),
+\end{aligned}
+(\#eq:tmp3)
+\end{equation}
+which is a Poisson regression model.
+
+
+
+
+
+
+

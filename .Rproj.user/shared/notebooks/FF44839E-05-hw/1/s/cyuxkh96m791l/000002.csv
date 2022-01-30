@@ -1,0 +1,1 @@
+"0","sensor <- sensor %>% filter(avg_temp > 15)"

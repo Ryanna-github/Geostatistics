@@ -1,0 +1,27 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1643462326296.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "2CF90940",
+    "lastKnownWriteTime" : 1643503501,
+    "last_content_update" : 1643503501581,
+    "path" : "D:/Ryanna/RUC_courses/R_Y1_1/Geometrics/Summary/summary_note/02-ch3.Rmd",
+    "project_path" : "02-ch3.Rmd",
+    "properties" : {
+        "cursorPosition" : "50,19",
+        "docOutlineVisible" : "1",
+        "scrollLine" : "50",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

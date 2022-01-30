@@ -1,0 +1,4 @@
+"0","sensor_hour_list <- list()"
+"0","for(h in 0:23){"
+"0","  sensor_hour_list <- c(sensor_hour_list, get_sensor_hour(sensor, h))"
+"0","}"

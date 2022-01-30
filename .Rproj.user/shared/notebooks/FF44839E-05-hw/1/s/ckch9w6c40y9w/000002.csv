@@ -1,0 +1,6 @@
+"0","get_sensor_hour <- function(sensor, hour){"
+"0","  sensor_hour <- sensor %>%"
+"0","    filter(hour == h) %>%"
+"0","    select(node_id, hour, avg_temp)"
+"0","  return(list(sensor_hour))"
+"0","}"

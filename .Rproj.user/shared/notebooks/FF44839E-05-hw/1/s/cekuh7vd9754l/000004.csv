@@ -1,0 +1,2 @@
+"0","v_fit_exp <- fit.variogram(v, model = vgm(""Exp""))"
+"0","plot(v, v_fit_exp)"

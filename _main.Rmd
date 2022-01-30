@@ -1,0 +1,1603 @@
+--- 
+title: "Geostatistics Final Summary"
+author: "Yan Ren"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+# url: your book url like https://bookdown.org/yihui/bookdown
+# cover-image: path to the social sharing image like images/cover.jpg
+description: |
+  This is a minimal example of using the bookdown package to write a book.
+  The HTML output format for this example is bookdown::gitbook,
+  set in the _output.yml file.
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+---
+
+
+```{r eval=FALSE}
+bookdown::serve_book()
+```
+
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```
+
+<!--chapter:end:index.Rmd-->
+
+# (PART) Geostatistical Data {-}
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE, echo=FALSE)
+```
+
+```{r, echo=FALSE}
+library(ggplot2)
+library(plotly)
+library(gstat)
+library(latex2exp)
+library(tidyverse)
+```
+
+
+# Geostatistics
+
+## Targeted Problems
+
+Spatial data is considered as a random process $\{Z(s),s\in D\}$ in this part.   
+
+- $D$: a is a fixed subset of $\mathbb{R}^d$ with positive d-dimensional volume.    
+- $s$: locations varies _continuously_ throughout the region $D$.
+
+Set `coalash` dataset as an example (Figure \@ref(fig:coalash-scatter)). $D$ is the region with values. and $s$ indicates percent of coalash in this location. Many kinds of exploratory statistics can be applied here to test stationarity, local stationarity and so on.
+
+```{r, coalash-scatter, fig.cap = "Scatter Plot of CoalAsh Percent", echo = FALSE}
+data("coalash")
+plot_ly(x = coalash$x,  y = coalash$y,  z = coalash$coalash, 
+        type='scatter3d',  mode='markers',  color = coalash$coalash,  alpha = 0.7) 
+```
+
+The key idea in this chapter is to model the above random process $\{Z(s),s\in D\}$ with values on known locations. Then inference of unknown locations can be made.
+
+## Spatial Data Example
+
+### Main Concepts
+
+Variogram is the crucial parameter of geostatistics. 
+
+> **Intrinsic Stationarity** \
+Based on the random process mentioned above, intrinsic stationarity is defined through first differences
+\begin{equation}
+\begin{aligned}
+&E\{Z(s+h) - Z(s)\} = 0,\\
+&Var\{Z(s+h) - Z(s)\} = 2\gamma(h).
+\end{aligned}
+(\#eq:stationary2)
+\end{equation}
+
+> **Variogram** \
+Variogram is $2\gamma(h)$ in the definition of intrinsic stationarity.
+
+### Esitimation of Variogram
+
+#### Estimator
+
+The classical estimator of the variogram: \
+\begin{equation}
+2 \hat{\gamma}(h) \equiv \frac{1}{|N(h)|} \sum_{N(h)}\left(Z\left(s_{i}\right)-Z\left(s_{j}\right)\right)^{2}
+(\#eq:v-estimation-classic)
+\end{equation}
+
+Estimator \@ref(eq:v-estimation-classic) is unbiased. However, it is badly affected by atypical observations due to square operation.
+
+For an approximately symmetric distribution, there is a more robust approach to the estimation of the variogram by transforming the problem to location estimation. For a Gaussian process, we have:
+
+\begin{equation}
+2 \bar{\gamma}(\mathrm{h}) \equiv\left\{\frac{1}{|N(\mathrm{~h})|} \sum_{N(\mathrm{~h})}\left|Z\left(\mathrm{~s}_{i}\right)-Z\left(\mathrm{~s}_{j}\right)\right|^{1 / 2}\right\}^{4} /\left(0.457+\frac{0.494}{|N(\mathrm{~h})|}\right).
+(\#eq:v-estimation-robust)
+\end{equation}
+
+Estimator \@ref(eq:v-estimation-robust) is also unbiased.
+
+#### Visualization
+
+**Variogram Cloud**: \
+Cousin to estimator \@ref(eq:v-estimation-classic), variogram cloud is a useful diagnostic tool. Similarly, it can be badly affected by atypical observations. Variogram cloud in east-west direction of coalash data is shown in Figure \@ref(fig:v-cloud)
+
+Here are steps to draw variogram cloud. \
+
+- Group points with $y$ value;
+- Calculate the classical estimator of the variogram $\frac{1}{|N(h)|}\cdot \displaystyle\sum_{N(h)}{(z(s_i) - z(s_j))^2}$. \
+  - $N(h) = \{(s_i, s_j):\ s_i + he = s_j\}$
+  - $e$: the unit vector of east direction (positive x axis)
+  - Notice that y values of each pair $(s_i, s_j)$ are the same. But they may vary among pairs.
+- Plot the corresponding boxplot. \
+  - x axis: distance $h$
+  - y axis: the classical estimator of the variogram with parameter h, Units are $(\% coal ash)^2$
+
+```{r, v-cloud, fig.cap="Variogram Cloud in the East-West Direction", echo = FALSE}
+get_df <- function(coalash, fun){
+  df <- data.frame()
+  for(j in min(coalash$y):max(coalash$y)){
+    data <- coalash[which(coalash$y == j),]
+    x_len <- length(data$x)
+    mat1 <- matrix(rep(data$x, times = x_len), ncol = x_len)
+    mat_h <- mat1 - t(mat1)
+    
+    mat2 <- matrix(rep(data$coalash, times = x_len), ncol = x_len)
+    mat_z <- mat2 - t(mat2)
+    df_current <- data.frame(h = as.numeric(mat_h), 
+                             z = fun(as.numeric(mat_z))) %>% filter(h > 0)
+    df <- rbind(df, df_current)
+  }
+  return(df)
+}
+
+df <- get_df(coalash, function(x){return(x**2)})
+p <- ggplot(df, aes(x = as.factor(h), y = z)) + 
+  geom_boxplot(aes(fill = h, color = h, alpha = 0.7), outlier.alpha = 0.7) +
+  theme_light() +
+  # labs(x = "h", y = TeX("$(Z(h+s)-Z(s))^2$"),
+  labs(x = "h", y = ("Variogram"),
+       title = "Variogram Cloud in the East-West Direction") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  guides(fill = "none", color = "none")
+ggplotly(p)
+```
+
+**Square-Root-Differences Cloud**: \
+The only different from variogram cloud: calculate the classical estimator of the variogram $\frac{1}{|N(h)|}\cdot \displaystyle\sum_{N(h)}{|Z(s_i) - Z(s_j)|^\frac12}$.
+
+```{r, squre-cloud, fig.cap="Square-Root-Differences Cloud in the East-West Direction"}
+df <- get_df(coalash, function(x){return(sqrt(abs(x)))})
+p <- ggplot(df, aes(x = as.factor(h), y = z)) + 
+  geom_boxplot(aes(fill = h, color = h, alpha = 0.7), outlier.alpha = 0.7) +
+  theme_light() +
+  labs(x = "h", y = ("Square-Root-Differences"),
+       title = "Square-Root-Differences Cloud in the East-West Direction") +
+  theme(plot.title = element_text(hjust = 0.5))
+ggplotly(p)
+```
+
+
+
+**Pocket Plot**
+
+The Pocket Plot tries to identify a localized area as being atypical with respect to a stationary mode. We plotting Pocket Plot \@ref(fig:pocket) in the North-South Direction follows the steps as below:  
+
+- Get $\{|N_{jk}|\}$ matrix (symmetric).
+  - Denote $|N_{jk}|$ as the value of row $j$ and column $k$ of the matrix
+  - $N_{jk} = \{(s_j, s_k):\ s_j \in row_j, s_k \in row_k, x_{s_j} = x_{s_k}\}$
+  - $|N_{jk}|$ means total pair number between row $j$ and $k$
+- Get $\{Y_{jk}\}$ matrix (symmetric).
+  - For there are 23 distinct value in y axis, the matrix has the dim of $23\times 23$
+  - Denote $Y_{jk}$ as the value of row $j$ and column $k$ of the matrix, we have $Y_{jk} = \frac{1}{N_{jk}}\displaystyle\sum_{N_{jk}}|z(s_j) - z(s_k)|^{\frac12}$
+- Calculate $Y_h$ vector.
+  - $Y_h$ is the weighted mean of $Y_{jk}$ where $|j - k| = h$ 
+- Calculate $P_{jk} = Y_{jk} - Y_h$
+- Plot the boxplot.
+  - x axis: index $j$
+  - y axis: $P_{jk}$. 
+  - There should be 23 points of each columns.
+
+```{r}
+get_Y_jk <- function(coalash, j, k){
+  df_j <- coalash %>% filter(y == j) %>% select(x, coalash)
+  df_k <- coalash %>% filter(y == k) %>% select(x, coalash)
+  df <- merge(df_j, df_k, by = "x") %>%
+    mutate(dif = sqrt(abs(coalash.x - coalash.y)))
+  res <- mean(df$dif)
+  num <- nrow(df)
+  return(list(res, num))
+}
+```
+
+```{r}
+is_outlier <- function(x) {
+  return(x < quantile(x, 0.25, na.rm = TRUE) - 1.5 * IQR(x, na.rm = TRUE) | x > quantile(x, 0.75, na.rm = TRUE) + 1.5 * IQR(x, na.rm = TRUE))
+}
+```
+
+```{r}
+# get Y_jk, N_jk matrix
+row_len <- length(unique(coalash$y))
+Y_jk <- matrix(nrow = row_len, ncol = row_len)
+N_jk <- matrix(nrow = row_len, ncol = row_len)
+for(i in 1:row_len){
+  for(j in 1:row_len){
+    jk_info <- get_Y_jk(coalash, i, j) # func `get_Y_jk` def hidden
+    Y_jk[i,j] <- jk_info[[1]]
+    N_jk[i,j] <- jk_info[[2]]
+  }
+}
+colnames(Y_jk) <- 1:23
+colnames(N_jk) <- 1:23
+```
+
+```{r}
+# colnames(df_N_jk): "j", "k", "N_jk"
+df_N_jk <- as.data.frame(as.table(N_jk)) %>%
+  mutate_if(is.factor, as.integer) %>%
+  rename(j = 1, k = 2, N_jk = 3)
+
+# colnames(df_Y_jk): "j", "k", "Y_jk", "h", "N_jk"
+df_Y_jk <- as.data.frame(as.table(Y_jk)) %>% 
+  mutate_if(is.factor, as.integer)%>%
+  transform(h = abs(Var1 - Var2)) %>%
+  rename(j = 1, k = 2, Y_jk = 3) %>%
+  left_join(df_N_jk, by = c('j', 'k')) %>%
+  filter(h > 0)
+
+# colnames(df_Y_h): "h", "N_h", "Y_h"
+df_Y_h <- df_Y_jk %>% group_by(h) %>% 
+  summarise(N_h = n(), Y_h = sum(Y_jk)/max(N_h))
+
+# colnames(df_P_jk): "h", "j", "k", "Y_jk", "N_jk", "N_h", "Y_h", "P_jk", "outlier"
+df_P_jk <- merge(df_Y_jk, df_Y_h, by = "h") %>%
+  transform(P_jk = Y_jk - Y_h) %>%
+  group_by(j) %>%
+  mutate(outlier = ifelse(is_outlier(P_jk), k, as.numeric(NA)))
+```
+
+```{r, pocket, fig.cap="Pocket Plot in the North-South Direction"}
+# Pocket plot
+p <- ggplot(df_P_jk, aes(x = as.factor(j), y = P_jk)) +
+  geom_boxplot(outlier.colour = 'red') +
+  geom_text(aes(label = outlier), check_overlap = TRUE, nudge_x = 0.5) +
+  theme_light() +
+  labs(x = "row number", y = TeX("$P_{j\ k}$"),
+  # labs(x = "row number", y = ("P_jk"),
+       title = "Pocket Plot in the North-South Direction") +
+  theme(plot.title = element_text(hjust = 0.5))
+p
+```
+
+
+### Decomposition
+
+The goal is to deompose data into large- and small-scale variation.
+
+> **Large-Scale Variation**: The grand, column, and row effects.
+
+> **Small-Scale Variation**: The residual.
+
+- Like ANOVA, $F$ test within-rows and within-columns is first raised. However, it suffer from correlation among data points.   
+- Another additive decomposition follows the idea of $data = all + row + column + residual$. Then for value of a location $(i,j)$ can be decomposed as $Y_{ij} = Y_{..} + (Y_{i.}-Y_{..}) + (Y_{.j}-Y_{..}) + (Y_{ij}-Y_{i.}-Y_{.j}+Y_{..})$, where a subscripted dot (·) denotes averaging over that subscript. This can be settled by _median polishing_ method.
+
+**Median Polishing** \
+Successively sweeps medians out of rows, then columns, then rows, then columns, and so on, accumulating them in "row," "column," and "all" registers, and leaves behind the table of residuals. 
+
+
+## Stationary Process
+
+The concept of _intrinsic stationarity_ has been introduced in section \@ref(main-concepts). Second-order (weak) stationarity is addressed in this section. It should be noticed that intrinsic stationarity is weaker than second-order stationarity.
+
+> **Intrinsic Stationarity** \
+Based on the random process mentioned above, intrinsic stationarity is defined through first differences
+\begin{equation}
+\begin{aligned}
+&E\{Z(s+h) - Z(s)\} = 0,\\
+&Var\{Z(s+h) - Z(s)\} = 2\gamma(h).
+\end{aligned}
+(\#eq:stationary2)
+\end{equation}
+
+> **Second-Order (Weak) Stationarity** \
+When the random process meets the following assuptions, the process is second-order (weak) stationary. 
+\begin{equation}
+\begin{aligned}
+&E(Z(s)) = 0, \ \forall s \in D \\
+&Cov(Z(s_i), Z(s_j)) = C(s_i - s_j), \ \forall s_i, s_j \in D
+\end{aligned}
+(\#eq:stationary)
+\end{equation}
+
+
+Other important concepts related to stationary process as listed below. \
+
+- **Covariogram**: Function $C(.)$ in \@ref(eq:stationary).
+- **Isotropy**: When $C(s_i - s_j)$ only depends on $\Vert s_i - s_j\Vert$ but not the direction of $s_i - s_j$, then $C(.)$ is isotropic.
+- **Anisotropy**: Contrary to isotropy, when $C(s_i - s_j)$ depends on both $\Vert s_i - s_j\Vert$ and the direction of $s_i - s_j$, then $C(.)$ is anisotropic.
+    - Caused by underlying physical process evolving differentlly in space.
+    - The Euclidean space is not appropriate for measuring distance between locations.
+- **Ergodicity**: The property which allows expectations over the $\Omega \in \mathbb{R}^d}$ space to be estimated by spatial averages.
+- **Strong Stationarity**: Strong stationarity refers to the property that the distribution of any finite sample of $Z(.)$ is independent of locations (translation invariant).
+
+
+### Variogram & Covariogram {#vc}
+
+Recall section \@ref(main-concepts), variogram is defined as $2\gamma(h) = Var(Z(s+h) - z(s)),\ \forall s, s+h\in D$. Some exploratory analysis of variogram has been seen in the example. Some related concepts are listed below.
+
+- **Semiv-variogram**: $\gamma(h) = \frac12 Var(Z(s+h) - z(s))$.
+- **Relative Variogram**: Variogram of transformed data. Sometimes, simple transformations lead to intrinsic stationary processes.
+- **Nugget Effect**: $c_0$ is named as nugget effect, where $c_0 = \lim_{h\to 0}\gamma(h)$.   
+    - When $h\to 0$, $Var(Z(s+h) - Z(s))\to Var(0)$, which should be exactly 0. This implies that nuggest effect should be 0 if assumptions are all met.
+    - Causes of $c_0 > 0$: 
+        - Measurement error;
+        - Microscale variation.
+    - Estimation: Extrapolating the variogram estimates fro lags closest to zero. for practically, it is impossible to calculate variogram with scale less than $\min \left\{\left\|s_{i}-s_{j}\right\|, 1 \leq i \leq j \leq n\right\}$.
+- **Still**: The quantity $C(0)$ is called still. $C(0) - c_0$ is called the partial still.
+
+Here are some other properties related to variogram and covariogram.
+
+- Variogram is symmetric: $\gamma(h) = \gamma(-h),\ \gamma(0) = 0$.
+- Speed of increase: $\lim _{|h| \rightarrow \infty} \frac{2 \gamma(h)}{|h|^{2}}=0$, which means that it is necessary for a variogram to increase slower than $|h|^2$.
+- Under stationarity, the covariance function $C(h)$ is necessarily positive definite. 
+- Under intrinsic stationarity, variograms must be conditionally negative-definite.
+
+### Estimation of Variogram & Covariogram
+
+#### Estimator of Variogram
+
+Considering the definition of variogram, the most direct solution is moment estimator $$2 \hat{\gamma}(h) \equiv \frac{1}{|N(h)|} \sum_{N(h)}\left(Z\left(s_{i}\right)-Z\left(s_{j}\right)\right)^{2}$$ where $N(h) = \{(s_i, s_j): s_i - s_j = h\}$
+
+Generally speaking, the variogram estimator can be expressed as a quadratic form \@ref(eq:qestimator)
+
+\begin{equation}
+2\hat \gamma (h) = Z'A(h)Z
+(\#eq:qestimator)
+\end{equation}
+
+Denote $Var(Z)=\Sigma$, then the means and variance of $2\gamma(h)$ can be calculated as:
+
+\begin{equation}
+\begin{aligned} E(2 \hat{\gamma}(h)) &=\operatorname{trace}(A(h) \Sigma) \\ \operatorname{var}(2 \hat{\gamma}(h)) &=2 \operatorname{trace}(A(h) \Sigma A(h) \Sigma) \end{aligned}
+(\#eq:matrixestimator)
+\end{equation}
+
+#### Estimator of Covariogram
+
+For Covariogram, estimators are in line with basic ideas of variogram estimators. In the same way, the most direct thought of moment estimator is as Formula \@ref(eq:mcov-estimator)
+
+\begin{equation}
+\hat{C}(h) \equiv \frac{1}{|N(h)|} \displaystyle\sum_{N(b)}\left(Z\left(s_{i}\right)-\bar{Z}\right)\left(Z\left(s_{j}\right)-\bar{Z}\right)
+\end{equation}
+
+where $\bar{Z}=\sum_{i=1}^{n} Z\left(s_{i}\right) / n$.
+
+### Validity
+
+Not all functions can be variograms or covariogram. There are some prerequisites ensuring validity of them.
+
+#### Valid Variogram
+
+- Under intrinsic stationarity, variogram must be conditionally negative definite, which means \@ref(eq:valid-variogram-cnd)
+
+\begin{equation}
+\sum_{i, j} a_{i} a_{j} 2 \gamma\left(s_{i}-s_{j}\right) \leq 0$ for $\sum a_{i}=0
+(\#eq:valid-variogram-cnd)
+\end{equation}
+
+- Continuous conditionally negative definite function corresponds to an intrinsically stationary stochastic process.
+- Valid variogram forms a convex cone.
+- Theorem \@ref(thm:valid-variogram) provides us with several ways to check variogram validity.
+
+
+::: {.theorem #valid-variogram}
+If $2 \gamma(.)$ is continuous on $\mathbb{R}^{d}$ and $\gamma(0)=0$, then the following are equivalent:
+
+1. $2 \gamma(.)$ is conditionally negative definite; \
+2. For all $a>0$, $\exp (-a \gamma(.))$ is positive definite. \
+3. $2 \gamma(h)=Q(h)+\int \frac{1-\cos \left(\omega^{\prime} h\right)}{\|\omega\|^{2}} G(d \omega)$, where $Q(.) \geq 0$ is a quadratic form and $G(.)$ is a positive, symmetric measure continuous at the origin that $\int\left(1+\|\omega\|^{2}\right)^{-1} G(d \omega)<\infty$.
+:::
+
+#### Valid Covariogram
+
+- Under second-order stationarity, the covariance function $C(h)$ is necessarily positive definite. That is, for any real numbers $a_1,...,a_n$ and locations $s_1,...,s_n$,
+
+\beegin{equation}
+\operatorname{Var}\left(\sum_{i=1}^{n} a_{i} Z\left(s_{i}\right)\right)=\sum_{i, j} a_{i} a_{j} C\left(s_{i}-s_{j}\right) \geq 0
+(\#eq:valid-covariogram)
+\end{equation}
+
+- Spectral representation form
+    - Accoding to Theorem \@ref(thm:valid-covariogram), a continuous function $C(h)$ is positive-definite if and only if it has a spectral representation $C(h)=\int \cos \left(\omega^{\prime} h\right) G(d \omega)$, where $G$ is a positive bounded symmetric measure.  
+    - Spectral density and distribution
+        -  $G/C(0)$ is the spectral distribution function
+        - If $G(d \omega)=g(\omega) d \omega$, $g/C(0)$ is the spectral density function.
+
+::: {.theorem #valid-covariogram}
+Theorem For any normalized continuous positive-definite function $f$ on $G$ (normalization here means that $f$ is 1 at the unit of $G$ ), there exists a unique probability measure $\mu$ on $\widehat{G}$ such that
+$$
+f(g)=\int_{\widehat{G}} \xi(g) d \mu(\xi)
+$$
+:::
+
+## Variogram Model Fitting
+
+Considering variogram validity prerequisites, variogram estimators presented in section \@ref(estimator-of-variogram) can not be used directly for spatial prediction. The key idea of variogram model fitting is to search for a valid variogram that is closest to the data.
+
+When there are more than one valid model, probably from method illustrated from section \@ref(maximum-likelihood-estimator) to \@ref(least-squares-esimator), **corss validation** is an important tool for model checking.
+
+### EDA Check Before Model Fitting
+
+- Check assumptions such as constant mean, constant marginal variance, stationarity, intrinsic stationarity;
+- Check the Gaussian assumption;  
+    - If the data is approximately normally distributed, modelling the first two moments are quite enough.
+    - If some evidence of non-Gaussianity is found, the variogram estimator defined in section \@ref(estimator-of-variogram) is still valid, because they can be viewed as moment estimators which are independent of Gaussian assumption. 
+- Isolate suspicious observations for further study;
+- Choose a appropriate parametric variogram model.
+
+From now on, we consider
+
+### Maximum Likelihood Estimator
+
+- Assumptions:
+    - Suppose the data is generated from a stationary Gaussian process with a parametric variogram model $P=\{2 \gamma: 2 \gamma(h)=2 \gamma(h ; \theta) ; \theta \in \Theta\}$. Then the goal is to estimate $\theta$.
+    - Suppose we also observed some covariates $X_1,...,X_n$ which are linearly related to $Z$.
+- Model: $Z=\left(Z\left(s_{1}\right), \ldots, Z\left(s_{n}\right)\right) \sim N(X \beta, \Sigma(\theta))$ where $\Sigma(\theta)=\left(\operatorname{cov}\left(Z\left(s_{i}\right), Z\left(s_{j}\right)\right)\right)$.
+- Goal: find parameter estimation $(\hat \beta, \hat \theta)$ to minimize loglikelihood function \@ref(eq:loglikelihood).
+    - Where there is no spatial correlation, this amounts to a simple linear regression model. The solution is $\Sigma(\theta)=\sigma^{2} I$ and $\theta=\sigma^{2}.$
+    - General solution: $\hat{\sigma}^{2}=\sum\left(Z\left(s_{i}\right)-X_{i} \hat{\beta}\right)^{2} / n$
+        - $\hat{\sigma}^{2}$ is biased.
+        - For $E\left(\hat{\sigma}^{2}\right)=(n-q) / n \sigma^{2}$, the larger $q$ is, the more biased the estimator gets. 
+
+\begin{equation}
+L(\beta, \theta)=\frac{n}{2} \log (2 \pi)+\frac{1}{2} \log |\Sigma(\theta)|+\frac{1}{2}(Z-X \beta)^{\prime} \Sigma(\theta)^{-1}(Z-X \beta)
+(\#eq:loglikelihood)
+\end{equation}
+    
+- Improvements: To de-bias $\hat \theta$, which is $\hat{\sigma}^{2}$ is out case, restricted maximum likelihood estimator (EMLE) is raised.
+    - Estimator form: $\hat{\theta}=\int_{\beta} \exp (-L(\beta, \theta))(d \beta)$
+
+
+Once variogram is estimated, then covariogram can be easily get by $2\gamma(h) = 2(C(0) - C(h))$
+
+### MINQ Estimation
+
+Applicable Situation: the variance matrix of the data is linear in its parameters, i.e. $\Sigma(\theta)=\theta_{1} \Sigma_{1}+\ldots, \theta_{m} \Sigma_{m}$. The MINQ approach is particularly appropriate for a variance components model.
+
+#### Least Squares Esimator
+
+The main idea of Least Squares Esimator (LSE) is the same as least square regression. The goal function to minimize is the square error.
+
+\begin{equation}
+\sum_{j=1}^{K}\left\{2 \gamma^{\#}(h(j) e)-2 \gamma(h(j) e ; \theta)\right\}^{2}
+(\#eq:lse)
+\end{equation}
+
+If we not $2 \boldsymbol{\gamma}^{\#}=\left(2 \gamma^{\#}(h(1)), \ldots, 2 \gamma^{\#}(h(K))\right)$ with covariance matrix $\operatorname{var}\left(2 \boldsymbol{\gamma}^{\#}\right)=V$, the goal to minimize is tranformed into 
+
+\begin{equation}
+\left(2 \boldsymbol{\gamma}^{\#}-2 \boldsymbol{\gamma}(\theta)\right)^{\prime} V^{-1}\left(2 \boldsymbol{\gamma}^{\#}-2 \boldsymbol{\gamma}(\theta)\right)
+(\#eq:lse2)
+\end{equation}
+
+- Notice that although a direction vector $e$ is included in formula \@ref(eq:lse), multiple directions could also be accounted for by adding the appropriate squared differences.
+- Drawbacks: The least squares estimator takes no cognizance of the distributional variation and covariation of the generic estimator.
+- Improvement:
+    - Weighted Least Squares (WLS): Replace $V$ by a diagonal matrix $\left.\Delta=\operatorname{diag}\left(\operatorname{var}\left(2 \gamma^{\#}(h(1))\right), \ldots, 2 \gamma^{\#}(h(K))\right)\right)$.
+    - Generalized Least Squares (GLS): use just the (asymptotic) second-order structure of the variogram estimator and does not make assumptions about the whole distribution of the data. When there is little knowledge of the true model, GLS is a good startingg choice.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--chapter:end:01-ch2.Rmd-->
+
+# Spatial Prediction and Kriging
+
+Recall decomposition of variogram illustrated in section \@ref(decomposition), large scale and small scale variation both contribute to $Z$. Continue with this idea, we model random process $\{Z(s), s\in D \subset \mathbb{R}^d\}$ as: 
+
+\begin{equation}
+Z(s)=S(s)+e(s), s \in D.
+(\#eq:scale-model)
+\end{equation}
+
+where $e(.)$ is a white-noise measurement-error process.
+
+- Notice that when it comes to prediction, we are interested in noiseless value, which means $S(s)$ in formula \@ref(eq:scale-model). 
+    - A known functional $g(S(s))$ can also be studied.
+    - Block average prediction value can be calculated by $g(Z(.))=\int_{B} Z(s) d s /|B|$, where $B\subset \mathbb{R}^d$ whose location and geometry are known.
+
+
+## Scale of variation
+
+> **Scale** \
+Scale can have two different meanings: \
+
+> 1. The observational scale of $Z(s)$ which means system error due to the recording instruments are just accurate up to a certain level.  
+2. The spatial scale of $s$. The observations are based on a certain
+aggregation and are taken a certain distance apart. 
+
+Extend the decomposition introduced in section \@ref(eq:scale-model) even further, we consider a more detailed decomposition as formula \@ref(eq:decomposition-scale).
+
+\begin{equation}
+Z(s) = \mu(s) + W(s) + \eta(s) + \epsilon(s)
+(\#eq:decomposition-scale)
+\end{equation}
+
+where
+
+- **Large-Scale Variation**: $\mu(s)$, the deterministic mean structure.
+- **Smooth Small-Scale Variation**: $W(s)$, a zero-mean, $L_2$-continuous, intrinsically stationary random process with variogram range _larger_ than $\min \left\{\left\|s_{i}-s_{j}\right\|, 1 \leq i \leq j \leq n\right\}$.
+- **Microscale Variation**: $\eta(s)$, a zero-mean, intrinsically stationary process with variogram range _smaller_ than $\min \left\{\left\|s_{i}-s_{j}\right\|, 1 \leq i \leq j \leq n\right\}$, and independent of $W(s)$.
+- **Measurement Error or Noise**: $\epsilon(s)$, a zero-mean white-noise process and independent of $W(s)$ and $\eta(s)$. $Var(\epsilon(s)):= c_{ME}$.
+
+
+Based on decomposition \@ref(eq:decomposition-scale), the variogram can be computed as below:
+
+\begin{equation}
+2 \gamma_{Z}(.)=2 \gamma_{w}(.)+2 \gamma_{\eta}(.)+2 c_{M E}.
+\end{equation}
+
+Thus, nugget effect mentioned in section \@ref(vc) can be decomposed as well as $c_0 = c_{ME} + c_{MS}$, where $c_{MS} = \displaystyle\lim_{|h|\to0}\gamma_\eta(h)$ indicates nugget effect of the microscale process $\eta(.)$, and $c_{ME}$ is defined as $Var(\epsilon(s))$.
+
+The general goal is to decompose $Z(s)$ as _signal_ term and _noise_ term. The decomposition is not unique.
+
+## Ordinary Kriging
+
+Kriging is a minimum-mean-squared-error method of spatial prediction that usually depends on the second-order properties of the random process $Z(.)$.
+
+### Model Introduction
+
+Suppose we have data $(Z(s_1),...,Z(s_n))\prime$. Denote the generic predictor as $p(Z, B)$ where $Z$ means the targeted value and $B$ implies the region the predicting location lies. Then we define ordinary kriging model.
+
+> **Ordinary Kriging** \
+The general form of ordinary kriging is $Z(s) = \mu + \delta(s):= \mu + W(s) + \eta(s) + \epsilon(s)$. Here, $\mu$ is the mean of the process, a constant but unknown.
+
+- **Predictor of Ordinary Kriging**: a linear predictor is adopted. That is $p(Z ; B)=\sum_{i=1}^{n} \lambda_{i} Z\left(s_{i}\right)$ where $\sum_{i=1}^{n} \lambda_{i}=1$.
+
+- **Loss Function of Ordinary Kriging**: We are considering squared-error loss here. That is $L(Z(B), p(Z, B))=(Z(B)-p(Z, B))^{2}$.
+
+With the assumptions and settings above, the problem has been transformed into a constrained optimization one. It can be addressed by Lagrange method. In our case, Lagrange function is
+
+\begin{equation}
+-\lambda^{\top} \Gamma \lambda+2 \lambda^{\top} \mathbf{r}-2 m\left(\lambda^{\top} 1_{n}-1\right)
+(\#eq:lagrange)
+\end{equation}
+
+and the corresponding normal equation can be writen as
+
+\begin{equation}
+\begin{gathered}
+\Gamma \lambda+m 1_{n}=\mathbf{r} \\
+\lambda^{\top} 1_{n}=1.
+\end{gathered}
+(\#eq:normal-function)
+\end{equation}
+
+
+Notice, second-order stationary is not mandatory for kriging, it is required for estimation of the covariogram.
+
+### Effect of Variogram Estimation
+
+#### Still
+
+> **Still** \
+$\sigma_{Z}^{2}=\lim _{|h| \rightarrow 0} \gamma_{Z}(h)$, $\sigma_Z^2$ is called still, which indicates the limit value of $\gamma$.
+
+- Theoretically, the sill of $Z$ is $\sigma_{Z}^{2}(\cdot)=\sigma_{W}^{2}(\cdot)+\sigma_{\eta}^{2}(\cdot)+c_{M E}$.
+- Practically, the sill of $Z$ is estimated as $\sigma_{W}^{2}(\cdot)+c_0 \leq \sigma_{Z}^{2}(\cdot)$.
+    - It can be useful in estimating nugget effect. Practically, nugget effect is usually estimated by $\sigma_{\eta}^{2}(\cdot)+c_{M E}$ rather than $c_0$.
+    
+#### Range
+
+> **Range** \
+The smallest value of $\Vert r_0\Vert$ for which $2 \gamma\left(\mathbf{r}_{0}(1+\epsilon)\right)=2 C(0),$ for any $\epsilon>0$ is called the range of the variogram in the direction of $r_0/\Vert r_0 \Vert$.
+
+Still can be interpreted as the lag beyond which $Z(s)$ and $Z(s + a)$ are uncorrelated. Thus $Cov(Z(s), Z(s+h)) = 0,\ h > a$. Still influence covariogram.
+
+## Cokriging
+
+Cokriging is actually the multivariate version of kriging. Suppose data are $k \times 1$ vectors $(\mathbf Z(s_1),...,\mathbf Z(s_n))^\prime$.
+
+> **Cokriging** \
+The Cokriging model with constant mean is
+\begin{equation}
+\begin{aligned}
+\mathbb{E}(\mathbf{Z}(s)) &=\boldsymbol{\mu}, s \in D \\
+\operatorname{cov}(\mathbf{Z}(s), \mathbf{Z}(u)) &=C(s, u), s, u \in D
+\end{aligned}
+(\#eq:cokriging)
+\end{equation}
+
+- **Predictor of Cokriging**: the linear predictor can be writen as formula \@ref(eq:cokriging-predictor) now.
+
+\begin{equation}
+p_{1}\left(\mathbf{Z} ; s_{0}\right)=\sum_{i=1}^{n} \sum_{j=1}^{k} \lambda_{j i} Z_{j}\left(s_{i}\right)
+(\#eq:cokriging-predictor)
+\end{equation}
+
+When $\sum_{i=1}^{n} \lambda_{1 i}=1$ and $\sum_{i=1}^{n} \lambda_{j i}=0 \text { for } j \neq 1$, the predictor is unbiased.
+
+- **Risk of Cokriging**: $E\left(Z_{1}\left(s_{0}\right)-\sum_{i=1}^{n} \sum_{j=1}^{k} \lambda_{j i} Z_{j}\left(s_{i}\right)\right)^{2}$
+
+- Notice that data are usually not satisfying all assumption. Take Gaussian distribution assumption as an example, data transformation may be taken before kriging is modeled.
+
+## Robust Kriging
+
+Even with the operation of data transformation beforehead, outliers may occur frequently and badly influence parameter estimators in out model. Linear predictors applied by kriging model is sensitive to outlying observations. Robust kriging is raised here to settle outlier problem.
+
+Instead of directly cancelling outliers, the main idea of robust kriging is downweighting the unusual observation. The predictor now is:
+
+\begin{equation}
+p(Z ; B)=\sum_{i=1}^{n} \lambda_{i} Z\left(s_{i}\right) w\left(Z\left(s_{i}\right)\right)=\sum_{i=1}^{n} \lambda_{i} Z^{(e)}\left(s_{i}\right)
+(\#eq:predictor-robust-kriging)
+\end{equation}
+
+where $0\leq W(.)\leq 1$ is the weight functin, and $Z^{(e)}(s)$ is the modified data.
+
+The algorithm of operating robust kriging is as below:
+
+1. Estimate the variogram using one of the robust estimators (Section 2.4.3 in Book) and fit a valid variogram model.
+2. Compute the kriging weights $\hat{Z}_{-j}\left(s_{j}\right)=\sum_{i \neq j} \lambda_{j i} Z\left(s_{i}\right)$. That is, predict $Z(s_j)$ without using $Z(s_j)$. Let $\sigma^2_{−j}(s_j)$ be the associated kriging variance. The subsript $−j$ means we do not use $Z(s_j)$ in the predition.
+3. Use the weights $\lambda_{ji}:i\neq j$ to obtain a robust prediction of $Z(s_j)$ from the data
+\begin{equation}
+Z_{-j}^{@}\left(s_{j}\right)=\text { weighted median of }\left(\left\{Z_{i}: i \neq j\right\} ;\left\{\lambda_{j i}: i \neq j\right\}\right)
+(\#eq:robust-step)
+\end{equation}
+We use $Z_{-j}^{@}\left(s_{j}\right)$ and $\sigma_{-j}^{2}\left(s_{j}\right)$ to judge whether $Z\left(s_{j}\right)$ is clean or contaminated.
+4. Edit $Z(s_j)$ by replacing it with the Winsorized version
+\begin{equation}
+Z^{(e)}\left(s_{j}\right)=\left\{\begin{array}{cl}
+Z_{-j}^{@}\left(s_{j}\right)+c \sigma_{-j}\left(s_{j}\right) & \text { if } Z\left(s_{j}\right)>Z_{-j}^{@}\left(s_{j}\right)+c \sigma_{-j}\left(s_{j}\right) \\
+Z\left(s_{j}\right) & \left|Z\left(s_{j}\right)-Z_{-j}^{@}\left(s_{j}\right)\right|<c \sigma_{-j}\left(s_{j}\right) \\
+Z_{-j}^{@}\left(s_{j}\right)-c \sigma_{-j}\left(s_{j}\right) & Z\left(s_{j}\right)<Z_{-j}^{@}\left(s_{j}\right)-c \sigma_{-j}\left(s_{j}\right)
+\end{array}\right.
+(\#eq:winsor)
+\end{equation}
+5. Predict with the modified data $Z^{(e)}(s_j)$
+\begin{equation}
+\hat{p}(Z, B)=\sum_{i=1}^{n} \lambda_{i} Z^{(e)}\left(s_{j}\right)
+(\#eq:predictor-robust)
+\end{equation}
+
+## Universal Kriging
+
+Extend to constant mean assumption of ordinary kriging, Suppose the mean is a linear combination of known functions $\left\{f_{0}(s), \ldots, f_{p}(s)\right\}$, we get universal kriging.
+
+> **Universal Kriging** \
+The general form of Universal Kriging is 
+\begin{equation}
+\left\{f_{0}(s), \ldots, f_{p}(s)\right\}.
+(\#eq:universal-kriging)
+\end{equation}
+It can also be writen in matrix form as 
+\begin{equation}
+\mathbf{Z} = \mathbf{X}\beta + \mathbf{\delta}.
+(\#eq:matrix-universal)
+\end{equation}
+where $\beta=(\beta_0,...,\beta_p)$ is an unknown vector of parameters and $\delta(.)$ is a zero-mean intrinsically stationary random process with variogram $2\gamma(.)$
+
+- **Predictor of Universal Kriging**: $p\left(\mathbf{Z} ; s_{0}\right)=\lambda^{\top} \mathbf{Z}, \text { for } \lambda^{\top} \mathbf{X}=\mathbf{x}^{\top}$
+
+where $\mathbf{x} = (f_1(s_0),...,f_p(s_0))^\prime$
+
+- **Risk of Universal Kriging**: $E\left(Z\left(s_{0}\right)-\sum_{i=1}^{n} \lambda_{i} Z\left(s_{i}\right)\right)^{2}=-\lambda^{\top} \Gamma \lambda+2 \lambda^{\top} \mathbf{r}$
+
+- Similary to ordinary kriging, the problem is tranformed into a optimization addressed by Lagrange method. Lagrange function here is $-\lambda^{\top} \Gamma \lambda+2 \lambda^{\top} \mathbf{r}-2 \mathbf{m}^{\top}\left(\mathbf{X}^{\top} \lambda-\mathbf{x}\right)$. The solution $\lambda$ and $m$ can be derived by the normal equation.
+
+
+<!--chapter:end:02-ch3.Rmd-->
+
+# (PART) Lattice Data {-}
+
+# Spatial Models on Lattices
+
+Instead of continuous index set considered in Part 1, this part is concerned with the situation where the index set $D$ is a countable collection of spatial sites at which data are observed. The collection $D$ of such sites is called a lattice, which is then supplemented with neighborhood information.
+
+## Lattices
+
+> **Latices** \
+Lattice refers to a countable collection of (spatial) sites, either spatially regular or irregular.
+
+
+Set Sudden Infant Death Syndrome (SIDS) in North Carolina, 1974-1978 as an example. The lattice form of the data can be drawn as Figure \@ref(fig:lattice-example).
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(spdep)
+nc <- st_read(system.file("shapes/sids.shp", package="spData")[1], quiet=TRUE)
+st_crs(nc) <- "+proj=longlat +datum=NAD27"
+row.names(nc) <- as.character(nc$FIPSNO)
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+gal_file <- system.file("weights/ncCC89.gal", package="spData")[1]
+ncCC89 <- read.gal(gal_file, region.id=nc$FIPSNO)
+```
+
+```{r, lattice-example, fig.cap='Lattice Figure of Sudden Infant Death Syndrome (SIDS) in North Carolina, 1974-1978', warning=FALSE, message=FALSE, echo=FALSE}
+plot(st_geometry(nc), border="grey")
+plot(ncCC89, st_centroid(st_geometry(nc), of_largest_polygon), add=TRUE, col="blue")
+plot(st_centroid(st_geometry(nc), of_largest_polygon)[c(71, 85, 67, 47)], add=TRUE, col="blue", lwd=4)
+plot(st_centroid(st_geometry(nc), of_largest_polygon)[[70]], add=TRUE, col="red", lwd=6)
+```
+
+> **Neighborhoods** \
+A site $k$ is defined to be a neighbor of site $i$ if the conditional distribution of $Z\left(s_{i}\right)$, given all other site values, depends functionally on $z\left(s_{k}\right)$, for $k \neq i$. Also define
+\begin{equation}
+N_{i} \equiv\{k: k \text { is a neighbor of } i\}
+(\#eq:neighborhoods)
+\end{equation}
+to be the neighborhood set of site $i$.
+
+Neighborhoods is important in lattice data. In SIDS data example, neighborhood relationships are drawn by blue line in Figure \@ref(fig:lattice-example).Here, counties whose seats are closer than 30 miles are deemed neighbors. For instance, if we consider the bold red points, four blue points around it are neighbors.
+
+## Spatial Models for Lattice Data
+
+In spatial domain, the conditional approach \@ref(conditional-spatial-models) and the simultaneous approach \@ref(simultaneous-spatial-models) result in different models.
+
+### Simultaneous Spatial Models
+
+#### General Form
+
+For simplicity, consider the square lattice in the plane $\mathbb{R}^2$.
+\begin{equation}
+D=\{s=(u, v): u=\ldots,-2,-1,0,1,2, \ldots ; v=\ldots,-2,-1,0,1,2, \ldots\}
+(\#eq:lattice)
+\end{equation}
+
+The joint approach is to assume
+\begin{equation}
+\operatorname{Pr}(\mathbf{z})=\prod_{(u, v) \in D} Q_{u v}(z(u, v) ; z(u-1, v), z(u+1, v), z(u, v-1), z(u, v+1)).
+(\#eq:joint)
+\end{equation}
+
+Equation \@ref(eq:joint) suggests that the probability of values on a specific location is determined by values of its neighbors.
+
+
+Model definition of simultaneous spatial models
+\begin{equation}
+\phi\left(T_{1}, T_{2}\right) Z(u, v)=\epsilon(u, v)
+(\#eq:gaussian-sg)
+\end{equation}
+where
+\begin{equation}
+\left\{\begin{aligned}
+& T_{1} Z(u, v)=Z(u+1, v) \\
+& T_{1}^{-1} Z(u, v)=Z(u-1, v) \\
+& T_{2} Z(u, v)=Z(u, v+1) \\
+& T_{2}^{-1} Z(u, v)=Z(u, v-1)
+\end{aligned}
+\right.
+(\#eq:details-gaussian-sg)
+\end{equation}
+and 
+\begin{equation} 
+\phi\left(T_{1}, T_{2}\right)=\sum_{i} \sum_{j} a_{i j} T_{1}^{i} T_{2}^{j}
+(\#eq:details-gaussian-sg2)
+\end{equation}
+
+Notice that $\phi(c_1, c_2)\neq 0$ for any complex number $|c_1| = |c_2| = 1$ must be met to ensure obtaining a stationary process.
+
+#### Simultaneously Specified Spatial Gaussian Models
+
+For this section, assume that $\{Z(s): s \in D\}=\left\{Z\left(s_{i}\right): i=1, \ldots, n\right\}$ is defined on a finite subset of the integer lattice in the plane.
+
+Suppose $\boldsymbol{\epsilon}=\left(\epsilon\left(s_{1}\right), \ldots, \epsilon\left(s_{n}\right)\right) \sim \operatorname{Gua}(0, \Lambda)$, where $\Lambda=\sigma^{2} I$ and $B=\left(b_{i j}\right)$, where $b_{ij} = 0$ means $s_1, s_2$ are independent. If $I - B$ is invertable, then simultaneously specified spatial gaussian model is writen as
+\begin{equation}
+(I-B)(\mathbf{Z}-\mu)=\epsilon
+(\#eq:sg-form-matrix)
+\end{equation}
+Equally,
+\begin{equation}
+Z\left(s_{i}\right)=\mu_{i}+\sum_{j=1}^{n} b_{i j}\left(Z\left(s_{j}\right)-\mu_{j}\right)+\epsilon_{i}
+(\#eq:sg-form-long)
+\end{equation}
+
+- From equation \@ref(eq:sg-form-matrix), we have $\mathbf{Z} \sim \operatorname{Gau}\left(\mu,(I-B)^{-1} \Lambda\left(I-B^{\top}\right)^{-1}\right)$.
+- Equation \@ref(eq:sg-form-long), this is a spatial analogue of the autoregressive model.
+- Note that $\left.\left.\operatorname{Cov}(\boldsymbol{\epsilon}, \mathbf{Z})=\operatorname{cov}\left(\boldsymbol{\epsilon},(I-B)^{-1}\right) \boldsymbol{\epsilon}\right)=\Lambda\left(I-B^{\top}\right)^{-1}\right)$ is not diagonal, which means the error is not independent of the autoregressive variables. It theoretically suspects the consistency of least-squares estimators. 
+
+
+### Conditional Spatial Models
+
+#### General Form
+
+The spatial conditional approach assumes
+
+\begin{equation}
+\begin{aligned}
+&\mathbf{P}(z(u, v) \mid\{z(k, l):(k, l) \neq(u, v)\}) \\
+\quad=&\mathbf{P}(z(u, v) \mid z(u-1, v), z(u+1, v), z(u, v-1), z(u, v+1)), \text { for all }(u, v)^{\prime} \in D.
+\end{aligned}
+(\#eq:conditional-lattice)
+\end{equation}
+
+The conditional approach also suggests that the probability of values on a specific location is determined by values of its neighbors, but in a different way from simultaneous approach in section \@ref(simultaneous-spatial-models)
+
+#### Conditionally Specified Spatial Gaussian Models
+
+For Gaussian data defined in section \@ref(simultaneously-specified-spatial-gaussian-models), the conditional model can be written as
+\begin{equation}
+\left.Z\left(s_{i}\right) \mid\left\{Z\left(s_{j}\right): j \neq i\right\}\right) \sim \operatorname{Gau}\left(\theta_{i}\left(\left\{Z\left(s_{j}\right): j \neq i\right\}\right), \tau_{i}^{2}\right)
+(\#eq:cg-model)
+\end{equation}
+
+Addditionally, we suppose ”pairwise-only dependence” between sites. Therefore we can write $\theta_i$ as a linear function
+\begin{equation}
+\theta_{i}\left(\left\{Z\left(s_{j}\right): j \neq i\right\}\right)=\mu_{i}+\sum_{j=1}^{n} c_{i j}\left(z\left(s_{j}\right)-\mu_{j}\right)
+(\#eq:cg-pairwise)
+\end{equation}
+where $c_{i j} \tau_{j}^{2}=c_{j i} \tau_{i}^{2}, c_{i i}=0$. $c_{i k}=0$ means there is no dependence between sites $s_i$ and $s_k$. Then we have 
+\begin{equation}
+\mathbf{Z} \sim \operatorname{Gau}\left(\mu,(I-C)^{-1} M\right)
+(\#eq:cg-z)
+\end{equation}
+where $M=\operatorname{diag}\left(\tau_{1}^{2}, \ldots, \tau_{n}^{2}\right)$.
+
+If we note $\nu:=(I-C)(\mathbf{Z}-\mu)$, conditionally specified spatial gaussian models can also be writen as 
+\begin{equation}
+Z\left(s_{i}\right)=\mu_{i}+\sum_{j=1}^{n} c_{i j}\left(Z\left(s_{j}\right)-\mu_{j}\right)+\nu_{i}
+(\#eq:cg-form-long)
+\end{equation}
+
+#### Comparison
+
+- Equation \@ref(eq:cg-form-long) and equation \@ref(eq:sg-form-long) are comparable.
+- SG and CG is equivalent if $(I-C)^{-1} M=(I-B)^{-1} \Lambda\left(I-B^{\top}\right)^{-1}$.
+- Any SG can be represented as a CG, but not necessarily vice versa.
+
+## Markov Random Fields
+
+### Preparation
+
+Before Markov Random Fields, some concepts and conditions need to be specified.
+
+> **Positivity Condition** \
+Suppose on each lattice node, we observe a discrete random variable $Z(s_i)$ (continuous random variables can be similarly treated). Define the domain of $Z(s_i)$ as $\zeta_{i}=\left\{z\left(s_{i}\right): \mathbf{P}\left(z\left(s_{i}\right)\right)>0\right\}$. Thus $\boldsymbol{\zeta}=\left\{\mathbf{z}=\left(z\left(s_{1}\right), \ldots, z\left(s_{n}\right)\right): \mathbf{P}(z)>0\right\}$ indicates the domain of $(Z(s_1),...,, Z(s_n))$. Positivity condition says that 
+\begin{equation}
+\zeta=\zeta_{1} \times \cdots \times \zeta_{n}.
+(\#eq:positivity-condition)
+\end{equation}
+
+In other words, positivity condition means indepence of domains in dimensions
+
+::: {.theorem #factorization-theorem}
+**[Factorization Theorem]** \
+Suppose the variables $\left\{\mathrm{Z}\left(s_{i}\right): i=1, \ldots, n\right\}$ have joint probability mass function $\mathbf{P}(\mathbf{z})$, whose support $\zeta$ satisfies the positivity condition. Then,
+\begin{equation}
+\frac{\mathbf{P}(\mathbf{z})}{\mathbf{P}(\mathbf{y})}=\prod_{i=1}^{n} \frac{\mathbf{P}\left(z\left(s_{i}\right) \mid z\left(s_{1}\right), \cdots, z\left(s_{i-1}\right), y\left(s_{i+1}\right), \cdots, y\left(s_{n}\right)\right)}{\mathbf{P}\left(y\left(s_{i}\right) \mid z\left(s_{1}\right), \cdots, z\left(s_{i-1}\right), y\left(s_{i+1}\right), \cdots, y\left(s_{n}\right)\right)}
+(\#eq:factorization-theorem)
+\end{equation}
+where $\mathbf{z}=\left(z\left(s_{1}\right), \cdots, z\left(s_{n}\right)\right), \mathbf{y}=\left(y\left(s_{1}\right), \ldots, y\left(s_{n}\right)\right) \in \boldsymbol{\zeta} .$
+:::
+
+
+There are two ways to model. If we model through joint distribution, conditional distribution is easily derived. However, if we start from conditional distribution, joint distribution may not be valid. In case of this, Factorization Theorem \@ref(eq:factorization-theorem) is proposed to eliminate invalid joint distribution.
+
+
+- Positivity condition and factorization theorem also works for continuous variable.
+- The ordering of the variables $\left(Z\left(s_{1}\right), \cdots, Z\left(s_{n}\right)\right)$ do not affect the left hand of equation \@ref(eq:factorization-theorem), but do affect the right hand.
+
+> **Neighbors** \
+Formal definition of neighbors is already given as \@ref(eq:neighborhoods) in section \@ref(lattices)
+
+
+> **Clique** \
+A clique is defined to be a set of sites that consists either of a single site or of sites that
+are all neighbors of each other.
+
+A clique can ben understood as an undirected graph. 
+
+### Markov Random Field
+
+Having some knowledge of graphs, Markov random field can be introduced now.
+
+> **Markov Random Field** \
+Any probability measure whose conditional distributions define a neighborhood
+structure ${N_i: i = 1,...,n}$ is defined to be a Markov random field.
+
+Another important concept in Markov Random Field, which contains the same informations as $\mathbf{P}(\mathbf{z})$.
+
+
+> **Negpotential Function** \
+The Negpotential Function $Q$ is defined as
+\begin{equation}
+Q(\mathbf{z})=\log \left\{\frac{\mathbf{P}(\mathbf{z})}{\mathbf{P}(\mathbf{0})}\right\}, \quad \mathbf{z} \in \boldsymbol{\zeta}
+(\#eq:neg-func)
+\end{equation}
+which is also called log-likelihood ratio.
+
+Negpotential function is equivalent to knowledge of $\mathbf{P}(\mathbf{z})$ for
+\begin{equation}
+\mathbf{P}(\mathbf{z})=\frac{\exp (Q(\mathbf{z}))}{\sum_{\mathbf{y} \in \zeta} \exp (Q(\mathbf{y}))}
+(\#eq:qp)
+\end{equation}
+
+::: {.theorem #negpotential-function}
+**[Properites of the negpotential function Q]** \
+\begin{equation}
+\exp \left(Q(\mathbf{z})-Q\left(\mathbf{z}_{i}\right)\right)=\frac{\mathbf{P}(\mathbf{z})}{\mathbf{P}\left(\mathbf{z}_{i}\right)}=\frac{\mathbf{P}\left(z\left(s_{i}\right) \mid\left\{z\left(s_{j}\right): j \neq i\right\}\right)}{\mathbf{P}\left(0\left(s_{i}\right) \mid\left\{z\left(s_{j}\right): j \neq i\right\}\right)}
+(\#eq:nf1)
+\end{equation}
+
+where $\mathbf{z}_{i}=\left(z\left(s_{1}\right), \cdots, z\left(s_{i-1}\right), 0, z\left(s_{i+1}\right), \ldots, z\left(s_{n}\right)\right)^{\prime}$ and $0\left(s_{i}\right)$ denotes the event $Z\left(s_{i}\right)=0$. 
+
+$Q$ can be expanded uniquely on $\zeta$ as
+\begin{equation}
+\begin{aligned}
+Q(\mathbf{z})=& \sum_{1 \leq i \leq n} z\left(s_{i}\right) G_{i}\left(z\left(s_{i}\right)\right)+\sum_{1 \leq i<j \leq n} z\left(s_{i}\right) z\left(s_{j}\right) G_{i j}\left(z\left(s_{i}\right), z\left(s_{j}\right)\right)+\cdots \\
+&+z\left(s_{1}\right) \cdots z\left(s_{n}\right) G_{1} \cdots n\left(z\left(s_{1}\right), \cdots, z\left(s_{n}\right)\right), \quad \mathbf{z} \in \boldsymbol{\zeta} .
+\end{aligned}
+(\#eq:nf2)
+\end{equation}
+:::
+
+- Theorem \@ref(negpotential-function) implies that the expansion of $Q(z)$ is
+actually made up of conditional probabilities.
+- The pairwise interaction term in $Q(\mathbf{z})$ \@ref(eq:nf2) is:
+\begin{equation}
+\begin{aligned}
+z &\left(s_{i}\right) z\left(s_{j}\right) G_{i j}\left(z\left(s_{i}\right), z\left(s_{j}\right)\right) \\
+=& Q\left(0, \cdots, 0, z\left(s_{i}\right), 0, \cdots, 0, z\left(s_{j}\right), 0, \cdots, 0\right)-Q\left(0, \cdots, 0, z\left(s_{j}\right), 0, \cdots, 0\right) \\
+&+Q(0, \cdots, 0)-Q\left(0, \cdots, 0, z\left(s_{i}\right), 0, \cdots, 0\right) \\
+=& \log \left[\frac{\mathbf{P}\left(z\left(s_{i}\right) \mid z\left(s_{j}\right),\left\{0\left(s_{k}\right): k \neq i, j\right\}\right)}{\mathbf{P}\left(0\left(s_{i}\right) \mid z\left(s_{j}\right),\left\{0\left(s_{k}\right): k \neq i, j\right\}\right)} \frac{\mathbf{P}\left(0\left(s_{i}\right) \mid\left\{0\left(s_{k}\right): k \neq i\right\}\right)}{\mathbf{P}\left(z\left(s_{i}\right) \mid\left\{0\left(s_{j}\right): j \neq i\right\}\right)}\right]
+\end{aligned}
+(\#eq:pair-dependence)
+\end{equation}
+
+Recall that if we start from conditional distribution, joint distribution may not be valid. With some conditions, joint distribution is valid. One more concept is to introduce.
+
+> **Well-Defined G Functions**
+The consistency conditions on the conditional probabilities (needed for
+reconstruction of a joint probability) can then be expressed as those conditions
+needed to yield well-defined G functions.
+
+
+### Hammersley-Clifford Theorem
+
+::: {.theorem #hammersley-clifford-theorem}
+**[Hammersley-Clifford Theorem]** \
+Suppose that $\mathbf{Z}$ is distributed according to a Markov random field on $\boldsymbol{\zeta}$ that satisfies the positivity condition. Then, the negpotential function $Q(.)$ given by 
+\begin{equation}
+\begin{aligned}
+Q(\mathbf{z})=& \sum_{1 \leq i \leq n} z\left(\mathbf{s}_{i}\right) G_{i}\left(z\left(\mathbf{s}_{i}\right)\right)+\sum_{1 \leq i<j \leq n} z\left(\mathbf{s}_{i}\right) z\left(\mathbf{s}_{j}\right) G_{i j}\left(z\left(\mathbf{s}_{i}\right), z\left(\mathbf{s}_{j}\right)\right) \\
+&+\sum_{1 \leq i<j<k \leq n} z\left(\mathbf{s}_{i}\right) z\left(\mathbf{s}_{j}\right) z\left(\mathbf{s}_{k}\right) G_{i j k}\left(z\left(\mathbf{s}_{i}\right), z\left(\mathbf{s}_{j}\right), z\left(\mathbf{s}_{k}\right)\right)+\cdots \\
+&+z\left(\mathbf{s}_{1}\right) \cdots z\left(\mathbf{s}_{n}\right) G_{1 \cdots n}\left(z\left(\mathbf{s}_{1}\right), \ldots, z\left(\mathbf{s}_{n}\right)\right), \quad \mathbf{z} \in \zeta .
+\end{aligned}
+(\#eq:hc-theorem)
+\end{equation}
+must satisfy the property that if sites $i, j, \ldots, s$ do not form a clique, then $G_{i j \cdots s}(.)=0$.
+:::
+
+Hammersley-Clifford theorem indicates negpotential function $Q(.)$'s property within a clique.
+
+### Pairwise-Only Dependence
+
+Pairwise-only means there is no directly stacked influence between sites who is not direct neighbors to each other. For simplicity and universality, from now on we consider only exponential distribution family. If there is non priori information, the exponential distribution is a good choice.
+
+> **Exponential Distribution** \
+A random variable follows a single parameter exponential distribution if $p(x \mid \eta)=h(x) \exp \{\eta t(x)-a(\eta)\}$
+
+Suppose the one-parameter exponential family is used to model the conditional
+distribution:
+\begin{equation}
+\begin{aligned}
+\mathbf{P}\left(z\left(s_{i}\right) \mid\left\{z\left(s_{j}\right): j \neq i\right\}\right)=& \exp \left[A_{i}\left(\left\{z\left(s_{j}\right): j \neq i\right\}\right) B_{i}\left(z\left(s_{i}\right)\right)\right.\\
+&\left.+C_{i}\left(z\left(s_{i}\right)\right)+D_{i}\left(\left\{z\left(s_{j}\right): j \neq i\right\}\right)\right]
+\end{aligned}
+(\#eq:besag-condition)
+\end{equation}
+
+::: {.theorem #besag}
+**[Besag’s Theorem]** \
+Assume equation \@ref(eq:besag-condition)
+and pairwise-only dependence between sites, i.e., all $G_{A}(.)=0$ for any $A$ whose number of distinct elements is 3 or more. Then
+\begin{equation}
+A_{i}\left(\left\{z\left(s_{j}\right): j \neq i\right\}\right)=\alpha_{i}+\sum_{j=1}^{n} \theta_{i j} B_{j}\left(z\left(s_{j}\right)\right), i=1, \cdots, n,
+(\#eq:besag)
+\end{equation}
+where $\theta_{i j}=\theta_{j i}, \theta_{i i}=0$, and $\theta_{i k}=0$ for $k \notin N_{i}$.
+:::
+
+As a consequence of the theorem, $Q(z)$ can be expressed as
+\begin{equation}
+Q(\mathbf{z})=\sum_{i=1}^{n}\left\{\alpha_{i} B_{i}\left(z\left(s_{i}\right)\right)+C_{i}\left(z\left(s_{i}\right)\right)\right\}+\sum_{1 \leq i<j \leq n} \theta_{i j} B_{i}\left(z\left(s_{i}\right)\right) B_{j}\left(z\left(s_{j}\right)\right).
+\end{equation}
+
+## Conditionally Specified Spatial Models
+
+### Models for Discrete Data
+
+Hammersley-Clifford theorem \@ref(hammersley-clifford-theorem) is the theoretical foundation of conditionally specified spatial models for discrete data.
+
+#### Binary Data
+
+> **Binary Data** \
+Binary data refers to data points which are either 0 or 1. 
+
+Logistic function is the first thing come to ming when it comes to 0-1 binary data. One of the most used method is known as **Autologistic Model**.
+
+Assuming pairwise-only dependence between sites, $G_{i}(1) \equiv \alpha_{i}$, $G_{i j}(1,1) \equiv \theta_{i j}$, and $z(s_i) = 0,1$. Autologistic Model can be writen as \@ref(eq:autologistic).
+
+
+\begin{equation}
+\operatorname{Pr}\left(z\left(\mathbf{s}_{i}\right) \mid\left\{z\left(\mathbf{s}_{j}\right): j \neq i\right\}\right)=\frac{\exp \left\{\alpha_{i} z\left(\mathbf{s}_{i}\right)+\sum_{j=1}^{n} \theta_{i j} z\left(\mathbf{s}_{i}\right) z\left(\mathbf{s}_{j}\right)\right\}}{1+\exp \left\{\alpha_{i}+\sum_{j=1}^{n} \theta_{i j} z\left(\mathbf{s}_{j}\right)\right\}}
+(\#eq:autologistic)
+\end{equation}
+
+Autologistic model can be easily fitted by function `autologistic()` in `ngspatial` package.
+
+As a homogeneous first-order autologistic on a countable regular latticeOne of autologistic prefered by physicist is **Ising Model**. It can ben summarized as 
+\begin{equation}
+\operatorname{Pr}(z(u, v) \mid\{z(k, l):(k, l) \neq(u, v)\})=\exp (z(u, v) g) /\{1+\exp (g)\}
+(\#eq:isling)
+\end{equation}
+where 
+\begin{equation}
+\begin{aligned}
+g \equiv\{\alpha&+\gamma_{1}(z(u-1, v)+z(u+1, v)) \\
+&\left.+\gamma_{2}(z(u, v-1)+z(u, v+1))\right\}
+\end{aligned}
+\end{equation}
+
+Other modelling types for binary data include Random Media, Multicolored Data and so on.
+
+#### Counts Data
+
+Besag’s theorem \@ref(thm:besag) is the theoretical foundation for counts data. When spatial data arise as counts, the natural model that comes to mind is one
+based on the Poisson distribution. Assuming pairwise-only dependence between site, the auto-Poisson conditional specification is 
+\begin{equation}
+\begin{aligned}
+&\operatorname{Pr}\left(z\left(\mathrm{~s}_{i}\right) \mid\left\{z\left(\mathrm{~s}_{j}\right): j \neq i\right\}\right) \\
+&\quad=\exp \left(-\lambda_{i}\left(\left\{z\left(\mathrm{~s}_{j}\right): j \neq i\right\}\right)\right)\left(\lambda_{i}\left(\left\{z\left(\mathrm{~s}_{j}\right): j \neq i\right\}\right)\right)^{z\left(\mathrm{~s}_{i}\right)} / z\left(\mathrm{~s}_{i}\right) !
+\end{aligned}
+(\#eq:poisson)
+\end{equation}
+where $\lambda_{i}=\lambda_{i}\left(\left\{z\left(\mathbf{s}_{j}\right): j \in N_{i}\right\}\right)$ is a function of data observed for the regions $N_j$ that neighbor the region $i (i = 1,..., n)$. By Besag’s theorem \@ref(thm:besag), we have
+
+\begin{equation}
+\lambda_{i}\left(\left\{z\left(\mathbf{s}_{j}\right): j \in N_{i}\right\}\right)=\exp \left\{\alpha_{i}+\sum_{j=1}^{n} \theta_{i j} z\left(\mathbf{s}_{j}\right)\right\}
+(\#eq:count1)
+\end{equation}
+Then, $Q(z)$ is derived as
+\begin{equation}
+Q(\mathbf{z})=\sum_{i=1}^{n} \alpha_{i} z\left(s_{i}\right)+\sum_{1 \leq i<j \leq n} \theta_{i j} z\left(s_{i}\right) z\left(s_{j}\right)-\sum_{i=1}^{n} \log \left(z\left(s_{i}\right) !\right)
+(\#eq:count2)
+\end{equation}
+
+Note that SIDS data introduced in the first part of this chapter \@ref(lattices) are suitable for auto-poisson model.
+
+### Models for Continuous Data
+
+#### Auto-Gaussian (or CG) models
+
+Assuming that the conditional density has the Gaussian form
+\begin{equation}
+\begin{aligned}
+&f\left(z\left(\mathbf{s}_{i}\right) \mid\left\{z\left(\mathbf{s}_{j}\right): j \neq i\right\}\right) \\
+&\quad=\left(2 \pi \tau_{i}^{2}\right)^{-1 / 2} \exp \left[-\left\{z\left(\mathbf{s}_{i}\right)-\theta_{i}\left(\left\{z\left(\mathbf{s}_{j}\right): j \neq i\right\}\right)\right\}^{2} / 2 \tau_{i}^{2}\right]
+\end{aligned}
+(\#eq:gaussian-form)
+\end{equation}
+
+
+Assuming pairwise-only dependence between sites, the conditional expecta-
+tion $E\left(Z\left(\mathbf{s}_{i}\right)\left\{\left\{z\left(\mathbf{s}_{j}\right): j \neq i\right\}\right) \equiv \theta_{i}\left(\left\{z\left(\mathbf{s}_{j}\right): j \neq i\right\}\right)\right.$ can be written as
+\begin{equation}
+\theta_{i}\left(\left\{z\left(\mathbf{s}_{j}\right): j \neq i\right\}\right)=\mu_{i}+\sum^{n} c_{i j}\left(z\left(\mathbf{s}_{j}\right)-\mu_{j}\right)
+(\#eq:g1)
+\end{equation}
+
+The conditional distribution is given by
+\begin{equation}
+Z\left(\mathbf{s}_{i}\right)\left\{\left\{z\left(\mathbf{s}_{j}\right): j \neq i\right\} \sim \operatorname{Gau}\left(\mu_{i}+\sum_{j=1}^{n} c_{i j}\left(z\left(\mathbf{s}_{j}\right)-\mu_{j}\right), \tau_{i}^{2}\right)\right.
+(\#eq:g2)
+\end{equation}
+
+Apply Factorization Theorem \@ref(factorization-theorem) directly, the joint distribution is as 
+\begin{equation}
+\mathbf{Z} \sim \operatorname{Gau}\left(\boldsymbol{\mu},(I-C)^{-1} M\right)
+(\#eq:g3)
+\end{equation}
+
+After the necessary derivation, we have $Q(z)$ as 
+\begin{equation}
+\begin{aligned}
+Q(\mathbf{z})=\log (f(\mathbf{z}) / f(\mathbf{0}))=&-(1 / 2)(\mathbf{z}-\boldsymbol{\mu})^{\prime} M^{-1}(I-C)(\mathbf{z}-\boldsymbol{\mu}) \\
+&+(1 / 2) \boldsymbol{\mu}^{\prime} M^{-1}(I-C) \boldsymbol{\mu}
+\end{aligned}
+\end{equation}
+
+## Simultaneously Specified Spatial Models
+
+Simultaneous approach is popular in econometrics and graphical modeling. Whittle's (1954) prescription for simultaneously specified stationary processes in the plane is given by equation \@ref(eq:ss1). For a (finite) data set $\mathbf{Z} \equiv\left(Z\left(s_{1}\right), \ldots, Z\left(s_{n}\right)\right)^{\prime}$ at locations $s_{1}, \ldots, s_{n}$, the analogous specification is
+\begin{equation}
+(I-B) \mathrm{Z}=\epsilon
+(\#eq:ss1)
+\end{equation}
+where $\epsilon \equiv\left(\epsilon\left(s_{1}\right), \ldots, \epsilon\left(s_{n}\right)\right)^{\prime}$ is a vector of i.i.d. zero-mean errors and $B$ is a matrix whose diagonal elements $\left\{b_{i i}\right\}$ are zero. Another way to write (6.7.1) is
+\begin{equation}
+Z\left(\mathbf{s}_{i}\right)=\sum_{j=1}^{n} b_{i j} Z\left(\mathbf{s}_{j}\right)+\epsilon\left(\mathbf{s}_{i}\right),
+(\#eq:ss2)
+\end{eq:equation}
+
+Simultaneously specified spatial models is referred to as a spatial autoregressiue (SAR) process, which can be understood by the form of equation \@ref(eq:ss2)
+
+A common special case occurs when $\epsilon$ is Gaussian, then we have
+\begin{equation}
+\mathbf{Z} \sim \operatorname{Gau}\left(\mathbf{0},(I-B)^{-1}\left(I-B^{\prime}\right)^{-1} \sigma^{2}\right)
+(\#eq:ss3)
+\end{equation}
+
+### Spatial Autoregressive Regression Model
+
+If it is desired to interpret large-scale effects $\boldsymbol{\beta}$ through $E(\mathbf{Z})=X \boldsymbol{\beta}$ (where the columns of $X$ might be treatments, spatial trends, factors, etc.), then the model should be modified to
+\begin{equation}
+(I-B)(\mathbf{Z}-X \boldsymbol{\beta})=\boldsymbol{\epsilon}
+(\#eq:ss4)
+\end{equation}
+When $\epsilon$ is Gaussian,
+\begin{equation}
+\mathbf{Z} \sim \operatorname{Gau}\left(X \boldsymbol{\beta},(I-B)^{-1}\left(I-B^{\prime}\right)^{-1} \sigma^{2}\right)
+(\#eq:ss5)
+\end{equation}
+
+## Space-Time Models
+
+Space-Time models consider the case when not only space but also time should also be taken into acount.
+
+### STARMA Model 
+
+the STARMA model is summarized as
+\begin{equation}
+\begin{aligned}
+\mathbf{Z}(t) &=\sum_{k=0}^{p}\left(\sum_{j=1}^{\lambda_{k}} \xi_{k j} W_{k j}\right) \mathbf{Z}(t-k)-\sum_{l=0}^{q}\left(\sum_{j=1}^{\mu_{l}} \phi_{l j} V_{l j}\right) \boldsymbol{\epsilon}(t-l)+\boldsymbol{\epsilon}(t) \\
+&=\sum_{k=0}^{p} B_{k} \mathbf{Z}(t-k)+\boldsymbol{\epsilon}(t)-\sum_{l=0}^{q} E_{l} \boldsymbol{\epsilon}(t-l)
+\end{aligned}
+(\#eq:starma)
+\end{equation}
+where
+
+- $W_{k j}$ and $V_{l j}$: given weight matrices,
+- $\lambda_{k}$: the extent of the spatial lagging on the autoregressive component,
+- $\mu_{l}$: the extent of the spatial lagging on the moving-average component,
+- $\left\{\xi_{k j}\right\}$ and $\left\{\phi_{l j}\right\}$: the STARMA parameters to be estimated (restrictions are needed on the $W$ s and $V$ s to ensure these parameters are identifiable).
+- $B_{0}, E_{0}$: necessarily have zeros down their diagonals.
+
+
+
+<!--chapter:end:03-ch6.Rmd-->
+
+# Inference for Lattice Models
+
+## Parameter Estimation for Lattice Models
+
+### Pseudolikelihood
+
+> **Pseudolikelihood** \
+Pseudolikelihood is to be writen as
+\begin{equation}
+p(\boldsymbol{\eta})=\prod_{i=1}^{n} \mathbf{P}\left(z\left(s_{i}\right) \mid\left\{z\left(s_{j}\right): j \neq i\right\} ; \boldsymbol{\eta}\right)
+(\#eq:pseudo)
+\end{equation}
+Also denote the negative log-pseudolikelihood function as 
+\begin{equation}
+P(\boldsymbol{\eta})=-\log (p(\boldsymbol{\eta}))=-\sum_{i=1}^{n} \log \mathbf{P}\left(z\left(s_{i}\right) \mid\left\{z\left(s_{j}\right): j \neq i\right\} ; \boldsymbol{\eta}\right)
+(\#eq:pseudo2)
+\end{equation}
+
+The goal is to maximizing p seudolikelihood \@ref(eq:pseudo1). Equally, we aims to find $\hat \eta_p$ which minimize formula \@ref(eq:pseudo2).
+
+### Gaussian Maximum Likelihood Estimation
+
+Under Gaussian assumptions, The SG and CG model can be estimated by maximum likelihood method.
+
+- If $\mathbf{Z} \sim \mathrm{N}(\boldsymbol{\mu}, \sigma)$, the negative log-likelihood is
+\begin{equation}
+L(\boldsymbol{\eta})=\frac{n}{2} \log (2 \pi)+\frac{1}{2} \log (|\Sigma|)+\frac{1}{2}(\mathbf{z}-\boldsymbol{\mu})^{\top} \Sigma^{-1}(\mathbf{z}-\boldsymbol{\mu})
+(\#eq:mle1)
+\end{equation}
+- For the covariance matrix,
+\begin{equation}
+\begin{array}{ll}
+\text { SG : } & \Sigma=(I-B)^{-1} \Lambda\left(I-B^{\prime}\right)^{-1} \\
+\text { CG : } & \Sigma=(I-C)^{-1} M
+\end{array}
+(\#eq:mle2)
+\end{equation}
+
+## Conditional Gaussian Model
+
+Recall Conditional Gaussian Model introduced in section \@ref(conditionally-specified-spatial-gaussian-models). The negative log-pseudolikelihood function here is 
+\begin{equation}
+P(\boldsymbol{\eta})=\frac{1}{2} \sum_{i=1}^{n} \frac{\left(z\left(s_{i}\right)-\theta\left(\left\{z\left(s_{j}\right): j \neq i\right\}\right)\right)^{2}}{\tau_{i}^{2}}+\log \left(2 \pi \tau_{i}^{2}\right)
+(\#eq:cgm1)
+\end{equation}
+where $\theta\left(\left\{z\left(s_{j}\right): j \neq i\right\}\right)=\mu_{i}+\sum_{j=1}^{n} c_{i j}\left(z\left(s_{j}\right)-\mu_{j}\right) .$
+
+It can be seen from forumula \@ref(eq:cgm1) that 
+
+- The maximum pseudolikelihood estimator is a weighted least squares
+estimator under heterogeneous variances $\tau_i$
+- If $\tau_{i}^{2} \equiv \sigma^{2}$ for all $i=1, \cdots, n$, then maximum pseudolikelihood estimator is the ordinary least squares estimator.
+
+Now that we have the goal function, MLE illustrated in section \@ref(gaussian-maximum-likelihood-estimation) can be applied for parameter estimation
+
+## Auto-logistic Model
+
+The conditional distribution is
+\begin{equation}
+\operatorname{logit}\left(Z\left(s_{i}\right)=1 \mid\left\{z\left(s_{j}\right): j \neq i\right\}\right)=\alpha_{i}+\sum_{j=1}^{n} \theta_{i j} z\left(s_{j}\right) .
+(\#eq:tmp1)
+\end{equation}
+
+Consider again the isotropic Ising model $\gamma_{1}=\gamma_{2}=\gamma$, the model is simplified to
+\begin{equation}
+\operatorname{logit}\left(Z\left(s_{i}\right)=1 \mid\left\{z\left(s_{j}\right): j \neq i\right\}\right)=\alpha+\gamma n_{i} .
+(\#eq:tmp2)
+\end{equation}
+
+Estimation: parameters can be estimated by a logistic regression with pseudo-data $\left\{\left(z_{i}, n_{i}\right), i=1, \cdots, n\right\}$.
+
+## Auto-Poisson Model
+The negative log-likelihood
+
+\begin{equation}
+\begin{aligned}
+\mathbf{P}\left(\left\{\alpha_{i}\right\},\left\{\theta_{i j}\right\}\right) &=\sum_{i=1}^{n} \lambda_{i}\left(\left\{z\left(s_{j}\right): j \neq i\right\}\right) \\
+&-z\left(s_{i}\right) \log \left(\lambda_{i}\left(\left\{z\left(s_{j}\right): j \neq i\right\}\right)\right)+\log \left(z\left(s_{i}\right) !\right),
+\end{aligned}
+(\#eq:tmp3)
+\end{equation}
+which is a Poisson regression model.
+
+
+
+
+
+
+
+
+<!--chapter:end:04-ch7.Rmd-->
+
+# (PART) Homework {-}
+
+# Spatial Analysis Homework
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(lubridate) 
+library(sp) 
+library(rgdal) 
+library(rgeos) 
+library(raster) 
+library(gstat) 
+library(tmap) 
+library(leaflet) 
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(DT)
+library(ggplot2)
+
+setwd("D:/Ryanna/RUC_courses/R_Y1_1/Geometrics/Summary/summary_note")
+```
+
+## Overview
+
+### Background
+
+Temperature is a variable highly related to locations. In most cases, places near to each other share similar average temperature, no matter what unit is the average (daily average, monthly average etc.) With temperature and geographic information of Chicago, some spatial analysis is explored.
+
+### Data
+
+The data is from AoT Workshop of the Center for Spatial Data Science at the University of Chicago. The dataset includes geographic information (latitude and longitude) and direct temperature measurement data recorded from temperature sensors of 90 spots in Chicago, August 25, 2018.
+
+For more information about the AoT Workshop and to download the data, please visit <https://geodacenter.github.io/aot-workshop/>. The overview of data is as below. (For presentation formatting, node id, which links tables, is omitted)
+
+```{r, echo=FALSE}
+# interactive table
+# datatable(nodes %>% 
+#             select(node_id, project_id, lat, lon))
+```
+
+```{r, echo=TRUE}
+nodes <- read.csv("../../Data/nodes.csv")
+colnames_tmp <- c("project_id", "lat", "lon", "start_timestamp")
+head(nodes[colnames_tmp]) %>%
+  kbl() %>% kable_material(c("striped", "hover"))
+```
+
+```{r, echo=TRUE}
+sensor <- read.csv("../../Data/data.csv.gz")
+colnames_tmp <- c("subsystem", "sensor", "parameter", "value_raw","value_hrf")
+head(sensor[colnames_tmp]) %>%
+  kbl() %>% kable_material(c("striped", "hover"))
+```
+
+```{r, echo=TRUE}
+sensor_info <- read.csv("../../Data/sensors.csv")
+colnames_tmp <- c("subsystem", "sensor", "parameter", "hrf_unit", "hrf_minval", "hrf_maxval")
+head(sensor_info[colnames_tmp]) %>%
+  kbl() %>% kable_material(c("striped", "hover"))
+```
+
+### Goal
+
+1. Practice theoretical knowledge related to geostatistics concepts, such as variogram and kriging model. 
+2. Apply kriging model in real data with help of AoT Workshop tutorial.
+3. Interpolate a temperature surface in the area.
+4. Familiar myself with gridding tricks.
+4. Explore visualization while presenting results of spatial statistics model.
+
+
+## Exploratory Analysis
+
+Two things are addressed in this part:
+
+- Data preprocessing: filter the data we are interested.
+- Descriptive statistics: draw plots or tables to be familiar with data and variables.
+
+### Data Preprocessing
+
+- Not all sensors record the temperature, humidity and pressure are also measured in out dataset. To cancel redundancy and to uniform standard of measurement, we select only sensor of type "tsys01".
+- "value_hrf" is the transformed recording of sensors. The unit of it is Celsius degree. It can be used directly for computing average temperature.
+- Suppose we are only interest in average temperature of second half of the day. Recordings in the mornings should be eliminated.
+
+
+
+```{r, echo=TRUE}
+sensor <- sensor %>%
+  filter(sensor == "tsys01")
+# timestamp
+sensor$timestamp2 <- ymd_hms(sensor$timestamp)
+sensor$hour <- hour(sensor$timestamp)
+sensor <- sensor %>% 
+  filter(hour(timestamp2) >= 12) %>%
+  group_by(node_id) %>%
+  summarize(avg_temp = mean(value_hrf))
+```
+Now we take out the faulty sensor with apparently fault average temperature.
+
+
+```{r, echo=TRUE}
+sensor$avg_temp
+```
+
+```{r, echo=TRUE}
+sensor <- sensor %>% filter(avg_temp > 15)
+```
+
+After these steps, size of data frame `sensor` is rapidly reduced from the original 497,912 to 32. The data frame now indicates average temperatures in the afternoon of 31 distinct sensor spots.
+
+```{r}
+ggplot(sensor, aes(x = avg_temp)) +
+  geom_histogram(bins = 9, alpha = 0.7) +
+  theme_bw() +
+  labs(x = "Average Temperature", 
+       title = "Average Temperature Frequence Histogram") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+- Sensor data is already now.
+- Merge sensor data with geographic location
+- Then, convert the completed node data to spatial object format for plotting and more advanced spatial analytics.
+
+```{r, echo=TRUE}
+nodes <- merge(sensor, nodes, by = c("node_id"))
+coordinates(nodes) <- nodes[,c("lon", "lat")]
+proj4string(nodes) <- CRS("+init=epsg:4326")
+```
+
+### Descriptive Statistics
+
+For the data is spatial, the most direct way is to plot a map.
+
+```{r, warning=FALSE, message=FALSE, echo=TRUE}
+tmap_mode("view")
+tm_shape(nodes) + tm_dots()
+```
+
+From the map, we can get a general idea of the sensor position. 
+
+Chicago community area is the domain of the model. Recall the random process $\{Z(s), s\in D\}$, which is the object of spatial analysis. The goal is to interpolate a temperature surface in $D$. It is helpful to plot community area as well.
+
+```{r, warning=FALSE, message=FALSE, echo=TRUE}
+chiCA <- readOGR("../../Data","ChiComArea") # generated by the workshop
+tmap_mode("view")
+tm_shape(chiCA) + tm_borders() + 
+  tm_shape(nodes) + tm_dots(col="avg_temp",size=0.3, title="Average Temperature (C)") 
+```
+
+
+in Chicago community area (namely, $D$), temperature sensors are not clustered, which is good for modeling.
+
+## Model Fitting
+
+### Variogram
+
+As an important parameter for spatial modeling, variogram has to be studied.
+
+```{r, echo=TRUE}
+v <- variogram(nodes$avg_temp ~ 1, nodes)
+plot(v)
+```
+
+Observe the variogram, it seems spherical semivariogram \@ref(eq:v1), exponential variogram  \@ref(eq:v2) can be suitable for the data.
+
+> **Spherical Semivariogram** \
+\begin{equation}
+\gamma(\mathbf{h} ; \boldsymbol{\theta})= \begin{cases}0, & \mathbf{h}=\mathbf{0}, \\ c_{0}+c_{s}\left\{(3 / 2)\left(\|\mathbf{h}\| / a_{s}\right)-(1 / 2)\left(\|\mathbf{h}\| / a_{s}\right)^{3}\right\}, & 0<\|\mathbf{h}\| \leq a_{s}, \\ c_{0}+c_{s}, & \|\mathbf{h}\| \geq a_{s},\end{cases}
+$\theta=\left(c_{0}, c_{s}, a_{s}\right)^{\prime}$,
+(\#eq:v1)
+\end{equaton}
+where $c_{0} \geq 0, c_{s} \geq 0$, and $a_{s} \geq 0$.
+
+> **Exponential Variogram** \
+\begin{equation}
+\gamma(\mathbf{h} ; \boldsymbol{\theta})= \begin{cases}0, & \mathbf{h}=\mathbf{0} \\ c_{0}+c_{e}\left\{1-\exp \left(-\|\mathbf{h}\| / a_{e}\right)\right\}, & \mathbf{h} \neq \mathbf{0}\end{cases}$
+$\theta=\left(c_{0}, c_{e}, a_{e}\right)^{\prime}$,
+(\#eq:v2)
+\end{equation}
+where $c_{0} \geq 0, c_{e} \geq 0$, and $a_{e} \geq 0 .
+
+```{r, echo=TRUE}
+v_fit_sph <- fit.variogram(v, model = vgm("Sph"))
+plot(v, v_fit_sph)
+```
+
+```{r, echo=TRUE}
+v_fit_exp <- fit.variogram(v, model = vgm("Exp"))
+plot(v, v_fit_exp)
+```
+
+It is hard to choose the variogram model. We might as well adopt the relatively simpler exponential variogram for the following modeling.
+
+### Kriging Model
+
+Gridding and projection should be performed before modeling kriging.
+
+
+
+```{r, echo=FALSE}
+pt2grid <- function(ptframe,n) {
+  bb <- bbox(ptframe)  
+  ptcrs <- proj4string(ptframe)  
+  xrange <- abs(bb[1,1] - bb[1,2])  
+  yrange <- abs(bb[2,1] - bb[2,2])  
+  cs <- c(xrange/n,yrange/n)  
+  cc <- bb[,1] + (cs/2)  
+  dc <- c(n,n)  
+  x1 <- GridTopology(cellcentre.offset=cc,cellsize=cs,cells.dim=dc)  
+  x2 <- SpatialGrid(grid=x1,proj4string=CRS(ptcrs))
+  return(x2)
+}
+```
+
+```{r, echo=TRUE}
+chi_grid <- pt2grid((chiCA), 200) # self-defined pt2grid for griding (omitted)
+projection(chi_grid) <- CRS("+init=epsg:4326")  
+projection(nodes) <-  CRS("+init=epsg:4326")
+projection(chiCA) <- CRS("+init=epsg:4326")
+```
+
+Then ordinary kriging model (illustrated in section \@ref(ordinary-kriging)) is fitted here. 
+
+```{r, echo=TRUE}
+kg <- krige(nodes$avg_temp ~ 1, nodes, chi_grid, model = v_fit_exp)
+plot(kg)
+```
+
+Clip the whole map to Chicago boundaries.
+
+```{r, echo=TRUE}
+chi_kg <- kg[chiCA,]
+plot(chi_kg)
+```
+
+Combine the predicted temperature surface, community area and sensor information, the results can be plotted nicely as
+
+```{r, echo=TRUE}
+tm_shape(chi_kg) +
+  tm_raster("var1.pred", style = "jenks", title = "Temperature (C)", palette = "BuPu") + tm_shape(nodes) + tm_dots(size=0.01) +
+  tm_layout(main.title = "Avg Afternoon Temperature August 25", main.title.size = 1.1) +
+  tm_legend(position = c("left", "bottom"))
+```
+
+## Animation
+
+The analysis above interpolate average temperature of Augest 25, 2018. If we are interested in hourly average temperature, we can fit 24 models using the data. An animation of hourly change of temperature in Chicago is as below.
+
+<video width="500" height="620" controls>
+  <source src="hour.mp4" type="video/mp4">
+</video>
+
+In practice, animation like this is informative and common. One main further modification of this animation is to uniform legend scale of different hour
+
+```{r, echo=FALSE}
+#data
+# nodes <- read.csv("../../Data/nodes.csv")
+# sensor <- read.csv("../../Data/data.csv.gz")
+# nodes_copy <- nodes
+# 
+# sensor <- sensor %>%
+#   filter(sensor == "tsys01")
+# # timestamp
+# sensor$timestamp2 <- ymd_hms(sensor$timestamp)
+# sensor$hour <- hour(sensor$timestamp)
+# sensor <- sensor %>%
+#   group_by(node_id, hour) %>%
+#   summarize(avg_temp = mean(value_hrf))
+# sensor <- sensor %>% filter(avg_temp > 15)
+```
+
+```{r, echo=FALSE}
+# get_tmap_hour <- function(sensor_hour){
+#   h <- min(sensor_hour$hour)
+#   nodes <- merge(sensor_hour, nodes_copy, by = c("node_id"))
+#   coordinates(nodes) <- nodes[,c("lon", "lat")]
+#   proj4string(nodes) <- CRS("+init=epsg:4326")
+# 
+#   v <- variogram(nodes$avg_temp ~ 1, nodes)
+#   v_fit_exp <- fit.variogram(v, model = vgm("Exp"))
+# 
+#   chi_grid <- pt2grid((chiCA), 200) # self-defined pt2grid for griding (omitted)
+#   projection(chi_grid) <- CRS("+init=epsg:4326")
+#   projection(nodes) <-  CRS("+init=epsg:4326")
+#   projection(chiCA) <- CRS("+init=epsg:4326")
+#   #
+#   kg <- krige(nodes$avg_temp ~ 1, nodes, chi_grid, model = v_fit_exp)
+#   chi_kg <- kg[chiCA,]
+#   m <- tm_shape(chi_kg) +
+#     tm_raster("var1.pred", style = "jenks", title = "Temperature (C)",
+#               palette = "BuPu") + 
+#     tm_shape(nodes) + 
+#     tm_dots(size=0.01) +
+#     tm_layout(main.title = paste0("Average Temperature of August 25 (Hour: ", h, ")"), main.title.size = 1.1) +
+#     tm_legend(position = c("left", "bottom"))
+#   return(m)
+# }
+```
+
+```{r, echo=FALSE}
+# get_sensor_hour <- function(sensor, hour){
+#   sensor_hour <- sensor %>%
+#     filter(hour == h) %>%
+#     select(node_id, hour, avg_temp)
+#   return(list(sensor_hour))
+# }
+```
+
+```{r, echo=FALSE}
+# sensor_hour_list <- list()
+# for(h in 0:23){
+#   sensor_hour_list <- c(sensor_hour_list, get_sensor_hour(sensor, h))
+# }
+```
+
+```{r, echo=FALSE}
+# tmap_hour_list <- lapply(sensor_hour_list, get_tmap_hour)
+```
+
+```{r, echo=FALSE}
+# tmap_animation(tmap_hour_list, delay=70, filename = "hour.mp4", width=600, height = 750)
+```
+
+
+
+
+
+
+<!--chapter:end:05-hw.Rmd-->
+
+`r if (knitr::is_html_output()) '
+# References {-}
+'`
+
+1. Cressie N. Statistics for spatial data[M]. John Wiley & Sons, 2015.
+2. Lecture slides by [Wu Wang](http://stat.ruc.edu.cn/teacher_more.php?id=140&cid=25), Renmin University of China
+
+<!--chapter:end:06-ref.Rmd-->
+

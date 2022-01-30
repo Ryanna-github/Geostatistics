@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>References | Geostatistics Final Summary</title>
+  <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="References | Geostatistics Final Summary" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="References | Geostatistics Final Summary" />
+  
+  <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  
+
+<meta name="author" content="Yan Ren" />
+
+
+<meta name="date" content="2022-01-31" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="spatial-analysis-homework.html"/>
+
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.0.4.1/leaflet-providers-plugin.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="part"><span><b>I Geostatistical Data</b></span></li>
+<li class="chapter" data-level="1" data-path="geostatistics.html"><a href="geostatistics.html"><i class="fa fa-check"></i><b>1</b> Geostatistics</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="geostatistics.html"><a href="geostatistics.html#targeted-problems"><i class="fa fa-check"></i><b>1.1</b> Targeted Problems</a></li>
+<li class="chapter" data-level="1.2" data-path="geostatistics.html"><a href="geostatistics.html#spatial-data-example"><i class="fa fa-check"></i><b>1.2</b> Spatial Data Example</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="geostatistics.html"><a href="geostatistics.html#main-concepts"><i class="fa fa-check"></i><b>1.2.1</b> Main Concepts</a></li>
+<li class="chapter" data-level="1.2.2" data-path="geostatistics.html"><a href="geostatistics.html#esitimation-of-variogram"><i class="fa fa-check"></i><b>1.2.2</b> Esitimation of Variogram</a></li>
+<li class="chapter" data-level="1.2.3" data-path="geostatistics.html"><a href="geostatistics.html#decomposition"><i class="fa fa-check"></i><b>1.2.3</b> Decomposition</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="geostatistics.html"><a href="geostatistics.html#stationary-process"><i class="fa fa-check"></i><b>1.3</b> Stationary Process</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="geostatistics.html"><a href="geostatistics.html#vc"><i class="fa fa-check"></i><b>1.3.1</b> Variogram &amp; Covariogram</a></li>
+<li class="chapter" data-level="1.3.2" data-path="geostatistics.html"><a href="geostatistics.html#estimation-of-variogram-covariogram"><i class="fa fa-check"></i><b>1.3.2</b> Estimation of Variogram &amp; Covariogram</a></li>
+<li class="chapter" data-level="1.3.3" data-path="geostatistics.html"><a href="geostatistics.html#validity"><i class="fa fa-check"></i><b>1.3.3</b> Validity</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="geostatistics.html"><a href="geostatistics.html#variogram-model-fitting"><i class="fa fa-check"></i><b>1.4</b> Variogram Model Fitting</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="geostatistics.html"><a href="geostatistics.html#eda-check-before-model-fitting"><i class="fa fa-check"></i><b>1.4.1</b> EDA Check Before Model Fitting</a></li>
+<li class="chapter" data-level="1.4.2" data-path="geostatistics.html"><a href="geostatistics.html#maximum-likelihood-estimator"><i class="fa fa-check"></i><b>1.4.2</b> Maximum Likelihood Estimator</a></li>
+<li class="chapter" data-level="1.4.3" data-path="geostatistics.html"><a href="geostatistics.html#minq-estimation"><i class="fa fa-check"></i><b>1.4.3</b> MINQ Estimation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html"><i class="fa fa-check"></i><b>2</b> Spatial Prediction and Kriging</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#scale-of-variation"><i class="fa fa-check"></i><b>2.1</b> Scale of variation</a></li>
+<li class="chapter" data-level="2.2" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#ordinary-kriging"><i class="fa fa-check"></i><b>2.2</b> Ordinary Kriging</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#model-introduction"><i class="fa fa-check"></i><b>2.2.1</b> Model Introduction</a></li>
+<li class="chapter" data-level="2.2.2" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#effect-of-variogram-estimation"><i class="fa fa-check"></i><b>2.2.2</b> Effect of Variogram Estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#cokriging"><i class="fa fa-check"></i><b>2.3</b> Cokriging</a></li>
+<li class="chapter" data-level="2.4" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#robust-kriging"><i class="fa fa-check"></i><b>2.4</b> Robust Kriging</a></li>
+<li class="chapter" data-level="2.5" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#universal-kriging"><i class="fa fa-check"></i><b>2.5</b> Universal Kriging</a></li>
+</ul></li>
+<li class="part"><span><b>II Lattice Data</b></span></li>
+<li class="chapter" data-level="3" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html"><i class="fa fa-check"></i><b>3</b> Spatial Models on Lattices</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#lattices"><i class="fa fa-check"></i><b>3.1</b> Lattices</a></li>
+<li class="chapter" data-level="3.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#spatial-models-for-lattice-data"><i class="fa fa-check"></i><b>3.2</b> Spatial Models for Lattice Data</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#simultaneous-spatial-models"><i class="fa fa-check"></i><b>3.2.1</b> Simultaneous Spatial Models</a></li>
+<li class="chapter" data-level="3.2.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#conditional-spatial-models"><i class="fa fa-check"></i><b>3.2.2</b> Conditional Spatial Models</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#markov-random-fields"><i class="fa fa-check"></i><b>3.3</b> Markov Random Fields</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#preparation"><i class="fa fa-check"></i><b>3.3.1</b> Preparation</a></li>
+<li class="chapter" data-level="3.3.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#markov-random-field"><i class="fa fa-check"></i><b>3.3.2</b> Markov Random Field</a></li>
+<li class="chapter" data-level="3.3.3" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#hammersley-clifford-theorem"><i class="fa fa-check"></i><b>3.3.3</b> Hammersley-Clifford Theorem</a></li>
+<li class="chapter" data-level="3.3.4" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#pairwise-only-dependence"><i class="fa fa-check"></i><b>3.3.4</b> Pairwise-Only Dependence</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#conditionally-specified-spatial-models"><i class="fa fa-check"></i><b>3.4</b> Conditionally Specified Spatial Models</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#models-for-discrete-data"><i class="fa fa-check"></i><b>3.4.1</b> Models for Discrete Data</a></li>
+<li class="chapter" data-level="3.4.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#models-for-continuous-data"><i class="fa fa-check"></i><b>3.4.2</b> Models for Continuous Data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#simultaneously-specified-spatial-models"><i class="fa fa-check"></i><b>3.5</b> Simultaneously Specified Spatial Models</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#spatial-autoregressive-regression-model"><i class="fa fa-check"></i><b>3.5.1</b> Spatial Autoregressive Regression Model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#space-time-models"><i class="fa fa-check"></i><b>3.6</b> Space-Time Models</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#starma-model"><i class="fa fa-check"></i><b>3.6.1</b> STARMA Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html"><i class="fa fa-check"></i><b>4</b> Inference for Lattice Models</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#parameter-estimation-for-lattice-models"><i class="fa fa-check"></i><b>4.1</b> Parameter Estimation for Lattice Models</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#pseudolikelihood"><i class="fa fa-check"></i><b>4.1.1</b> Pseudolikelihood</a></li>
+<li class="chapter" data-level="4.1.2" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#gaussian-maximum-likelihood-estimation"><i class="fa fa-check"></i><b>4.1.2</b> Gaussian Maximum Likelihood Estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#conditional-gaussian-model"><i class="fa fa-check"></i><b>4.2</b> Conditional Gaussian Model</a></li>
+<li class="chapter" data-level="4.3" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#auto-logistic-model"><i class="fa fa-check"></i><b>4.3</b> Auto-logistic Model</a></li>
+<li class="chapter" data-level="4.4" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#auto-poisson-model"><i class="fa fa-check"></i><b>4.4</b> Auto-Poisson Model</a></li>
+</ul></li>
+<li class="part"><span><b>III Homework</b></span></li>
+<li class="chapter" data-level="5" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html"><i class="fa fa-check"></i><b>5</b> Spatial Analysis Homework</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#overview"><i class="fa fa-check"></i><b>5.1</b> Overview</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#background"><i class="fa fa-check"></i><b>5.1.1</b> Background</a></li>
+<li class="chapter" data-level="5.1.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#data"><i class="fa fa-check"></i><b>5.1.2</b> Data</a></li>
+<li class="chapter" data-level="5.1.3" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#goal"><i class="fa fa-check"></i><b>5.1.3</b> Goal</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#exploratory-analysis"><i class="fa fa-check"></i><b>5.2</b> Exploratory Analysis</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#data-preprocessing"><i class="fa fa-check"></i><b>5.2.1</b> Data Preprocessing</a></li>
+<li class="chapter" data-level="5.2.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#descriptive-statistics"><i class="fa fa-check"></i><b>5.2.2</b> Descriptive Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#model-fitting"><i class="fa fa-check"></i><b>5.3</b> Model Fitting</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#variogram"><i class="fa fa-check"></i><b>5.3.1</b> Variogram</a></li>
+<li class="chapter" data-level="5.3.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#kriging-model"><i class="fa fa-check"></i><b>5.3.2</b> Kriging Model</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#animation"><i class="fa fa-check"></i><b>5.4</b> Animation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Geostatistics Final Summary</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<ol style="list-style-type: decimal">
+<li>Cressie N. Statistics for spatial data[M]. John Wiley &amp; Sons, 2015.</li>
+<li>Lecture slides by <a href="http://stat.ruc.edu.cn/teacher_more.php?id=140&amp;cid=25">Wu Wang</a>, Renmin University of China</li>
+</ol>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="spatial-analysis-homework.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/06-ref.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

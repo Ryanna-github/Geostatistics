@@ -1,0 +1,2 @@
+"0","v_fit_sph <- fit.variogram(v, model = vgm(""Sph""))"
+"0","plot(v, v_fit_sph)"

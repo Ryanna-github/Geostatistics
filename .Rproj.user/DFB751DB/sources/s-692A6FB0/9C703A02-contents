@@ -1,0 +1,6 @@
+`r if (knitr::is_html_output()) '
+# References {-}
+'`
+
+1. Cressie N. Statistics for spatial data[M]. John Wiley & Sons, 2015.
+2. Lecture slides by [Wu Wang](http://stat.ruc.edu.cn/teacher_more.php?id=140&cid=25), Renmin University of China

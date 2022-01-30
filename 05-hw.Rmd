@@ -1,0 +1,326 @@
+# (PART) Homework {-}
+
+# Spatial Analysis Homework
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(lubridate) 
+library(sp) 
+library(rgdal) 
+library(rgeos) 
+library(raster) 
+library(gstat) 
+library(tmap) 
+library(leaflet) 
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(DT)
+library(ggplot2)
+
+setwd("D:/Ryanna/RUC_courses/R_Y1_1/Geometrics/Summary/summary_note")
+```
+
+## Overview
+
+### Background
+
+Temperature is a variable highly related to locations. In most cases, places near to each other share similar average temperature, no matter what unit is the average (daily average, monthly average etc.) With temperature and geographic information of Chicago, some spatial analysis is explored.
+
+### Data
+
+The data is from AoT Workshop of the Center for Spatial Data Science at the University of Chicago. The dataset includes geographic information (latitude and longitude) and direct temperature measurement data recorded from temperature sensors of 90 spots in Chicago, August 25, 2018.
+
+For more information about the AoT Workshop and to download the data, please visit <https://geodacenter.github.io/aot-workshop/>. The overview of data is as below. (For presentation formatting, node id, which links tables, is omitted)
+
+```{r, echo=FALSE}
+# interactive table
+# datatable(nodes %>% 
+#             select(node_id, project_id, lat, lon))
+```
+
+```{r, echo=TRUE}
+nodes <- read.csv("../../Data/nodes.csv")
+colnames_tmp <- c("project_id", "lat", "lon", "start_timestamp")
+head(nodes[colnames_tmp]) %>%
+  kbl() %>% kable_material(c("striped", "hover"))
+```
+
+```{r, echo=TRUE}
+sensor <- read.csv("../../Data/data.csv.gz")
+colnames_tmp <- c("subsystem", "sensor", "parameter", "value_raw","value_hrf")
+head(sensor[colnames_tmp]) %>%
+  kbl() %>% kable_material(c("striped", "hover"))
+```
+
+```{r, echo=TRUE}
+sensor_info <- read.csv("../../Data/sensors.csv")
+colnames_tmp <- c("subsystem", "sensor", "parameter", "hrf_unit", "hrf_minval", "hrf_maxval")
+head(sensor_info[colnames_tmp]) %>%
+  kbl() %>% kable_material(c("striped", "hover"))
+```
+
+### Goal
+
+1. Practice theoretical knowledge related to geostatistics concepts, such as variogram and kriging model. 
+2. Apply kriging model in real data with help of AoT Workshop tutorial.
+3. Interpolate a temperature surface in the area.
+4. Familiar myself with gridding tricks.
+4. Explore visualization while presenting results of spatial statistics model.
+
+
+## Exploratory Analysis
+
+Two things are addressed in this part:
+
+- Data preprocessing: filter the data we are interested.
+- Descriptive statistics: draw plots or tables to be familiar with data and variables.
+
+### Data Preprocessing
+
+- Not all sensors record the temperature, humidity and pressure are also measured in out dataset. To cancel redundancy and to uniform standard of measurement, we select only sensor of type "tsys01".
+- "value_hrf" is the transformed recording of sensors. The unit of it is Celsius degree. It can be used directly for computing average temperature.
+- Suppose we are only interest in average temperature of second half of the day. Recordings in the mornings should be eliminated.
+
+
+
+```{r, echo=TRUE}
+sensor <- sensor %>%
+  filter(sensor == "tsys01")
+# timestamp
+sensor$timestamp2 <- ymd_hms(sensor$timestamp)
+sensor$hour <- hour(sensor$timestamp)
+sensor <- sensor %>% 
+  filter(hour(timestamp2) >= 12) %>%
+  group_by(node_id) %>%
+  summarize(avg_temp = mean(value_hrf))
+```
+Now we take out the faulty sensor with apparently fault average temperature.
+
+
+```{r, echo=TRUE}
+sensor$avg_temp
+```
+
+```{r, echo=TRUE}
+sensor <- sensor %>% filter(avg_temp > 15)
+```
+
+After these steps, size of data frame `sensor` is rapidly reduced from the original 497,912 to 32. The data frame now indicates average temperatures in the afternoon of 31 distinct sensor spots.
+
+```{r}
+ggplot(sensor, aes(x = avg_temp)) +
+  geom_histogram(bins = 9, alpha = 0.7) +
+  theme_bw() +
+  labs(x = "Average Temperature", 
+       title = "Average Temperature Frequence Histogram") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+- Sensor data is already now.
+- Merge sensor data with geographic location
+- Then, convert the completed node data to spatial object format for plotting and more advanced spatial analytics.
+
+```{r, echo=TRUE}
+nodes <- merge(sensor, nodes, by = c("node_id"))
+coordinates(nodes) <- nodes[,c("lon", "lat")]
+proj4string(nodes) <- CRS("+init=epsg:4326")
+```
+
+### Descriptive Statistics
+
+For the data is spatial, the most direct way is to plot a map.
+
+```{r, warning=FALSE, message=FALSE, echo=TRUE}
+tmap_mode("view")
+tm_shape(nodes) + tm_dots()
+```
+
+From the map, we can get a general idea of the sensor position. 
+
+Chicago community area is the domain of the model. Recall the random process $\{Z(s), s\in D\}$, which is the object of spatial analysis. The goal is to interpolate a temperature surface in $D$. It is helpful to plot community area as well.
+
+```{r, warning=FALSE, message=FALSE, echo=TRUE}
+chiCA <- readOGR("../../Data","ChiComArea") # generated by the workshop
+tmap_mode("view")
+tm_shape(chiCA) + tm_borders() + 
+  tm_shape(nodes) + tm_dots(col="avg_temp",size=0.3, title="Average Temperature (C)") 
+```
+
+
+in Chicago community area (namely, $D$), temperature sensors are not clustered, which is good for modeling.
+
+## Model Fitting
+
+### Variogram
+
+As an important parameter for spatial modeling, variogram has to be studied.
+
+```{r, echo=TRUE}
+v <- variogram(nodes$avg_temp ~ 1, nodes)
+plot(v)
+```
+
+Observe the variogram, it seems spherical semivariogram \@ref(eq:v1), exponential variogram  \@ref(eq:v2) can be suitable for the data.
+
+> **Spherical Semivariogram** \
+\begin{equation}
+\gamma(\mathbf{h} ; \boldsymbol{\theta})= \begin{cases}0, & \mathbf{h}=\mathbf{0}, \\ c_{0}+c_{s}\left\{(3 / 2)\left(\|\mathbf{h}\| / a_{s}\right)-(1 / 2)\left(\|\mathbf{h}\| / a_{s}\right)^{3}\right\}, & 0<\|\mathbf{h}\| \leq a_{s}, \\ c_{0}+c_{s}, & \|\mathbf{h}\| \geq a_{s},\end{cases}
+$\theta=\left(c_{0}, c_{s}, a_{s}\right)^{\prime}$,
+(\#eq:v1)
+\end{equaton}
+where $c_{0} \geq 0, c_{s} \geq 0$, and $a_{s} \geq 0$.
+
+> **Exponential Variogram** \
+\begin{equation}
+\gamma(\mathbf{h} ; \boldsymbol{\theta})= \begin{cases}0, & \mathbf{h}=\mathbf{0} \\ c_{0}+c_{e}\left\{1-\exp \left(-\|\mathbf{h}\| / a_{e}\right)\right\}, & \mathbf{h} \neq \mathbf{0}\end{cases}$
+$\theta=\left(c_{0}, c_{e}, a_{e}\right)^{\prime}$,
+(\#eq:v2)
+\end{equation}
+where $c_{0} \geq 0, c_{e} \geq 0$, and $a_{e} \geq 0 .
+
+```{r, echo=TRUE}
+v_fit_sph <- fit.variogram(v, model = vgm("Sph"))
+plot(v, v_fit_sph)
+```
+
+```{r, echo=TRUE}
+v_fit_exp <- fit.variogram(v, model = vgm("Exp"))
+plot(v, v_fit_exp)
+```
+
+It is hard to choose the variogram model. We might as well adopt the relatively simpler exponential variogram for the following modeling.
+
+### Kriging Model
+
+Gridding and projection should be performed before modeling kriging.
+
+
+
+```{r, echo=FALSE}
+pt2grid <- function(ptframe,n) {
+  bb <- bbox(ptframe)  
+  ptcrs <- proj4string(ptframe)  
+  xrange <- abs(bb[1,1] - bb[1,2])  
+  yrange <- abs(bb[2,1] - bb[2,2])  
+  cs <- c(xrange/n,yrange/n)  
+  cc <- bb[,1] + (cs/2)  
+  dc <- c(n,n)  
+  x1 <- GridTopology(cellcentre.offset=cc,cellsize=cs,cells.dim=dc)  
+  x2 <- SpatialGrid(grid=x1,proj4string=CRS(ptcrs))
+  return(x2)
+}
+```
+
+```{r, echo=TRUE}
+chi_grid <- pt2grid((chiCA), 200) # self-defined pt2grid for griding (omitted)
+projection(chi_grid) <- CRS("+init=epsg:4326")  
+projection(nodes) <-  CRS("+init=epsg:4326")
+projection(chiCA) <- CRS("+init=epsg:4326")
+```
+
+Then ordinary kriging model (illustrated in section \@ref(ordinary-kriging)) is fitted here. 
+
+```{r, echo=TRUE}
+kg <- krige(nodes$avg_temp ~ 1, nodes, chi_grid, model = v_fit_exp)
+plot(kg)
+```
+
+Clip the whole map to Chicago boundaries.
+
+```{r, echo=TRUE}
+chi_kg <- kg[chiCA,]
+plot(chi_kg)
+```
+
+Combine the predicted temperature surface, community area and sensor information, the results can be plotted nicely as
+
+```{r, echo=TRUE}
+tm_shape(chi_kg) +
+  tm_raster("var1.pred", style = "jenks", title = "Temperature (C)", palette = "BuPu") + tm_shape(nodes) + tm_dots(size=0.01) +
+  tm_layout(main.title = "Avg Afternoon Temperature August 25", main.title.size = 1.1) +
+  tm_legend(position = c("left", "bottom"))
+```
+
+## Animation
+
+The analysis above interpolate average temperature of Augest 25, 2018. If we are interested in hourly average temperature, we can fit 24 models using the data. An animation of hourly change of temperature in Chicago is as below.
+
+<video width="500" height="620" controls>
+  <source src="hour.mp4" type="video/mp4">
+</video>
+
+In practice, animation like this is informative and common. One main further modification of this animation is to uniform legend scale of different hour
+
+```{r, echo=FALSE}
+#data
+# nodes <- read.csv("../../Data/nodes.csv")
+# sensor <- read.csv("../../Data/data.csv.gz")
+# nodes_copy <- nodes
+# 
+# sensor <- sensor %>%
+#   filter(sensor == "tsys01")
+# # timestamp
+# sensor$timestamp2 <- ymd_hms(sensor$timestamp)
+# sensor$hour <- hour(sensor$timestamp)
+# sensor <- sensor %>%
+#   group_by(node_id, hour) %>%
+#   summarize(avg_temp = mean(value_hrf))
+# sensor <- sensor %>% filter(avg_temp > 15)
+```
+
+```{r, echo=FALSE}
+# get_tmap_hour <- function(sensor_hour){
+#   h <- min(sensor_hour$hour)
+#   nodes <- merge(sensor_hour, nodes_copy, by = c("node_id"))
+#   coordinates(nodes) <- nodes[,c("lon", "lat")]
+#   proj4string(nodes) <- CRS("+init=epsg:4326")
+# 
+#   v <- variogram(nodes$avg_temp ~ 1, nodes)
+#   v_fit_exp <- fit.variogram(v, model = vgm("Exp"))
+# 
+#   chi_grid <- pt2grid((chiCA), 200) # self-defined pt2grid for griding (omitted)
+#   projection(chi_grid) <- CRS("+init=epsg:4326")
+#   projection(nodes) <-  CRS("+init=epsg:4326")
+#   projection(chiCA) <- CRS("+init=epsg:4326")
+#   #
+#   kg <- krige(nodes$avg_temp ~ 1, nodes, chi_grid, model = v_fit_exp)
+#   chi_kg <- kg[chiCA,]
+#   m <- tm_shape(chi_kg) +
+#     tm_raster("var1.pred", style = "jenks", title = "Temperature (C)",
+#               palette = "BuPu") + 
+#     tm_shape(nodes) + 
+#     tm_dots(size=0.01) +
+#     tm_layout(main.title = paste0("Average Temperature of August 25 (Hour: ", h, ")"), main.title.size = 1.1) +
+#     tm_legend(position = c("left", "bottom"))
+#   return(m)
+# }
+```
+
+```{r, echo=FALSE}
+# get_sensor_hour <- function(sensor, hour){
+#   sensor_hour <- sensor %>%
+#     filter(hour == h) %>%
+#     select(node_id, hour, avg_temp)
+#   return(list(sensor_hour))
+# }
+```
+
+```{r, echo=FALSE}
+# sensor_hour_list <- list()
+# for(h in 0:23){
+#   sensor_hour_list <- c(sensor_hour_list, get_sensor_hour(sensor, h))
+# }
+```
+
+```{r, echo=FALSE}
+# tmap_hour_list <- lapply(sensor_hour_list, get_tmap_hour)
+```
+
+```{r, echo=FALSE}
+# tmap_animation(tmap_hour_list, delay=70, filename = "hour.mp4", width=600, height = 750)
+```
+
+
+
+
+

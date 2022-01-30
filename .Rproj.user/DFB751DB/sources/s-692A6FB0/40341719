@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1643563744493.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "40341719",
+    "lastKnownWriteTime" : 1643563701,
+    "last_content_update" : 1643563744493,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "255A1F2E",
+        "caption" : "sensor",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=sensor&cache_key=255A1F2E",
+        "displayedObservations" : "358",
+        "environment" : "",
+        "expression" : "sensor",
+        "object" : "sensor",
+        "preview" : "0",
+        "totalObservations" : "358",
+        "variables" : "3"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

@@ -1,0 +1,3 @@
+"0","nodes <- merge(sensor, nodes, by = c(""node_id""))"
+"0","coordinates(nodes) <- nodes[,c(""lon"", ""lat"")]"
+"0","proj4string(nodes) <- CRS(""+init=epsg:4326"")"

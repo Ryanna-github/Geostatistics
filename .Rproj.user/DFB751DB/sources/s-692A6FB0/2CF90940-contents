@@ -1,0 +1,193 @@
+# Spatial Prediction and Kriging
+
+Recall decomposition of variogram illustrated in section \@ref(decomposition), large scale and small scale variation both contribute to $Z$. Continue with this idea, we model random process $\{Z(s), s\in D \subset \mathbb{R}^d\}$ as: 
+
+\begin{equation}
+Z(s)=S(s)+e(s), s \in D.
+(\#eq:scale-model)
+\end{equation}
+
+where $e(.)$ is a white-noise measurement-error process.
+
+- Notice that when it comes to prediction, we are interested in noiseless value, which means $S(s)$ in formula \@ref(eq:scale-model). 
+    - A known functional $g(S(s))$ can also be studied.
+    - Block average prediction value can be calculated by $g(Z(.))=\int_{B} Z(s) d s /|B|$, where $B\subset \mathbb{R}^d$ whose location and geometry are known.
+
+
+## Scale of variation
+
+> **Scale** \
+Scale can have two different meanings: \
+
+> 1. The observational scale of $Z(s)$ which means system error due to the recording instruments are just accurate up to a certain level.  
+2. The spatial scale of $s$. The observations are based on a certain
+aggregation and are taken a certain distance apart. 
+
+Extend the decomposition introduced in section \@ref(eq:scale-model) even further, we consider a more detailed decomposition as formula \@ref(eq:decomposition-scale).
+
+\begin{equation}
+Z(s) = \mu(s) + W(s) + \eta(s) + \epsilon(s)
+(\#eq:decomposition-scale)
+\end{equation}
+
+where
+
+- **Large-Scale Variation**: $\mu(s)$, the deterministic mean structure.
+- **Smooth Small-Scale Variation**: $W(s)$, a zero-mean, $L_2$-continuous, intrinsically stationary random process with variogram range _larger_ than $\min \left\{\left\|s_{i}-s_{j}\right\|, 1 \leq i \leq j \leq n\right\}$.
+- **Microscale Variation**: $\eta(s)$, a zero-mean, intrinsically stationary process with variogram range _smaller_ than $\min \left\{\left\|s_{i}-s_{j}\right\|, 1 \leq i \leq j \leq n\right\}$, and independent of $W(s)$.
+- **Measurement Error or Noise**: $\epsilon(s)$, a zero-mean white-noise process and independent of $W(s)$ and $\eta(s)$. $Var(\epsilon(s)):= c_{ME}$.
+
+
+Based on decomposition \@ref(eq:decomposition-scale), the variogram can be computed as below:
+
+\begin{equation}
+2 \gamma_{Z}(.)=2 \gamma_{w}(.)+2 \gamma_{\eta}(.)+2 c_{M E}.
+\end{equation}
+
+Thus, nugget effect mentioned in section \@ref(vc) can be decomposed as well as $c_0 = c_{ME} + c_{MS}$, where $c_{MS} = \displaystyle\lim_{|h|\to0}\gamma_\eta(h)$ indicates nugget effect of the microscale process $\eta(.)$, and $c_{ME}$ is defined as $Var(\epsilon(s))$.
+
+The general goal is to decompose $Z(s)$ as _signal_ term and _noise_ term. The decomposition is not unique.
+
+## Ordinary Kriging
+
+Kriging is a minimum-mean-squared-error method of spatial prediction that usually depends on the second-order properties of the random process $Z(.)$.
+
+### Model Introduction
+
+Suppose we have data $(Z(s_1),...,Z(s_n))\prime$. Denote the generic predictor as $p(Z, B)$ where $Z$ means the targeted value and $B$ implies the region the predicting location lies. Then we define ordinary kriging model.
+
+> **Ordinary Kriging** \
+The general form of ordinary kriging is $Z(s) = \mu + \delta(s):= \mu + W(s) + \eta(s) + \epsilon(s)$. Here, $\mu$ is the mean of the process, a constant but unknown.
+
+- **Predictor of Ordinary Kriging**: a linear predictor is adopted. That is $p(Z ; B)=\sum_{i=1}^{n} \lambda_{i} Z\left(s_{i}\right)$ where $\sum_{i=1}^{n} \lambda_{i}=1$.
+
+- **Loss Function of Ordinary Kriging**: We are considering squared-error loss here. That is $L(Z(B), p(Z, B))=(Z(B)-p(Z, B))^{2}$.
+
+With the assumptions and settings above, the problem has been transformed into a constrained optimization one. It can be addressed by Lagrange method. In our case, Lagrange function is
+
+\begin{equation}
+-\lambda^{\top} \Gamma \lambda+2 \lambda^{\top} \mathbf{r}-2 m\left(\lambda^{\top} 1_{n}-1\right)
+(\#eq:lagrange)
+\end{equation}
+
+and the corresponding normal equation can be writen as
+
+\begin{equation}
+\begin{gathered}
+\Gamma \lambda+m 1_{n}=\mathbf{r} \\
+\lambda^{\top} 1_{n}=1.
+\end{gathered}
+(\#eq:normal-function)
+\end{equation}
+
+
+Notice, second-order stationary is not mandatory for kriging, it is required for estimation of the covariogram.
+
+### Effect of Variogram Estimation
+
+#### Still
+
+> **Still** \
+$\sigma_{Z}^{2}=\lim _{|h| \rightarrow 0} \gamma_{Z}(h)$, $\sigma_Z^2$ is called still, which indicates the limit value of $\gamma$.
+
+- Theoretically, the sill of $Z$ is $\sigma_{Z}^{2}(\cdot)=\sigma_{W}^{2}(\cdot)+\sigma_{\eta}^{2}(\cdot)+c_{M E}$.
+- Practically, the sill of $Z$ is estimated as $\sigma_{W}^{2}(\cdot)+c_0 \leq \sigma_{Z}^{2}(\cdot)$.
+    - It can be useful in estimating nugget effect. Practically, nugget effect is usually estimated by $\sigma_{\eta}^{2}(\cdot)+c_{M E}$ rather than $c_0$.
+    
+#### Range
+
+> **Range** \
+The smallest value of $\Vert r_0\Vert$ for which $2 \gamma\left(\mathbf{r}_{0}(1+\epsilon)\right)=2 C(0),$ for any $\epsilon>0$ is called the range of the variogram in the direction of $r_0/\Vert r_0 \Vert$.
+
+Still can be interpreted as the lag beyond which $Z(s)$ and $Z(s + a)$ are uncorrelated. Thus $Cov(Z(s), Z(s+h)) = 0,\ h > a$. Still influence covariogram.
+
+## Cokriging
+
+Cokriging is actually the multivariate version of kriging. Suppose data are $k \times 1$ vectors $(\mathbf Z(s_1),...,\mathbf Z(s_n))^\prime$.
+
+> **Cokriging** \
+The Cokriging model with constant mean is
+\begin{equation}
+\begin{aligned}
+\mathbb{E}(\mathbf{Z}(s)) &=\boldsymbol{\mu}, s \in D \\
+\operatorname{cov}(\mathbf{Z}(s), \mathbf{Z}(u)) &=C(s, u), s, u \in D
+\end{aligned}
+(\#eq:cokriging)
+\end{equation}
+
+- **Predictor of Cokriging**: the linear predictor can be writen as formula \@ref(eq:cokriging-predictor) now.
+
+\begin{equation}
+p_{1}\left(\mathbf{Z} ; s_{0}\right)=\sum_{i=1}^{n} \sum_{j=1}^{k} \lambda_{j i} Z_{j}\left(s_{i}\right)
+(\#eq:cokriging-predictor)
+\end{equation}
+
+When $\sum_{i=1}^{n} \lambda_{1 i}=1$ and $\sum_{i=1}^{n} \lambda_{j i}=0 \text { for } j \neq 1$, the predictor is unbiased.
+
+- **Risk of Cokriging**: $E\left(Z_{1}\left(s_{0}\right)-\sum_{i=1}^{n} \sum_{j=1}^{k} \lambda_{j i} Z_{j}\left(s_{i}\right)\right)^{2}$
+
+- Notice that data are usually not satisfying all assumption. Take Gaussian distribution assumption as an example, data transformation may be taken before kriging is modeled.
+
+## Robust Kriging
+
+Even with the operation of data transformation beforehead, outliers may occur frequently and badly influence parameter estimators in out model. Linear predictors applied by kriging model is sensitive to outlying observations. Robust kriging is raised here to settle outlier problem.
+
+Instead of directly cancelling outliers, the main idea of robust kriging is downweighting the unusual observation. The predictor now is:
+
+\begin{equation}
+p(Z ; B)=\sum_{i=1}^{n} \lambda_{i} Z\left(s_{i}\right) w\left(Z\left(s_{i}\right)\right)=\sum_{i=1}^{n} \lambda_{i} Z^{(e)}\left(s_{i}\right)
+(\#eq:predictor-robust-kriging)
+\end{equation}
+
+where $0\leq W(.)\leq 1$ is the weight functin, and $Z^{(e)}(s)$ is the modified data.
+
+The algorithm of operating robust kriging is as below:
+
+1. Estimate the variogram using one of the robust estimators (Section 2.4.3 in Book) and fit a valid variogram model.
+2. Compute the kriging weights $\hat{Z}_{-j}\left(s_{j}\right)=\sum_{i \neq j} \lambda_{j i} Z\left(s_{i}\right)$. That is, predict $Z(s_j)$ without using $Z(s_j)$. Let $\sigma^2_{−j}(s_j)$ be the associated kriging variance. The subsript $−j$ means we do not use $Z(s_j)$ in the predition.
+3. Use the weights $\lambda_{ji}:i\neq j$ to obtain a robust prediction of $Z(s_j)$ from the data
+\begin{equation}
+Z_{-j}^{@}\left(s_{j}\right)=\text { weighted median of }\left(\left\{Z_{i}: i \neq j\right\} ;\left\{\lambda_{j i}: i \neq j\right\}\right)
+(\#eq:robust-step)
+\end{equation}
+We use $Z_{-j}^{@}\left(s_{j}\right)$ and $\sigma_{-j}^{2}\left(s_{j}\right)$ to judge whether $Z\left(s_{j}\right)$ is clean or contaminated.
+4. Edit $Z(s_j)$ by replacing it with the Winsorized version
+\begin{equation}
+Z^{(e)}\left(s_{j}\right)=\left\{\begin{array}{cl}
+Z_{-j}^{@}\left(s_{j}\right)+c \sigma_{-j}\left(s_{j}\right) & \text { if } Z\left(s_{j}\right)>Z_{-j}^{@}\left(s_{j}\right)+c \sigma_{-j}\left(s_{j}\right) \\
+Z\left(s_{j}\right) & \left|Z\left(s_{j}\right)-Z_{-j}^{@}\left(s_{j}\right)\right|<c \sigma_{-j}\left(s_{j}\right) \\
+Z_{-j}^{@}\left(s_{j}\right)-c \sigma_{-j}\left(s_{j}\right) & Z\left(s_{j}\right)<Z_{-j}^{@}\left(s_{j}\right)-c \sigma_{-j}\left(s_{j}\right)
+\end{array}\right.
+(\#eq:winsor)
+\end{equation}
+5. Predict with the modified data $Z^{(e)}(s_j)$
+\begin{equation}
+\hat{p}(Z, B)=\sum_{i=1}^{n} \lambda_{i} Z^{(e)}\left(s_{j}\right)
+(\#eq:predictor-robust)
+\end{equation}
+
+## Universal Kriging
+
+Extend to constant mean assumption of ordinary kriging, Suppose the mean is a linear combination of known functions $\left\{f_{0}(s), \ldots, f_{p}(s)\right\}$, we get universal kriging.
+
+> **Universal Kriging** \
+The general form of Universal Kriging is 
+\begin{equation}
+\left\{f_{0}(s), \ldots, f_{p}(s)\right\}.
+(\#eq:universal-kriging)
+\end{equation}
+It can also be writen in matrix form as 
+\begin{equation}
+\mathbf{Z} = \mathbf{X}\beta + \mathbf{\delta}.
+(\#eq:matrix-universal)
+\end{equation}
+where $\beta=(\beta_0,...,\beta_p)$ is an unknown vector of parameters and $\delta(.)$ is a zero-mean intrinsically stationary random process with variogram $2\gamma(.)$
+
+- **Predictor of Universal Kriging**: $p\left(\mathbf{Z} ; s_{0}\right)=\lambda^{\top} \mathbf{Z}, \text { for } \lambda^{\top} \mathbf{X}=\mathbf{x}^{\top}$
+
+where $\mathbf{x} = (f_1(s_0),...,f_p(s_0))^\prime$
+
+- **Risk of Universal Kriging**: $E\left(Z\left(s_{0}\right)-\sum_{i=1}^{n} \lambda_{i} Z\left(s_{i}\right)\right)^{2}=-\lambda^{\top} \Gamma \lambda+2 \lambda^{\top} \mathbf{r}$
+
+- Similary to ordinary kriging, the problem is tranformed into a optimization addressed by Lagrange method. Lagrange function here is $-\lambda^{\top} \Gamma \lambda+2 \lambda^{\top} \mathbf{r}-2 \mathbf{m}^{\top}\left(\mathbf{X}^{\top} \lambda-\mathbf{x}\right)$. The solution $\lambda$ and $m$ can be derived by the normal equation.
+

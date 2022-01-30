@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1643419975302.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "26F7BB00",
+    "lastKnownWriteTime" : 1633780167,
+    "last_content_update" : 1633780167,
+    "path" : "D:/Ryanna/RUC_courses/R_Y1_1/Geometrics/Homework/2021-10-27_hw1.Rmd",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "57,97",
+        "scrollLine" : "54"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

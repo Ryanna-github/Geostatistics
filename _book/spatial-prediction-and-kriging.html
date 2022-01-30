@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Spatial Prediction and Kriging | Geostatistics Final Summary</title>
+  <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Spatial Prediction and Kriging | Geostatistics Final Summary" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Spatial Prediction and Kriging | Geostatistics Final Summary" />
+  
+  <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  
+
+<meta name="author" content="Yan Ren" />
+
+
+<meta name="date" content="2022-01-31" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="geostatistics.html"/>
+<link rel="next" href="spatial-models-on-lattices.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.0.4.1/leaflet-providers-plugin.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="part"><span><b>I Geostatistical Data</b></span></li>
+<li class="chapter" data-level="1" data-path="geostatistics.html"><a href="geostatistics.html"><i class="fa fa-check"></i><b>1</b> Geostatistics</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="geostatistics.html"><a href="geostatistics.html#targeted-problems"><i class="fa fa-check"></i><b>1.1</b> Targeted Problems</a></li>
+<li class="chapter" data-level="1.2" data-path="geostatistics.html"><a href="geostatistics.html#spatial-data-example"><i class="fa fa-check"></i><b>1.2</b> Spatial Data Example</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="geostatistics.html"><a href="geostatistics.html#main-concepts"><i class="fa fa-check"></i><b>1.2.1</b> Main Concepts</a></li>
+<li class="chapter" data-level="1.2.2" data-path="geostatistics.html"><a href="geostatistics.html#esitimation-of-variogram"><i class="fa fa-check"></i><b>1.2.2</b> Esitimation of Variogram</a></li>
+<li class="chapter" data-level="1.2.3" data-path="geostatistics.html"><a href="geostatistics.html#decomposition"><i class="fa fa-check"></i><b>1.2.3</b> Decomposition</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="geostatistics.html"><a href="geostatistics.html#stationary-process"><i class="fa fa-check"></i><b>1.3</b> Stationary Process</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="geostatistics.html"><a href="geostatistics.html#vc"><i class="fa fa-check"></i><b>1.3.1</b> Variogram &amp; Covariogram</a></li>
+<li class="chapter" data-level="1.3.2" data-path="geostatistics.html"><a href="geostatistics.html#estimation-of-variogram-covariogram"><i class="fa fa-check"></i><b>1.3.2</b> Estimation of Variogram &amp; Covariogram</a></li>
+<li class="chapter" data-level="1.3.3" data-path="geostatistics.html"><a href="geostatistics.html#validity"><i class="fa fa-check"></i><b>1.3.3</b> Validity</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="geostatistics.html"><a href="geostatistics.html#variogram-model-fitting"><i class="fa fa-check"></i><b>1.4</b> Variogram Model Fitting</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="geostatistics.html"><a href="geostatistics.html#eda-check-before-model-fitting"><i class="fa fa-check"></i><b>1.4.1</b> EDA Check Before Model Fitting</a></li>
+<li class="chapter" data-level="1.4.2" data-path="geostatistics.html"><a href="geostatistics.html#maximum-likelihood-estimator"><i class="fa fa-check"></i><b>1.4.2</b> Maximum Likelihood Estimator</a></li>
+<li class="chapter" data-level="1.4.3" data-path="geostatistics.html"><a href="geostatistics.html#minq-estimation"><i class="fa fa-check"></i><b>1.4.3</b> MINQ Estimation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html"><i class="fa fa-check"></i><b>2</b> Spatial Prediction and Kriging</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#scale-of-variation"><i class="fa fa-check"></i><b>2.1</b> Scale of variation</a></li>
+<li class="chapter" data-level="2.2" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#ordinary-kriging"><i class="fa fa-check"></i><b>2.2</b> Ordinary Kriging</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#model-introduction"><i class="fa fa-check"></i><b>2.2.1</b> Model Introduction</a></li>
+<li class="chapter" data-level="2.2.2" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#effect-of-variogram-estimation"><i class="fa fa-check"></i><b>2.2.2</b> Effect of Variogram Estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#cokriging"><i class="fa fa-check"></i><b>2.3</b> Cokriging</a></li>
+<li class="chapter" data-level="2.4" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#robust-kriging"><i class="fa fa-check"></i><b>2.4</b> Robust Kriging</a></li>
+<li class="chapter" data-level="2.5" data-path="spatial-prediction-and-kriging.html"><a href="spatial-prediction-and-kriging.html#universal-kriging"><i class="fa fa-check"></i><b>2.5</b> Universal Kriging</a></li>
+</ul></li>
+<li class="part"><span><b>II Lattice Data</b></span></li>
+<li class="chapter" data-level="3" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html"><i class="fa fa-check"></i><b>3</b> Spatial Models on Lattices</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#lattices"><i class="fa fa-check"></i><b>3.1</b> Lattices</a></li>
+<li class="chapter" data-level="3.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#spatial-models-for-lattice-data"><i class="fa fa-check"></i><b>3.2</b> Spatial Models for Lattice Data</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#simultaneous-spatial-models"><i class="fa fa-check"></i><b>3.2.1</b> Simultaneous Spatial Models</a></li>
+<li class="chapter" data-level="3.2.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#conditional-spatial-models"><i class="fa fa-check"></i><b>3.2.2</b> Conditional Spatial Models</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#markov-random-fields"><i class="fa fa-check"></i><b>3.3</b> Markov Random Fields</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#preparation"><i class="fa fa-check"></i><b>3.3.1</b> Preparation</a></li>
+<li class="chapter" data-level="3.3.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#markov-random-field"><i class="fa fa-check"></i><b>3.3.2</b> Markov Random Field</a></li>
+<li class="chapter" data-level="3.3.3" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#hammersley-clifford-theorem"><i class="fa fa-check"></i><b>3.3.3</b> Hammersley-Clifford Theorem</a></li>
+<li class="chapter" data-level="3.3.4" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#pairwise-only-dependence"><i class="fa fa-check"></i><b>3.3.4</b> Pairwise-Only Dependence</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#conditionally-specified-spatial-models"><i class="fa fa-check"></i><b>3.4</b> Conditionally Specified Spatial Models</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#models-for-discrete-data"><i class="fa fa-check"></i><b>3.4.1</b> Models for Discrete Data</a></li>
+<li class="chapter" data-level="3.4.2" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#models-for-continuous-data"><i class="fa fa-check"></i><b>3.4.2</b> Models for Continuous Data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#simultaneously-specified-spatial-models"><i class="fa fa-check"></i><b>3.5</b> Simultaneously Specified Spatial Models</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#spatial-autoregressive-regression-model"><i class="fa fa-check"></i><b>3.5.1</b> Spatial Autoregressive Regression Model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#space-time-models"><i class="fa fa-check"></i><b>3.6</b> Space-Time Models</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="spatial-models-on-lattices.html"><a href="spatial-models-on-lattices.html#starma-model"><i class="fa fa-check"></i><b>3.6.1</b> STARMA Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html"><i class="fa fa-check"></i><b>4</b> Inference for Lattice Models</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#parameter-estimation-for-lattice-models"><i class="fa fa-check"></i><b>4.1</b> Parameter Estimation for Lattice Models</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#pseudolikelihood"><i class="fa fa-check"></i><b>4.1.1</b> Pseudolikelihood</a></li>
+<li class="chapter" data-level="4.1.2" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#gaussian-maximum-likelihood-estimation"><i class="fa fa-check"></i><b>4.1.2</b> Gaussian Maximum Likelihood Estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#conditional-gaussian-model"><i class="fa fa-check"></i><b>4.2</b> Conditional Gaussian Model</a></li>
+<li class="chapter" data-level="4.3" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#auto-logistic-model"><i class="fa fa-check"></i><b>4.3</b> Auto-logistic Model</a></li>
+<li class="chapter" data-level="4.4" data-path="inference-for-lattice-models.html"><a href="inference-for-lattice-models.html#auto-poisson-model"><i class="fa fa-check"></i><b>4.4</b> Auto-Poisson Model</a></li>
+</ul></li>
+<li class="part"><span><b>III Homework</b></span></li>
+<li class="chapter" data-level="5" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html"><i class="fa fa-check"></i><b>5</b> Spatial Analysis Homework</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#overview"><i class="fa fa-check"></i><b>5.1</b> Overview</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#background"><i class="fa fa-check"></i><b>5.1.1</b> Background</a></li>
+<li class="chapter" data-level="5.1.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#data"><i class="fa fa-check"></i><b>5.1.2</b> Data</a></li>
+<li class="chapter" data-level="5.1.3" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#goal"><i class="fa fa-check"></i><b>5.1.3</b> Goal</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#exploratory-analysis"><i class="fa fa-check"></i><b>5.2</b> Exploratory Analysis</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#data-preprocessing"><i class="fa fa-check"></i><b>5.2.1</b> Data Preprocessing</a></li>
+<li class="chapter" data-level="5.2.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#descriptive-statistics"><i class="fa fa-check"></i><b>5.2.2</b> Descriptive Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#model-fitting"><i class="fa fa-check"></i><b>5.3</b> Model Fitting</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#variogram"><i class="fa fa-check"></i><b>5.3.1</b> Variogram</a></li>
+<li class="chapter" data-level="5.3.2" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#kriging-model"><i class="fa fa-check"></i><b>5.3.2</b> Kriging Model</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="spatial-analysis-homework.html"><a href="spatial-analysis-homework.html#animation"><i class="fa fa-check"></i><b>5.4</b> Animation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Geostatistics Final Summary</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="spatial-prediction-and-kriging" class="section level1" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Spatial Prediction and Kriging</h1>
+<p>Recall decomposition of variogram illustrated in section <a href="geostatistics.html#decomposition">1.2.3</a>, large scale and small scale variation both contribute to <span class="math inline">\(Z\)</span>. Continue with this idea, we model random process <span class="math inline">\(\{Z(s), s\in D \subset \mathbb{R}^d\}\)</span> as:</p>
+<p><span class="math display" id="eq:scale-model">\[\begin{equation}
+Z(s)=S(s)+e(s), s \in D.
+\tag{2.1}
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(e(.)\)</span> is a white-noise measurement-error process.</p>
+<ul>
+<li>Notice that when it comes to prediction, we are interested in noiseless value, which means <span class="math inline">\(S(s)\)</span> in formula <a href="spatial-prediction-and-kriging.html#eq:scale-model">(2.1)</a>.
+<ul>
+<li>A known functional <span class="math inline">\(g(S(s))\)</span> can also be studied.</li>
+<li>Block average prediction value can be calculated by <span class="math inline">\(g(Z(.))=\int_{B} Z(s) d s /|B|\)</span>, where <span class="math inline">\(B\subset \mathbb{R}^d\)</span> whose location and geometry are known.</li>
+</ul></li>
+</ul>
+<div id="scale-of-variation" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Scale of variation</h2>
+<blockquote>
+<p><strong>Scale</strong><br />
+Scale can have two different meanings:<br />
+</p>
+</blockquote>
+<blockquote>
+<ol style="list-style-type: decimal">
+<li>The observational scale of <span class="math inline">\(Z(s)\)</span> which means system error due to the recording instruments are just accurate up to a certain level.<br />
+</li>
+<li>The spatial scale of <span class="math inline">\(s\)</span>. The observations are based on a certain
+aggregation and are taken a certain distance apart.</li>
+</ol>
+</blockquote>
+<p>Extend the decomposition introduced in section <a href="spatial-prediction-and-kriging.html#eq:scale-model">(2.1)</a> even further, we consider a more detailed decomposition as formula <a href="spatial-prediction-and-kriging.html#eq:decomposition-scale">(2.2)</a>.</p>
+<p><span class="math display" id="eq:decomposition-scale">\[\begin{equation}
+Z(s) = \mu(s) + W(s) + \eta(s) + \epsilon(s)
+\tag{2.2}
+\end{equation}\]</span></p>
+<p>where</p>
+<ul>
+<li><strong>Large-Scale Variation</strong>: <span class="math inline">\(\mu(s)\)</span>, the deterministic mean structure.</li>
+<li><strong>Smooth Small-Scale Variation</strong>: <span class="math inline">\(W(s)\)</span>, a zero-mean, <span class="math inline">\(L_2\)</span>-continuous, intrinsically stationary random process with variogram range <em>larger</em> than <span class="math inline">\(\min \left\{\left\|s_{i}-s_{j}\right\|, 1 \leq i \leq j \leq n\right\}\)</span>.</li>
+<li><strong>Microscale Variation</strong>: <span class="math inline">\(\eta(s)\)</span>, a zero-mean, intrinsically stationary process with variogram range <em>smaller</em> than <span class="math inline">\(\min \left\{\left\|s_{i}-s_{j}\right\|, 1 \leq i \leq j \leq n\right\}\)</span>, and independent of <span class="math inline">\(W(s)\)</span>.</li>
+<li><strong>Measurement Error or Noise</strong>: <span class="math inline">\(\epsilon(s)\)</span>, a zero-mean white-noise process and independent of <span class="math inline">\(W(s)\)</span> and <span class="math inline">\(\eta(s)\)</span>. <span class="math inline">\(Var(\epsilon(s)):= c_{ME}\)</span>.</li>
+</ul>
+<p>Based on decomposition <a href="spatial-prediction-and-kriging.html#eq:decomposition-scale">(2.2)</a>, the variogram can be computed as below:</p>
+<p><span class="math display">\[\begin{equation}
+2 \gamma_{Z}(.)=2 \gamma_{w}(.)+2 \gamma_{\eta}(.)+2 c_{M E}.
+\end{equation}\]</span></p>
+<p>Thus, nugget effect mentioned in section <a href="geostatistics.html#vc">1.3.1</a> can be decomposed as well as <span class="math inline">\(c_0 = c_{ME} + c_{MS}\)</span>, where <span class="math inline">\(c_{MS} = \displaystyle\lim_{|h|\to0}\gamma_\eta(h)\)</span> indicates nugget effect of the microscale process <span class="math inline">\(\eta(.)\)</span>, and <span class="math inline">\(c_{ME}\)</span> is defined as <span class="math inline">\(Var(\epsilon(s))\)</span>.</p>
+<p>The general goal is to decompose <span class="math inline">\(Z(s)\)</span> as <em>signal</em> term and <em>noise</em> term. The decomposition is not unique.</p>
+</div>
+<div id="ordinary-kriging" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Ordinary Kriging</h2>
+<p>Kriging is a minimum-mean-squared-error method of spatial prediction that usually depends on the second-order properties of the random process <span class="math inline">\(Z(.)\)</span>.</p>
+<div id="model-introduction" class="section level3" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Model Introduction</h3>
+<p>Suppose we have data <span class="math inline">\((Z(s_1),...,Z(s_n))\prime\)</span>. Denote the generic predictor as <span class="math inline">\(p(Z, B)\)</span> where <span class="math inline">\(Z\)</span> means the targeted value and <span class="math inline">\(B\)</span> implies the region the predicting location lies. Then we define ordinary kriging model.</p>
+<blockquote>
+<p><strong>Ordinary Kriging</strong><br />
+The general form of ordinary kriging is <span class="math inline">\(Z(s) = \mu + \delta(s):= \mu + W(s) + \eta(s) + \epsilon(s)\)</span>. Here, <span class="math inline">\(\mu\)</span> is the mean of the process, a constant but unknown.</p>
+</blockquote>
+<ul>
+<li><p><strong>Predictor of Ordinary Kriging</strong>: a linear predictor is adopted. That is <span class="math inline">\(p(Z ; B)=\sum_{i=1}^{n} \lambda_{i} Z\left(s_{i}\right)\)</span> where <span class="math inline">\(\sum_{i=1}^{n} \lambda_{i}=1\)</span>.</p></li>
+<li><p><strong>Loss Function of Ordinary Kriging</strong>: We are considering squared-error loss here. That is <span class="math inline">\(L(Z(B), p(Z, B))=(Z(B)-p(Z, B))^{2}\)</span>.</p></li>
+</ul>
+<p>With the assumptions and settings above, the problem has been transformed into a constrained optimization one. It can be addressed by Lagrange method. In our case, Lagrange function is</p>
+<p><span class="math display" id="eq:lagrange">\[\begin{equation}
+-\lambda^{\top} \Gamma \lambda+2 \lambda^{\top} \mathbf{r}-2 m\left(\lambda^{\top} 1_{n}-1\right)
+\tag{2.3}
+\end{equation}\]</span></p>
+<p>and the corresponding normal equation can be writen as</p>
+<p><span class="math display" id="eq:normal-function">\[\begin{equation}
+\begin{gathered}
+\Gamma \lambda+m 1_{n}=\mathbf{r} \\
+\lambda^{\top} 1_{n}=1.
+\end{gathered}
+\tag{2.4}
+\end{equation}\]</span></p>
+<p>Notice, second-order stationary is not mandatory for kriging, it is required for estimation of the covariogram.</p>
+</div>
+<div id="effect-of-variogram-estimation" class="section level3" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> Effect of Variogram Estimation</h3>
+<div id="still" class="section level4" number="2.2.2.1">
+<h4><span class="header-section-number">2.2.2.1</span> Still</h4>
+<blockquote>
+<p><strong>Still</strong><br />
+<span class="math inline">\(\sigma_{Z}^{2}=\lim _{|h| \rightarrow 0} \gamma_{Z}(h)\)</span>, <span class="math inline">\(\sigma_Z^2\)</span> is called still, which indicates the limit value of <span class="math inline">\(\gamma\)</span>.</p>
+</blockquote>
+<ul>
+<li>Theoretically, the sill of <span class="math inline">\(Z\)</span> is <span class="math inline">\(\sigma_{Z}^{2}(\cdot)=\sigma_{W}^{2}(\cdot)+\sigma_{\eta}^{2}(\cdot)+c_{M E}\)</span>.</li>
+<li>Practically, the sill of <span class="math inline">\(Z\)</span> is estimated as <span class="math inline">\(\sigma_{W}^{2}(\cdot)+c_0 \leq \sigma_{Z}^{2}(\cdot)\)</span>.
+<ul>
+<li>It can be useful in estimating nugget effect. Practically, nugget effect is usually estimated by <span class="math inline">\(\sigma_{\eta}^{2}(\cdot)+c_{M E}\)</span> rather than <span class="math inline">\(c_0\)</span>.</li>
+</ul></li>
+</ul>
+</div>
+<div id="range" class="section level4" number="2.2.2.2">
+<h4><span class="header-section-number">2.2.2.2</span> Range</h4>
+<blockquote>
+<p><strong>Range</strong><br />
+The smallest value of <span class="math inline">\(\Vert r_0\Vert\)</span> for which <span class="math inline">\(2 \gamma\left(\mathbf{r}_{0}(1+\epsilon)\right)=2 C(0),\)</span> for any <span class="math inline">\(\epsilon&gt;0\)</span> is called the range of the variogram in the direction of <span class="math inline">\(r_0/\Vert r_0 \Vert\)</span>.</p>
+</blockquote>
+<p>Still can be interpreted as the lag beyond which <span class="math inline">\(Z(s)\)</span> and <span class="math inline">\(Z(s + a)\)</span> are uncorrelated. Thus <span class="math inline">\(Cov(Z(s), Z(s+h)) = 0,\ h &gt; a\)</span>. Still influence covariogram.</p>
+</div>
+</div>
+</div>
+<div id="cokriging" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Cokriging</h2>
+<p>Cokriging is actually the multivariate version of kriging. Suppose data are <span class="math inline">\(k \times 1\)</span> vectors <span class="math inline">\((\mathbf Z(s_1),...,\mathbf Z(s_n))^\prime\)</span>.</p>
+<blockquote>
+<p><strong>Cokriging</strong><br />
+The Cokriging model with constant mean is
+<span class="math display" id="eq:cokriging">\[\begin{equation}
+\begin{aligned}
+\mathbb{E}(\mathbf{Z}(s)) &amp;=\boldsymbol{\mu}, s \in D \\
+\operatorname{cov}(\mathbf{Z}(s), \mathbf{Z}(u)) &amp;=C(s, u), s, u \in D
+\end{aligned}
+\tag{2.5}
+\end{equation}\]</span></p>
+</blockquote>
+<ul>
+<li><strong>Predictor of Cokriging</strong>: the linear predictor can be writen as formula <a href="spatial-prediction-and-kriging.html#eq:cokriging-predictor">(2.6)</a> now.</li>
+</ul>
+<p><span class="math display" id="eq:cokriging-predictor">\[\begin{equation}
+p_{1}\left(\mathbf{Z} ; s_{0}\right)=\sum_{i=1}^{n} \sum_{j=1}^{k} \lambda_{j i} Z_{j}\left(s_{i}\right)
+\tag{2.6}
+\end{equation}\]</span></p>
+<p>When <span class="math inline">\(\sum_{i=1}^{n} \lambda_{1 i}=1\)</span> and <span class="math inline">\(\sum_{i=1}^{n} \lambda_{j i}=0 \text { for } j \neq 1\)</span>, the predictor is unbiased.</p>
+<ul>
+<li><p><strong>Risk of Cokriging</strong>: <span class="math inline">\(E\left(Z_{1}\left(s_{0}\right)-\sum_{i=1}^{n} \sum_{j=1}^{k} \lambda_{j i} Z_{j}\left(s_{i}\right)\right)^{2}\)</span></p></li>
+<li><p>Notice that data are usually not satisfying all assumption. Take Gaussian distribution assumption as an example, data transformation may be taken before kriging is modeled.</p></li>
+</ul>
+</div>
+<div id="robust-kriging" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Robust Kriging</h2>
+<p>Even with the operation of data transformation beforehead, outliers may occur frequently and badly influence parameter estimators in out model. Linear predictors applied by kriging model is sensitive to outlying observations. Robust kriging is raised here to settle outlier problem.</p>
+<p>Instead of directly cancelling outliers, the main idea of robust kriging is downweighting the unusual observation. The predictor now is:</p>
+<p><span class="math display" id="eq:predictor-robust-kriging">\[\begin{equation}
+p(Z ; B)=\sum_{i=1}^{n} \lambda_{i} Z\left(s_{i}\right) w\left(Z\left(s_{i}\right)\right)=\sum_{i=1}^{n} \lambda_{i} Z^{(e)}\left(s_{i}\right)
+\tag{2.7}
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(0\leq W(.)\leq 1\)</span> is the weight functin, and <span class="math inline">\(Z^{(e)}(s)\)</span> is the modified data.</p>
+<p>The algorithm of operating robust kriging is as below:</p>
+<ol style="list-style-type: decimal">
+<li>Estimate the variogram using one of the robust estimators (Section 2.4.3 in Book) and fit a valid variogram model.</li>
+<li>Compute the kriging weights <span class="math inline">\(\hat{Z}_{-j}\left(s_{j}\right)=\sum_{i \neq j} \lambda_{j i} Z\left(s_{i}\right)\)</span>. That is, predict <span class="math inline">\(Z(s_j)\)</span> without using <span class="math inline">\(Z(s_j)\)</span>. Let <span class="math inline">\(\sigma^2_{−j}(s_j)\)</span> be the associated kriging variance. The subsript <span class="math inline">\(−j\)</span> means we do not use <span class="math inline">\(Z(s_j)\)</span> in the predition.</li>
+<li>Use the weights <span class="math inline">\(\lambda_{ji}:i\neq j\)</span> to obtain a robust prediction of <span class="math inline">\(Z(s_j)\)</span> from the data
+<span class="math display" id="eq:robust-step">\[\begin{equation}
+Z_{-j}^{@}\left(s_{j}\right)=\text { weighted median of }\left(\left\{Z_{i}: i \neq j\right\} ;\left\{\lambda_{j i}: i \neq j\right\}\right)
+\tag{2.8}
+\end{equation}\]</span>
+We use <span class="math inline">\(Z_{-j}^{@}\left(s_{j}\right)\)</span> and <span class="math inline">\(\sigma_{-j}^{2}\left(s_{j}\right)\)</span> to judge whether <span class="math inline">\(Z\left(s_{j}\right)\)</span> is clean or contaminated.</li>
+<li>Edit <span class="math inline">\(Z(s_j)\)</span> by replacing it with the Winsorized version
+<span class="math display" id="eq:winsor">\[\begin{equation}
+Z^{(e)}\left(s_{j}\right)=\left\{\begin{array}{cl}
+Z_{-j}^{@}\left(s_{j}\right)+c \sigma_{-j}\left(s_{j}\right) &amp; \text { if } Z\left(s_{j}\right)&gt;Z_{-j}^{@}\left(s_{j}\right)+c \sigma_{-j}\left(s_{j}\right) \\
+Z\left(s_{j}\right) &amp; \left|Z\left(s_{j}\right)-Z_{-j}^{@}\left(s_{j}\right)\right|&lt;c \sigma_{-j}\left(s_{j}\right) \\
+Z_{-j}^{@}\left(s_{j}\right)-c \sigma_{-j}\left(s_{j}\right) &amp; Z\left(s_{j}\right)&lt;Z_{-j}^{@}\left(s_{j}\right)-c \sigma_{-j}\left(s_{j}\right)
+\end{array}\right.
+\tag{2.9}
+\end{equation}\]</span></li>
+<li>Predict with the modified data <span class="math inline">\(Z^{(e)}(s_j)\)</span>
+<span class="math display" id="eq:predictor-robust">\[\begin{equation}
+\hat{p}(Z, B)=\sum_{i=1}^{n} \lambda_{i} Z^{(e)}\left(s_{j}\right)
+\tag{2.10}
+\end{equation}\]</span></li>
+</ol>
+</div>
+<div id="universal-kriging" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Universal Kriging</h2>
+<p>Extend to constant mean assumption of ordinary kriging, Suppose the mean is a linear combination of known functions <span class="math inline">\(\left\{f_{0}(s), \ldots, f_{p}(s)\right\}\)</span>, we get universal kriging.</p>
+<blockquote>
+<p><strong>Universal Kriging</strong><br />
+The general form of Universal Kriging is
+<span class="math display" id="eq:universal-kriging">\[\begin{equation}
+\left\{f_{0}(s), \ldots, f_{p}(s)\right\}.
+\tag{2.11}
+\end{equation}\]</span>
+It can also be writen in matrix form as
+<span class="math display" id="eq:matrix-universal">\[\begin{equation}
+\mathbf{Z} = \mathbf{X}\beta + \mathbf{\delta}.
+\tag{2.12}
+\end{equation}\]</span>
+where <span class="math inline">\(\beta=(\beta_0,...,\beta_p)\)</span> is an unknown vector of parameters and <span class="math inline">\(\delta(.)\)</span> is a zero-mean intrinsically stationary random process with variogram <span class="math inline">\(2\gamma(.)\)</span></p>
+</blockquote>
+<ul>
+<li><strong>Predictor of Universal Kriging</strong>: <span class="math inline">\(p\left(\mathbf{Z} ; s_{0}\right)=\lambda^{\top} \mathbf{Z}, \text { for } \lambda^{\top} \mathbf{X}=\mathbf{x}^{\top}\)</span></li>
+</ul>
+<p>where <span class="math inline">\(\mathbf{x} = (f_1(s_0),...,f_p(s_0))^\prime\)</span></p>
+<ul>
+<li><p><strong>Risk of Universal Kriging</strong>: <span class="math inline">\(E\left(Z\left(s_{0}\right)-\sum_{i=1}^{n} \lambda_{i} Z\left(s_{i}\right)\right)^{2}=-\lambda^{\top} \Gamma \lambda+2 \lambda^{\top} \mathbf{r}\)</span></p></li>
+<li><p>Similary to ordinary kriging, the problem is tranformed into a optimization addressed by Lagrange method. Lagrange function here is <span class="math inline">\(-\lambda^{\top} \Gamma \lambda+2 \lambda^{\top} \mathbf{r}-2 \mathbf{m}^{\top}\left(\mathbf{X}^{\top} \lambda-\mathbf{x}\right)\)</span>. The solution <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(m\)</span> can be derived by the normal equation.</p></li>
+</ul>
+
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="geostatistics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="spatial-models-on-lattices.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-ch3.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

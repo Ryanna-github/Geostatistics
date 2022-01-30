@@ -1,0 +1,201 @@
+---
+title: "HW1: Plotting about Coalash Dataset"
+author: "Yan Ren"
+date: "2021/10/3"
+output:
+  prettydoc::html_pretty:
+    toc: true
+    theme: homework2
+    highlight: github
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+```{r}
+library(prettydoc)
+library(gstat)
+library(RColorBrewer)
+library(ggplot2)
+library(dplyr)
+library(latex2exp)
+```
+
+
+# Task Description
+
+- Describe `coalash` Dataset and do some exploratory analysis
+- Specifically, re-generate Figure 2.7, 2.8, 2.9 of the Text book
+
+## General Overview of Dataset
+
+```{r}
+data("coalash")
+myPalette <- colorRampPalette(rev(brewer.pal(11, "Spectral")))
+ggplot(coalash) +
+  geom_point(aes(x=x, y=y, color = coalash)) +
+  scale_colour_gradientn(colours = myPalette(100)) +
+  theme_light() +
+  labs(title = "Scatter Points of Coalash Dataset") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+# Plot
+
+## Variogram Cloud
+
+Variogram isuseful diagnostic tool which help detect atypical points. _Variogram Cloud in the East-West Direction_ only includes differences of east-west direction (x axis). 
+
+- Group points with $y$ value;
+- Calculate the classical estimator of the variogram $\frac{1}{|N(h)|}\cdot \displaystyle\sum_{N(h)}{(z(s_i) - z(s_j))^2}$.
+  - $N(h) = \{(s_i, s_j):\ s_i + he = s_j\}$
+  - $e$: the unit vector of east direction (positive x axis)
+  - Notice that y values of each pair $(s_i, s_j)$ are the same. But they may vary among pairs.
+- Plot the corresponding boxplot.
+  - x axis: distance $h$
+  - y axis: the classical estimator of the variogram with parameter h, Units are $(% coal ash)^2$
+
+```{r}
+get_df <- function(coalash, fun){
+  df <- data.frame()
+  for(j in min(coalash$y):max(coalash$y)){
+    data <- coalash[which(coalash$y == j),]
+    x_len <- length(data$x)
+    mat1 <- matrix(rep(data$x, times = x_len), ncol = x_len)
+    mat_h <- mat1 - t(mat1)
+    
+    mat2 <- matrix(rep(data$coalash, times = x_len), ncol = x_len)
+    mat_z <- mat2 - t(mat2)
+    df_current <- data.frame(h = as.numeric(mat_h), 
+                             z = fun(as.numeric(mat_z))) %>% filter(h > 0)
+    df <- rbind(df, df_current)
+  }
+  return(df)
+}
+
+```
+
+```{r}
+df <- get_df(coalash, function(x){return(x**2)})
+ggplot(df, aes(x = as.factor(h), y = z)) + 
+  geom_boxplot() +
+  theme_light() +
+  labs(x = "h", y = TeX("$(Z(h+s)-Z(s))^2$"), 
+       title = "Variogram Cloud in the East-West Direction") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+The plot indicate that when $h = 1, 2, 5, 6$, intrinsic stationarity may not true. More quantitive methods should be applied to test the stationarity.
+
+## Square-Root-Differences Cloud
+
+Square-Root-Differences Cloud can be considered as the robust version of Variogram Cloud, since the square operation augmentate 'bad' differences.   
+
+- The plotting steps are almost the same as those of Variogram Cloud.
+- The only different step: calculate the classical estimator of the variogram $\frac{1}{|N(h)|}\cdot \displaystyle\sum_{N(h)}{|z(s_i) - z(s_j)|^\frac12}$.
+
+```{r}
+df <- get_df(coalash, function(x){return(sqrt(abs(x)))})
+ggplot(df, aes(x = as.factor(h), y = z)) + 
+  geom_boxplot() +
+  theme_light() +
+  labs(x = "h", y = TeX("$(Z(h+s)-Z(s))^{1/2}$"),
+       title = "Square-Root-Differences Cloud in the East-West Direction") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+As we can see, the Square-Root-Differences Cloud reflects the same things as Variogram Cloud. Points in this diagram is distributed approximately equal to the median.
+
+
+## Pocket Plot
+
+The Pocket Plot tries to identify a localized area as being atypical with respect to a stationary mode. We plotting _Pocket Plot in the North-South Direction_ follows the steps as below:  
+
+- Get $\{|N_{jk}|\}$ matrix (symmetric).
+  - Denote $|N_{jk}|$ as the value of row $j$ and column $k$ of the matrix
+  - $N_{jk} = \{(s_j, s_k):\ s_j \in row_j, s_k \in row_k, x_{s_j} = x_{s_k}\}$
+  - $|N_{jk}|$ means total pair number between row $j$ and $k$
+- Get $\{Y_{jk}\}$ matrix (symmetric).
+  - For there are 23 distinct value in y axis, the matrix has the dim of $23\times 23$
+  - Denote $Y_{jk}$ as the value of row $j$ and column $k$ of the matrix, we have $Y_{jk} = \frac{1}{N_{jk}}\displaystyle\sum_{N_{jk}}|z(s_j) - z(s_k)|^{\frac12}$
+- Calculate $Y_h$ vector.
+  - $Y_h$ is the weighted mean of $Y_{jk}$ where $|j - k| = h$ 
+- Calculate $P_{jk} = Y_{jk} - Y_h$
+- Plot the boxplot.
+  - x axis: index $j$
+  - y axis: $P_{jk}$. 
+  - There should be 23 points of each columns.
+
+```{r}
+get_Y_jk <- function(coalash, j, k){
+  df_j <- coalash %>% filter(y == j) %>% select(x, coalash)
+  df_k <- coalash %>% filter(y == k) %>% select(x, coalash)
+  df <- merge(df_j, df_k, by = "x") %>%
+    mutate(dif = sqrt(abs(coalash.x - coalash.y)))
+  res <- mean(df$dif)
+  num <- nrow(df)
+  return(list(res, num))
+}
+```
+
+```{r}
+is_outlier <- function(x) {
+  return(x < quantile(x, 0.25, na.rm = TRUE) - 1.5 * IQR(x, na.rm = TRUE) | x > quantile(x, 0.75, na.rm = TRUE) + 1.5 * IQR(x, na.rm = TRUE))
+}
+```
+
+```{r}
+# get Y_jk, N_jk matrix
+row_len <- length(unique(coalash$y))
+Y_jk <- matrix(nrow = row_len, ncol = row_len)
+N_jk <- matrix(nrow = row_len, ncol = row_len)
+for(i in 1:row_len){
+  for(j in 1:row_len){
+    jk_info <- get_Y_jk(coalash, i, j) # func `get_Y_jk` def hidden
+    Y_jk[i,j] <- jk_info[[1]]
+    N_jk[i,j] <- jk_info[[2]]
+  }
+}
+colnames(Y_jk) <- 1:23
+colnames(N_jk) <- 1:23
+```
+
+```{r}
+# colnames(df_N_jk): "j", "k", "N_jk"
+df_N_jk <- as.data.frame(as.table(N_jk)) %>%
+  mutate_if(is.factor, as.integer) %>%
+  rename(j = 1, k = 2, N_jk = 3)
+
+# colnames(df_Y_jk): "j", "k", "Y_jk", "h", "N_jk"
+df_Y_jk <- as.data.frame(as.table(Y_jk)) %>% 
+  mutate_if(is.factor, as.integer)%>%
+  transform(h = abs(Var1 - Var2)) %>%
+  rename(j = 1, k = 2, Y_jk = 3) %>%
+  left_join(df_N_jk, by = c('j', 'k')) %>%
+  filter(h > 0)
+
+# colnames(df_Y_h): "h", "N_h", "Y_h"
+df_Y_h <- df_Y_jk %>% group_by(h) %>% 
+  summarise(N_h = n(), Y_h = sum(Y_jk)/max(N_h))
+
+# colnames(df_P_jk): "h", "j", "k", "Y_jk", "N_jk", "N_h", "Y_h", "P_jk", "outlier"
+df_P_jk <- merge(df_Y_jk, df_Y_h, by = "h") %>%
+  transform(P_jk = Y_jk - Y_h) %>%
+  group_by(j) %>%
+  mutate(outlier = ifelse(is_outlier(P_jk), k, as.numeric(NA)))
+```
+
+```{r}
+# Pocket plot
+ggplot(df_P_jk, aes(x = as.factor(j), y = P_jk)) +
+  geom_boxplot(outlier.colour = 'red') +
+  geom_text(aes(label = outlier), check_overlap = TRUE, nudge_x = 0.5) +
+  theme_light() +
+  labs(x = "row number", y = TeX("$P_{j\ k}$"),
+       title = "Pocket Plot in the North-South Direction") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+Row 2, 6 are the most atypical point.
